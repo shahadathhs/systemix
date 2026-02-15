@@ -7,4 +7,12 @@ export enum GeneratePasswordPropsEnum {
   EXCLUDE_SIMILAR_CHARACTERS = 'excludeSimilarCharacters',
   EXCLUDE = 'exclude',
   COUNT = 'count',
+  MIN_NUMBERS = 'minNumbers',
+  MIN_UPPERCASE = 'minUppercase',
+  MIN_LOWERCASE = 'minLowercase',
+  MIN_SYMBOLS = 'minSymbols',
+  CUSTOM_LOWERCASE = 'customLowercase',
+  CUSTOM_UPPERCASE = 'customUppercase',
+  CUSTOM_NUMBERS = 'customNumbers',
+  CUSTOM_SYMBOLS = 'customSymbols',
 }
