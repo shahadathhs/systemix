@@ -47,7 +47,7 @@ const securePass = generatePassword({
   minNumbers: 2,
   minSymbols: 2,
   useUppercase: true,
-  customSymbols: "!@#$%^&*", // Use specific symbols only
+  customSymbols: '!@#$%^&*', // Use specific symbols only
 });
 ```
 
@@ -64,28 +64,28 @@ console.log(`Entropy: ${entropy} bits`);
 
 ### `generatePassword(props?: PasswordProps): string | string[]`
 
-| Property                   | Type      | Default | Description                            |
-| :------------------------- | :-------- | :------ | :------------------------------------- |
-| `length`                   | `number`  | `12`    | Password length (1 to 100).            |
-| `useNumbers`               | `boolean` | `true`  | Include 0-9.                           |
-| `useUppercase`             | `boolean` | `true`  | Include A-Z.                           |
-| `useLowercase`             | `boolean` | `true`  | Include a-z.                           |
-| `useSymbols`               | `boolean` | `false` | Include special characters.            |
-| `minNumbers`               | `number`  | `0`     | Minimum numbers to include.            |
-| `minUppercase`             | `number`  | `0`     | Minimum uppercase letters to include.  |
-| `minLowercase`             | `number`  | `0`     | Minimum lowercase letters to include.  |
-| `minSymbols`               | `number`  | `0`     | Minimum symbols to include.            |
-| `customNumbers`            | `string`  | _0-9_   | Custom number set.                     |
-| `customUppercase`          | `string`  | _A-Z_   | Custom uppercase set.                  |
-| `customLowercase`          | `string`  | _a-z_   | Custom lowercase set.                  |
-| `customSymbols`            | `string`  | _Special_ | Custom symbol set.                   |
-| `excludeSimilarCharacters` | `boolean` | `false` | Exclude visually similar characters.   |
-| `exclude`                  | `string`  | `""`    | Specific characters to exclude.        |
-| `count`                    | `number`  | `1`     | Number of passwords to generate.       |
+| Property                   | Type      | Default   | Description                           |
+| :------------------------- | :-------- | :-------- | :------------------------------------ |
+| `length`                   | `number`  | `12`      | Password length (1 to 100).           |
+| `useNumbers`               | `boolean` | `true`    | Include 0-9.                          |
+| `useUppercase`             | `boolean` | `true`    | Include A-Z.                          |
+| `useLowercase`             | `boolean` | `true`    | Include a-z.                          |
+| `useSymbols`               | `boolean` | `false`   | Include special characters.           |
+| `minNumbers`               | `number`  | `0`       | Minimum numbers to include.           |
+| `minUppercase`             | `number`  | `0`       | Minimum uppercase letters to include. |
+| `minLowercase`             | `number`  | `0`       | Minimum lowercase letters to include. |
+| `minSymbols`               | `number`  | `0`       | Minimum symbols to include.           |
+| `customNumbers`            | `string`  | _0-9_     | Custom number set.                    |
+| `customUppercase`          | `string`  | _A-Z_     | Custom uppercase set.                 |
+| `customLowercase`          | `string`  | _a-z_     | Custom lowercase set.                 |
+| `customSymbols`            | `string`  | _Special_ | Custom symbol set.                    |
+| `excludeSimilarCharacters` | `boolean` | `false`   | Exclude visually similar characters.  |
+| `exclude`                  | `string`  | `""`      | Specific characters to exclude.       |
+| `count`                    | `number`  | `1`       | Number of passwords to generate.      |
 
 ### `calculatePasswordEntropy(length: number, charsetSize: number): number`
 
-Calculates the theoretical entropy of a password (H = L * log2(N)).
+Calculates the theoretical entropy of a password (H = L \* log2(N)).
 
 ## License
 

@@ -60,19 +60,19 @@ console.log(`Entropy: ${entropy} bits`);
 
 ### `generatePassphrase(props?: PassphraseProps): string`
 
-| Property          | Type       | Default | Description                        |
-| :---------------- | :--------- | :------ | :--------------------------------- |
-| `wordCount`       | `number`   | `4`     | Number of words (1 to 100).        |
-| `separator`       | `string`   | `" "`   | Separator between words.           |
-| `wordList`        | `string[]` | _Built-in_ | Custom list of words.           |
-| `useTitleCase`    | `boolean`  | `false` | Convert words to TitleCase.        |
-| `useUpperCase`    | `boolean`  | `false` | Convert words to UPPERCASE.        |
-| `includeNumber`   | `boolean`  | `false` | Inject a random digit into words.  |
-| `randomSeparator` | `boolean`  | `false` | Randomize separator between words. |
+| Property          | Type       | Default    | Description                        |
+| :---------------- | :--------- | :--------- | :--------------------------------- |
+| `wordCount`       | `number`   | `4`        | Number of words (1 to 100).        |
+| `separator`       | `string`   | `" "`      | Separator between words.           |
+| `wordList`        | `string[]` | _Built-in_ | Custom list of words.              |
+| `useTitleCase`    | `boolean`  | `false`    | Convert words to TitleCase.        |
+| `useUpperCase`    | `boolean`  | `false`    | Convert words to UPPERCASE.        |
+| `includeNumber`   | `boolean`  | `false`    | Inject a random digit into words.  |
+| `randomSeparator` | `boolean`  | `false`    | Randomize separator between words. |
 
 ### `calculatePassphraseEntropy(wordCount: number, wordListSize: number): number`
 
-Calculates the theoretical entropy of a passphrase (H = L * log2(N)).
+Calculates the theoretical entropy of a passphrase (H = L \* log2(N)).
 
 ## License
 
