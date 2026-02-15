@@ -1,0 +1,7 @@
+# Default owner for everything
+*       @shahadathhs
+
+# Specific owners for sensitive areas
+/.github/workflows/    @shahadathhs
+/packages/config/      @shahadathhs
+/packages/common/      @shahadathhs
