@@ -1,7 +1,7 @@
 {
   "name": "@systemix/typescript",
-  "version": "1.0.0",
-  "private": false,
+  "version": "0.0.1",
+  "private": true,
   "description": "Standard TypeScript configurations for Systemix projects.",
   "repository": {
     "type": "git",
