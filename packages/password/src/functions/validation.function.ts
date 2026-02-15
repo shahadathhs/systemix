@@ -37,15 +37,59 @@ export function generatePasswordPropValidation(
     excludeSimilarCharacters,
     exclude,
     count,
+    minNumbers,
+    minUppercase,
+    minLowercase,
+    minSymbols,
+    customNumbers,
+    customUppercase,
+    customLowercase,
+    customSymbols,
   } = props;
 
   // * length validation
   if (typeof length !== 'number' || length < 1) {
     throw new Error(lengthError.invalidLength);
   }
-  if (length > 50) {
+  if (length > 100) {
     throw new Error(lengthError.lengthTooLarge);
   }
+
+  // * min requirements validation
+  const checkMin = (val: any, name: string) => {
+    if (val !== undefined && (typeof val !== 'number' || val < 0)) {
+      throw new Error(`${name} must be a non-negative number.`);
+    }
+  };
+
+  checkMin(minNumbers, 'minNumbers');
+  checkMin(minUppercase, 'minUppercase');
+  checkMin(minLowercase, 'minLowercase');
+  checkMin(minSymbols, 'minSymbols');
+
+  const totalMin =
+    (minNumbers ?? 0) +
+    (minUppercase ?? 0) +
+    (minLowercase ?? 0) +
+    (minSymbols ?? 0);
+
+  if (totalMin > length) {
+    throw new Error(
+      'Total minimum character requirements exceed requested password length.',
+    );
+  }
+
+  // * custom charsets validation
+  const checkString = (val: any, name: string) => {
+    if (val !== undefined && typeof val !== 'string') {
+      throw new Error(`${name} must be a string.`);
+    }
+  };
+
+  checkString(customNumbers, 'customNumbers');
+  checkString(customUppercase, 'customUppercase');
+  checkString(customLowercase, 'customLowercase');
+  checkString(customSymbols, 'customSymbols');
 
   // * useNumbers validation
   if (typeof useNumbers !== 'boolean') {

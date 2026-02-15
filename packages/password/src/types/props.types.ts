@@ -4,8 +4,17 @@ export type GeneratePasswordFunctionProps = {
   [key in GeneratePasswordPropsEnum]?: key extends
     | GeneratePasswordPropsEnum.LENGTH
     | GeneratePasswordPropsEnum.COUNT
+    | GeneratePasswordPropsEnum.MIN_NUMBERS
+    | GeneratePasswordPropsEnum.MIN_UPPERCASE
+    | GeneratePasswordPropsEnum.MIN_LOWERCASE
+    | GeneratePasswordPropsEnum.MIN_SYMBOLS
     ? number
-    : key extends GeneratePasswordPropsEnum.EXCLUDE
+    : key extends
+          | GeneratePasswordPropsEnum.EXCLUDE
+          | GeneratePasswordPropsEnum.CUSTOM_LOWERCASE
+          | GeneratePasswordPropsEnum.CUSTOM_UPPERCASE
+          | GeneratePasswordPropsEnum.CUSTOM_NUMBERS
+          | GeneratePasswordPropsEnum.CUSTOM_SYMBOLS
       ? string
       : key extends
             | GeneratePasswordPropsEnum.USE_NUMBERS

@@ -23,10 +23,10 @@ In an era where security and performance are paramount, **Systemix** aims to pro
 
 Systemix is organized as a monorepo, housing specialized packages for different needs:
 
-| Package                                       | Version | Description                                                               |
-| :-------------------------------------------- | :------ | :------------------------------------------------------------------------ |
-| [`@systemix/password`](packages/password)     | `0.0.1` | Cryptographically secure password generator with customizable complexity. |
-| [`@systemix/passphrase`](packages/passphrase) | `0.0.1` | Secure, memorable passphrase generator using strong random values.        |
+| Package                                       | Version | Description                                                            |
+| :-------------------------------------------- | :------ | :--------------------------------------------------------------------- |
+| [`@systemix/password`](packages/password)     | `0.0.2` | Secure password generator with character guarantees and entropy tools. |
+| [`@systemix/passphrase`](packages/passphrase) | `0.0.2` | Human-readable passphrase generator with formatting and entropy tools. |
 
 ### 🛠 Shared Configs
 

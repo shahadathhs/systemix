@@ -7,7 +7,12 @@ export type GeneratePassphraseFunctionProps = {
       ? string
       : key extends GeneratePassphrasePropsEnum.WORD_LIST
         ? string[]
-        : key extends GeneratePassphrasePropsEnum.CAPITALIZE
+        : key extends
+              | GeneratePassphrasePropsEnum.CAPITALIZE
+              | GeneratePassphrasePropsEnum.USE_TITLE_CASE
+              | GeneratePassphrasePropsEnum.USE_UPPER_CASE
+              | GeneratePassphrasePropsEnum.INCLUDE_NUMBER
+              | GeneratePassphrasePropsEnum.RANDOM_SEPARATOR
           ? boolean
           : never;
 };

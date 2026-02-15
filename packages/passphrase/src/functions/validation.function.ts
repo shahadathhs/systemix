@@ -4,7 +4,16 @@ import { passphraseErrors } from '../utils/error.message';
 export function generatePassphrasePropValidation(
   props: GeneratePassphraseFunctionProps,
 ) {
-  const { wordCount, separator, wordList, capitalize } = props;
+  const {
+    wordCount,
+    separator,
+    wordList,
+    capitalize,
+    useTitleCase,
+    useUpperCase,
+    includeNumber,
+    randomSeparator,
+  } = props;
 
   if (
     wordCount !== undefined &&
@@ -26,4 +35,15 @@ export function generatePassphrasePropValidation(
   if (capitalize !== undefined && typeof capitalize !== 'boolean') {
     throw new Error(passphraseErrors.invalidCapitalize);
   }
+
+  const checkBool = (val: any, name: string) => {
+    if (val !== undefined && typeof val !== 'boolean') {
+      throw new Error(`${name} must be a boolean.`);
+    }
+  };
+
+  checkBool(useTitleCase, 'useTitleCase');
+  checkBool(useUpperCase, 'useUpperCase');
+  checkBool(includeNumber, 'includeNumber');
+  checkBool(randomSeparator, 'randomSeparator');
 }
