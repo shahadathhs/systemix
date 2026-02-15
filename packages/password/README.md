@@ -55,15 +55,15 @@ const password = generatePassword({
 
 ### `generatePassword(props?: PasswordProps): string`
 
-| Property | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `length` | `number` | `8` | Password length (1 to 50). |
-| `useNumbers` | `boolean` | `true` | Include 0-9. |
-| `useUppercase` | `boolean` | `true` | Include A-Z. |
-| `useLowercase` | `boolean` | `true` | Include a-z. |
-| `useSymbols` | `boolean` | `false` | Include special characters. |
+| Property                   | Type      | Default | Description                          |
+| :------------------------- | :-------- | :------ | :----------------------------------- |
+| `length`                   | `number`  | `8`     | Password length (1 to 50).           |
+| `useNumbers`               | `boolean` | `true`  | Include 0-9.                         |
+| `useUppercase`             | `boolean` | `true`  | Include A-Z.                         |
+| `useLowercase`             | `boolean` | `true`  | Include a-z.                         |
+| `useSymbols`               | `boolean` | `false` | Include special characters.          |
 | `excludeSimilarCharacters` | `boolean` | `false` | Exclude visually similar characters. |
-| `exclude` | `string` | `""` | Specific characters to exclude. |
+| `exclude`                  | `string`  | `""`    | Specific characters to exclude.      |
 
 ## License
 

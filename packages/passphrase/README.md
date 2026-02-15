@@ -50,12 +50,12 @@ console.log(passphrase); // Example: "Security-Meta-Flow-Logic-System"
 
 ### `generatePassphrase(props?: PassphraseProps): string`
 
-| Property | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `wordCount` | `number` | `4` | Number of words (1 to 100). |
-| `separator` | `string` | `" "` | Separator between words. |
-| `capitalize` | `boolean` | `false` | Capitalize each word. |
-| `wordList` | `string[]` | *Built-in* | Custom list of words to select from. |
+| Property     | Type       | Default    | Description                          |
+| :----------- | :--------- | :--------- | :----------------------------------- |
+| `wordCount`  | `number`   | `4`        | Number of words (1 to 100).          |
+| `separator`  | `string`   | `" "`      | Separator between words.             |
+| `capitalize` | `boolean`  | `false`    | Capitalize each word.                |
+| `wordList`   | `string[]` | _Built-in_ | Custom list of words to select from. |
 
 ## License
 
