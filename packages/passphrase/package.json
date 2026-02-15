@@ -1,16 +1,17 @@
 {
   "name": "@systemix/passphrase",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shahadathhs/passphrase.git"
+    "url": "git+https://github.com/shahadathhs/systemix.git",
+    "directory": "packages/passphrase"
   },
-  "homepage": "https://github.com/shahadathhs/passphrase/blob/main/README.md",
+  "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/passphrase#readme",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "typecheck": "tsc --noEmit",
@@ -52,7 +53,7 @@
     "*.scss"
   ],
   "bugs": {
-    "url": "https://github.com/shahadathhs/passphrase/issues"
+    "url": "https://github.com/shahadathhs/systemix/issues"
   },
   "files": [
     "dist",

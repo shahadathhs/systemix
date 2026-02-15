@@ -1,7 +1,19 @@
 {
   "name": "@systemix/typescript",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
+  "description": "Standard TypeScript configurations for Systemix projects.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shahadathhs/systemix.git",
+    "directory": "configs/typescript"
+  },
+  "homepage": "https://github.com/shahadathhs/systemix/tree/main/configs/typescript#readme",
+  "bugs": {
+    "url": "https://github.com/shahadathhs/systemix/issues"
+  },
+  "author": "https://github.com/shahadathhs",
+  "license": "MIT",
   "exports": {
     "./base.json": "./base.json",
     "./express.json": "./express.json",
@@ -10,6 +22,5 @@
   "scripts": {
     "clean": "rimraf node_modules",
     "clean:turbo": "rimraf .turbo node_modules"
-  },
-  "license": "ISC"
+  }
 }

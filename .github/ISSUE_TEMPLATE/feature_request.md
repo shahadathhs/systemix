@@ -12,11 +12,15 @@ A clear and concise description of what the problem is. Ex. I'm always frustrate
 
 ## Describe the solution you'd like
 
-A clear and concise description of what you want to happen.
+A clear and concise description of what you want to happen. How does this fit into the Systemix goal of being a modular, secure, and lightweight toolkit?
 
 ## Describe alternatives you've considered
 
 A clear and concise description of any alternative solutions or features you've considered.
+
+## Implementation Details (Optional)
+
+If you have an idea of how this could be implemented within the monorepo structure (e.g., as a new package in `packages/`), please share.
 
 ## Additional Context
 

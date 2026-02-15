@@ -3,5 +3,7 @@
 
 # Specific owners for sensitive areas
 /.github/workflows/    @shahadathhs
-/packages/config/      @shahadathhs
-/packages/common/      @shahadathhs
+/packages/password/    @shahadathhs
+/packages/passphrase/  @shahadathhs
+/configs/eslint/       @shahadathhs
+/configs/typescript/   @shahadathhs

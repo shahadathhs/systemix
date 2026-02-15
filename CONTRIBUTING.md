@@ -1,6 +1,6 @@
-# Contributing to Vortex
+# Contributing to Systemix
 
-Thank you for your interest in contributing to Vortex! This project is a microservices ecosystem built with Node.js, TypeScript, and TurboRepo.
+Thank you for your interest in contributing to Systemix! This project is a modular, open-source toolkit for secure and scalable JavaScript systems, built with Node.js, TypeScript, and TurboRepo.
 
 ## Development Environment Setup
 
@@ -8,7 +8,6 @@ Thank you for your interest in contributing to Vortex! This project is a microse
 
 - **Node.js**: v24.x or higher
 - **PNPM**: v10.x or higher
-- **Docker & Docker Compose**: For running infrastructure services
 - **Make**: For running orchestration commands
 
 ### Initial Setup
@@ -18,34 +17,33 @@ Thank you for your interest in contributing to Vortex! This project is a microse
    ```bash
    pnpm install
    ```
-3. Start infrastructure (MongoDB, RabbitMQ):
+3. Verify build:
    ```bash
-   make infra
+   make build
    ```
 
 ## Development Workflow
 
-We use **TurboRepo** to manage the monorepo.
+We use **TurboRepo** and **pnpm** to manage the monorepo.
 
-### Running Services
+### Package Management
 
-- Run all services in dev mode: `pnpm dev`
-- Run a specific service: `pnpm --filter <service-name> dev`
+Our `Makefile` provides dynamic targets for all packages and configurations:
 
-### Building
+- **Build everything**: `make build`
+- **Build a specific package**: `make build-<package-name>` (e.g., `make build-password`)
+- **Lint all**: `make lint`
+- **Lint a specific package**: `make lint-<package-name>`
+- **Format all**: `make format`
+- **Format a specific package**: `make format-<package-name>`
 
-- Build all: `pnpm build`
-- Build specific service: `pnpm --filter <service-name>... build` (The `...` ensures dependencies are built too)
+### Adding new packages
 
-### Code Quality
-
-- Lint: `pnpm lint`
-- Format: `pnpm format`
-- Typecheck: `pnpm typecheck`
+Simply add a new directory in `packages/` or `configs/` and the `Makefile` will automatically pick it up for the dynamic targets.
 
 ## Commit Message Guidelines
 
-We use **Conventional Commits**. This is crucial because our CI/CD pipeline uses these messages to automate versioning and releases.
+We use **Conventional Commits**. This is crucial because our CI/CD pipeline uses these messages to automate versioning and selective releases to NPM.
 
 Format: `<type>(<scope>): <subject>`
 
@@ -54,24 +52,28 @@ Format: `<type>(<scope>): <subject>`
 - `feat`: A new feature
 - `fix`: A bug fix
 - `docs`: Documentation only changes
-- `style`: Changes that do not affect the meaning of the code (white-space, formatting, etc)
+- `style`: Formatting changes
 - `refactor`: A code change that neither fixes a bug nor adds a feature
 - `perf`: A code change that improves performance
-- `test`: Adding missing tests or correcting existing tests
 - `build`: Changes that affect the build system or external dependencies
-- `ci`: Changes to our CI configuration files and scripts
+- `ci`: Changes to our CI configuration
 - `chore`: Other changes that don't modify src or test files
 
 **Example:**
-`feat(auth): add google oauth2 support`
+`feat(password): add custom character set support`
 
 ## Pull Request Process
 
 1. Create a new branch from `main`.
-2. Ensure your code passes all CI checks (`pnpm lint`, `pnpm typecheck`, `pnpm build`).
+2. Ensure your code passes all checks:
+   ```bash
+   make build
+   make lint
+   pnpm typecheck
+   ```
 3. Open a Pull Request using the provided PR template.
-4. Once approved and merged into `main`, the CI/CD pipeline will automatically handle the release.
+4. Once approved and merged into `main`, the CI/CD pipeline will automatically handle the NPM publication of updated packages.
 
-## Tools
+## License
 
-You can use `make tools` to start management interfaces like **Mongo Express**.
+By contributing to Systemix, you agree that your contributions will be licensed under its MIT License.
