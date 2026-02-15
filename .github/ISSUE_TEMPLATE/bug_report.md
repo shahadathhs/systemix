@@ -12,10 +12,9 @@ A clear and concise description of what the bug is.
 
 ## Steps to Reproduce
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+1. Provide a minimal reproduction code snippet or steps.
+2. If it's a package-specific issue, specify which one (e.g., `@systemix/password`).
+3. Describe the environment (Node.js version, OS).
 
 ## Expected Behavior
 
@@ -27,13 +26,13 @@ A clear and concise description of what actually happened.
 
 ## Screenshots/Logs
 
-If applicable, add screenshots or terminal logs to help explain your problem.
+If applicable, add terminal logs or screenshots to help explain your problem.
 
 ## Environment:
 
-- OS: [e.g. Windows, Ubuntu]
+- OS: [e.g. Ubuntu, MacOS]
 - Node Version: [e.g. 24.x]
-- Service/Package: [e.g. auth-service, @systemix/common]
+- Package: [e.g. @systemix/password, @systemix/passphrase, @systemix/eslint]
 
 ## Additional Context
 

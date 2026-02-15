@@ -1,23 +1,24 @@
 {
   "name": "@systemix/passphrase",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shahadathhs/passphrase.git"
+    "url": "git+https://github.com/shahadathhs/systemix.git",
+    "directory": "packages/passphrase"
   },
-  "homepage": "https://github.com/shahadathhs/passphrase/blob/main/README.md",
+  "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/passphrase#readme",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write .",
+    "format": "prettier --check . --ignore-path .prettierignore",
+    "format:fix": "prettier --write . --ignore-path .prettierignore",
     "clean": "rimraf dist node_modules",
     "clean:turbo": "rimraf .turbo dist node_modules"
   },
@@ -38,11 +39,12 @@
   "license": "MIT",
   "description": "A lightweight and secure passphrase generator for JavaScript and TypeScript. Suitable for generating memorable passphrases using Node.js built-in crypto modules.",
   "devDependencies": {
+    "@systemix/eslint": "workspace:*",
     "@systemix/typescript": "workspace:*",
-    "@types/node": "^22.13.4",
-    "eslint": "^9.18.0",
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.3"
+    "@types/node": "^25.2.3",
+    "eslint": "^10.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   },
   "directories": {
     "test": "tests"
@@ -52,7 +54,7 @@
     "*.scss"
   ],
   "bugs": {
-    "url": "https://github.com/shahadathhs/passphrase/issues"
+    "url": "https://github.com/shahadathhs/systemix/issues"
   },
   "files": [
     "dist",
@@ -60,4 +62,3 @@
     "package.json"
   ]
 }
-

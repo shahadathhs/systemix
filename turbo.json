@@ -29,23 +29,6 @@
       "dependsOn": ["^format:fix"],
       "cache": false
     },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "start": {
-      "dependsOn": ["^build"],
-      "cache": false,
-      "persistent": true
-    },
-    "test": {
-      "dependsOn": ["^build"],
-      "cache": true
-    },
-    "test:w": {
-      "cache": false,
-      "persistent": true
-    },
     "clean": {
       "dependsOn": ["^clean"],
       "cache": false

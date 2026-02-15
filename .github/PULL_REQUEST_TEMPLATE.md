@@ -19,9 +19,9 @@ Please delete options that are not relevant.
 
 Please describe the tests that you ran to verify your changes.
 
-- [ ] Service/Local build successful
-- [ ] New/Existing test cases passed
-- [ ] Manual verification via Postman/Portal
+- [ ] Workspace build successful (`make build`)
+- [ ] Package-specific checks passed (`make lint-<pkg>`, `make build-<pkg>`)
+- [ ] Local typechecking passed (`pnpm typecheck`)
 
 ## Checklist:
 
@@ -30,4 +30,4 @@ Please describe the tests that you ran to verify your changes.
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
-- [ ] Any dependent changes have been merged and published in downstream modules
+- [ ] All packages build correctly without errors
