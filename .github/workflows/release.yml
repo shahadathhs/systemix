@@ -6,8 +6,12 @@ on:
 
 jobs:
   release:
-    name: Build, Release & Selective Publish
+    name: Build, Release & Publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
     if: github.event.repository.fork == false
     steps:
       - name: Checkout code
@@ -21,6 +25,7 @@ jobs:
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
+          scope: '@systemix'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -31,28 +36,7 @@ jobs:
       - name: Build Project
         run: pnpm build
 
-      - name: Create Release Zip
-        run: |
-          zip -r release.zip . \
-            -x "*.git*" \
-            -x "*node_modules*" \
-            -x "*.turbo*" \
-            -x "*.vscode*" \
-            -x "*/src/*" \
-            -x "*/test/*" \
-            -x "*.env*" \
-            -x "*pnpm-store*" \
-            -x "*.log"
-
-      - name: Semantic Release
-        id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm exec semantic-release
-
-      - name: Selective Publish
-        run: |
-          pnpm -r publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish changed packages
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset publish

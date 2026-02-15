@@ -1,6 +1,5 @@
 {
   "name": "systemix",
-  "version": "0.0.1",
   "private": true,
   "description": "Systemix — A Modular Open-Source Toolkit for Secure and Scalable JavaScript Systems",
   "packageManager": "pnpm@10.26.0",
@@ -8,7 +7,6 @@
     "type": "git",
     "url": "git+https://github.com/shahadathhs/systemix.git"
   },
-  "homepage": "https://github.com/shahadathhs/systemix#readme",
   "scripts": {
     "build": "turbo build",
     "typecheck": "turbo typecheck",
@@ -16,48 +14,24 @@
     "lint:fix": "turbo lint:fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "ci:fix": "pnpm lint:fix && pnpm format:fix",
     "clean": "turbo clean && rimraf node_modules",
-    "clean:turbo": "turbo clean:turbo && rimraf .turbo node_modules",
     "prepare": "husky",
-    "commit": "cz",
-    "release": "semantic-release"
+    "commit": "cz"
   },
   "workspaces": [
     "packages/*",
     "configs/*",
     "demos/*"
   ],
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-git"
-    }
-  },
-  "keywords": [],
-  "author": "https://github.com/shahadathhs",
-  "license": "MIT",
   "devDependencies": {
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^13.0.1",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^12.0.6",
-    "@semantic-release/npm": "^13.1.4",
-    "@semantic-release/release-notes-generator": "^14.1.0",
-    "@systemix/eslint": "workspace:*",
-    "@systemix/passphrase": "workspace:*",
-    "@systemix/password": "workspace:*",
-    "@systemix/typescript": "workspace:*",
+    "@changesets/cli": "^2.29.8",
+    "turbo": "^2.8.9",
+    "typescript": "^5.9.3",
+    "eslint": "^9.39.2",
+    "prettier": "^3.8.1",
+    "husky": "^9.1.7",
     "commitizen": "^4.3.1",
     "cz-git": "^1.12.0",
-    "eslint": "^9.39.2",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
-    "prettier": "^3.8.1",
-    "rimraf": "^6.1.2",
-    "semantic-release": "^25.0.3",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
-    "turbo": "^2.8.9",
-    "typescript": "^5.9.3"
+    "rimraf": "^6.1.2"
   }
 }
