@@ -24,7 +24,8 @@
     "prepublishOnly": "pnpm build",
     "commit": "cz",
     "version": "changeset version",
-    "publish": "changeset publish"
+    "publish": "changeset publish",
+    "changelog": "changeset add"
   },
   "workspaces": [
     "packages/*",
