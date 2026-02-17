@@ -2,42 +2,56 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   release:
-    name: Build, Release & Publish
+    name: Build, Version & Publish
     runs-on: ubuntu-latest
+
+    # Required permissions for Changesets
     permissions:
       contents: write
       pull-requests: write
       packages: write
       id-token: write
+
     if: github.event.repository.fork == false
+
     steps:
-      - name: Checkout code
+      # 1️⃣ Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: false
 
+      # 2️⃣ Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
           scope: '@systemix'
+          always-auth: true
 
+      # 3️⃣ Setup pnpm
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
+      # 4️⃣ Install Dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Project
+      # 5️⃣ Build packages
+      - name: Build project
         run: pnpm build
 
-      - name: Publish changed packages
+      # 6️⃣ Version + Publish via Changesets
+      - name: Version & Publish Packages
         uses: changesets/action@v1
         with:
           publish: pnpm changeset publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
