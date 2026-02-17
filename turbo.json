@@ -3,11 +3,19 @@
   "globalDependencies": ["package.json", "tsconfig.json"],
   "globalEnv": ["NODE_ENV"],
   "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
     "build": {
+      "dependsOn": ["^build", "^lint"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false
+    },
+    "start": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "package.json", "tsconfig.json"],
-      "outputs": ["dist/**"],
-      "cache": true
+      "cache": false,
+      "persistent": true
     },
     "typecheck": {
       "dependsOn": ["^typecheck"],

@@ -22,7 +22,7 @@ export const baseConfig = defineConfig([
     'prettier.config.mjs',
   ]),
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
+    files: ['**/*.{js,mjs,cjs,ts,mts,cts,tsx}'],
     ...js.configs.recommended,
     rules: {
       'no-console': [
@@ -44,7 +44,7 @@ export const baseConfig = defineConfig([
     },
   },
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
+    files: ['**/*.{js,mjs,cjs,ts,mts,cts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.browser,

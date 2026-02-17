@@ -6,9 +6,16 @@
   },
   "private": false,
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shahadathhs/systemix.git",
@@ -38,7 +45,7 @@
     "node",
     "utility"
   ],
-  "author": "Shahadath Hossain <shahadath.dev@gmail.com> (https://github.com/shahadathhs)",
+  "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
   "license": "MIT",
   "description": "A secure, memorable passphrase generator using cryptographically strong random values. Part of the Systemix toolkit.",
   "devDependencies": {
