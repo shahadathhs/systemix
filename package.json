@@ -21,7 +21,10 @@
     "ci:fix": "pnpm lint:fix && pnpm format:fix",
     "clean": "turbo clean && rimraf node_modules",
     "prepare": "husky",
-    "commit": "cz"
+    "prepublishOnly": "pnpm build",
+    "commit": "cz",
+    "version": "changeset version",
+    "publish": "changeset publish"
   },
   "workspaces": [
     "packages/*",
