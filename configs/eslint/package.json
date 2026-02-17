@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/shahadathhs/systemix/issues"
   },
-  "author": "https://github.com/shahadathhs",
+  "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
   "license": "MIT",
   "exports": {
     "./base": "./base.js",

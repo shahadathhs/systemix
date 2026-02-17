@@ -45,7 +45,7 @@
     "node",
     "utility"
   ],
-  "author": "Shahadath Hossain <shahadath.dev@gmail.com> (https://github.com/shahadathhs)",
+  "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
   "license": "MIT",
   "description": "A secure, memorable passphrase generator using cryptographically strong random values. Part of the Systemix toolkit.",
   "devDependencies": {
