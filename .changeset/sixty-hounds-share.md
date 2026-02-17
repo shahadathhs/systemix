@@ -1,6 +1,6 @@
 ---
-'@systemix/passphrase': major
-'@systemix/password': major
+'@systemix/passphrase': patch
+'@systemix/password': patch
 ---
 
 Improve version
