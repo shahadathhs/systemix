@@ -2,3 +2,8 @@ packages:
   - 'packages/*'
   - 'configs/*'
   - 'demos'
+
+# Used by demos (Next.js) to avoid building optional native deps on Vercel
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver
