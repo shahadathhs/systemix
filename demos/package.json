@@ -1,0 +1,41 @@
+{
+  "name": "demos",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check . --ignore-path .prettierignore",
+    "format:fix": "prettier --write . --ignore-path .prettierignore",
+    "clean": "rimraf .next node_modules",
+    "clean:turbo": "rimraf .turbo .next node_modules"
+  },
+  "dependencies": {
+    "@systemix/passphrase": "workspace:*",
+    "@systemix/password": "workspace:*",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.564.0",
+    "motion": "^12.34.0",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "tailwind-merge": "^3.4.1"
+  },
+  "devDependencies": {
+    "@systemix/eslint": "workspace:*",
+    "@systemix/typescript": "workspace:*",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^10.0.0",
+    "prettier": "^3.8.1",
+    "rimraf": "^6.1.2",
+    "tailwindcss": "^4",
+    "typescript": "^5.9.3"
+  }
+}

@@ -19,9 +19,11 @@
     "./base": "./base.js",
     "./express": "./express.js",
     "./next": "./next.js",
+    "./next-minimal": "./next-minimal.js",
     "./base.js": "./base.js",
     "./express.js": "./express.js",
-    "./next.js": "./next.js"
+    "./next.js": "./next.js",
+    "./next-minimal.js": "./next-minimal.js"
   },
   "scripts": {
     "clean": "rimraf node_modules",
