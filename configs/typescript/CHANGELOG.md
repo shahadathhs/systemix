@@ -1,5 +1,11 @@
 # @systemix/typescript
 
+## 0.2.1
+
+### Patch Changes
+
+- 80b1184: Simplify GitHub Packages names (@shahadathhs/\*), add install docs to package READMEs
+
 ## 0.2.0
 
 ### Minor Changes
