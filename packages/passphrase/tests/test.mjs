@@ -30,12 +30,24 @@ assert(typeof ph1 === 'string', 'returns string');
 assert(ph1.split(/\s+/).length === 4, 'word count respected');
 
 // Edge word counts
-assert(generatePassphrase({ wordCount: 1 }).split(/\s+/).length === 1, 'wordCount 1 works');
-assert(generatePassphrase({ wordCount: 20 }).split(/\s+/).length === 20, 'wordCount 20 works');
+assert(
+  generatePassphrase({ wordCount: 1 }).split(/\s+/).length === 1,
+  'wordCount 1 works',
+);
+assert(
+  generatePassphrase({ wordCount: 20 }).split(/\s+/).length === 20,
+  'wordCount 20 works',
+);
 
 // Separators
-assert(generatePassphrase({ wordCount: 2, separator: '-' }).includes('-'), 'custom separator');
-assert(generatePassphrase({ wordCount: 2, separator: '_' }).includes('_'), 'underscore separator');
+assert(
+  generatePassphrase({ wordCount: 2, separator: '-' }).includes('-'),
+  'custom separator',
+);
+assert(
+  generatePassphrase({ wordCount: 2, separator: '_' }).includes('_'),
+  'underscore separator',
+);
 
 // Formatting
 const ph2 = generatePassphrase({ wordCount: 3, useTitleCase: true });
@@ -53,7 +65,7 @@ assert(
   ['a b', 'b a', 'a a', 'b b'].includes(custom) ||
     custom.includes('a') ||
     custom.includes('b'),
-  'custom wordList works'
+  'custom wordList works',
 );
 
 console.log(`\n✅ ${passed} passed, ${failed} failed\n`);

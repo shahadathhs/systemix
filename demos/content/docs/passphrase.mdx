@@ -1,0 +1,56 @@
+# @systemix/passphrase
+
+A secure, memorable passphrase generator using cryptographically strong random values.
+
+## Installation
+
+```bash
+pnpm add @systemix/passphrase
+```
+
+## Basic Usage
+
+```typescript
+import { generatePassphrase } from '@systemix/passphrase';
+
+const passphrase = generatePassphrase();
+// Default: 4 words, space-separated
+```
+
+## Options
+
+| Property          | Type       | Default  | Description                    |
+| ----------------- | ---------- | -------- | ------------------------------ |
+| `wordCount`       | `number`   | `4`      | Number of words (1–100)        |
+| `separator`       | `string`   | `" "`    | Separator between words        |
+| `wordList`        | `string[]` | Built-in | Custom word list               |
+| `useTitleCase`    | `boolean`  | `false`  | Capitalize each word           |
+| `useUpperCase`    | `boolean`  | `false`  | UPPERCASE all words            |
+| `includeNumber`   | `boolean`  | `false`  | Inject random digit into words |
+| `randomSeparator` | `boolean`  | `false`  | Random separator per word pair |
+
+## Examples
+
+### Title case with custom separator
+
+```typescript
+const passphrase = generatePassphrase({
+  wordCount: 5,
+  separator: '-',
+  useTitleCase: true,
+});
+// e.g. "Correct-Horse-Battery-Staple-Valid"
+```
+
+### Entropy calculation
+
+```typescript
+import { calculatePassphraseEntropy } from '@systemix/passphrase';
+
+const entropy = calculatePassphraseEntropy(4, 7776); // wordCount, list size
+console.log(`Entropy: ${entropy.toFixed(1)} bits`);
+```
+
+## Try it
+
+[Open the Passphrase Generator demo](/passphrase) to experiment interactively.

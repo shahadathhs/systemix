@@ -1,0 +1,32 @@
+# Systemix Documentation
+
+Systemix is a modular, high-performance toolkit for building secure and scalable JavaScript and TypeScript systems.
+
+## Overview
+
+The toolkit provides cryptographically secure utilities with zero external production dependencies:
+
+- **@systemix/password** — Generate strong, customizable passwords with entropy calculation
+- **@systemix/passphrase** — Create memorable passphrases from high-entropy word lists
+
+All utilities use `globalThis.crypto` (Node.js `crypto` or Web Crypto API) for bias-free randomization.
+
+## Quick Start
+
+```bash
+pnpm add @systemix/password @systemix/passphrase
+```
+
+```typescript
+import { generatePassword } from '@systemix/password';
+import { generatePassphrase } from '@systemix/passphrase';
+
+const password = generatePassword({ length: 16, useSymbols: true });
+const passphrase = generatePassphrase({ wordCount: 4, useTitleCase: true });
+```
+
+## Explore
+
+- [Password Generator](/docs/password) — API reference and usage
+- [Passphrase Generator](/docs/passphrase) — API reference and usage
+- [Live Demos](/password) — Interactive playgrounds

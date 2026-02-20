@@ -11,3 +11,7 @@ pnpm-lock.yaml
 packages/
 configs/
 demos/
+
+# pnpm
+.pnpm-store/
+.pnpm-store

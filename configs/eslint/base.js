@@ -10,6 +10,7 @@ export const baseConfig = defineConfig([
     '**/node_modules/**',
     '**/dist/**',
     '**/logs/**',
+    '**/tests/**',
     'coverage/**',
     '.husky/**',
     '.turbo/**',

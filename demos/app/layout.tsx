@@ -86,18 +86,24 @@ export default function RootLayout({
               >
                 Passphrase
               </Link>
+              <Link
+                href="/docs"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Docs
+              </Link>
               <a
                 href="https://github.com/shahadathhs/systemix"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
-                Docs <ExternalLink className="w-3 h-3" />
+                GitHub <ExternalLink className="w-3 h-3" />
               </a>
             </nav>
             <div className="flex items-center gap-4">
               <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                v0.0.2
+                v0.1.0
               </span>
             </div>
           </div>

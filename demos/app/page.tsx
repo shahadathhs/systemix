@@ -45,10 +45,16 @@ export default function Home() {
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <Link
-              href="/password"
+              href="/docs"
               className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all hover:scale-105 active:scale-95"
             >
-              Explore Demos
+              Documentation
+            </Link>
+            <Link
+              href="/password"
+              className="rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-all"
+            >
+              Demos
             </Link>
             <Link
               href="https://github.com/shahadathhs/systemix"

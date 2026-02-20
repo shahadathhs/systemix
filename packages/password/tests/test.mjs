@@ -37,9 +37,11 @@ const p1 = generatePassword({ length: 12 });
 assert(typeof p1 === 'string', 'returns string');
 assert(p1.length === 12, 'respects length');
 // Default charset includes a-z, A-Z, 0-9 — verify over multiple runs (random can omit a type in one run)
-const samples = Array.from({ length: 10 }, () => generatePassword({ length: 12 }));
+const samples = Array.from({ length: 10 }, () =>
+  generatePassword({ length: 12 }),
+);
 const hasAllTypes = samples.some(
-  (p) => /[a-z]/.test(p) && /[A-Z]/.test(p) && /\d/.test(p)
+  (p) => /[a-z]/.test(p) && /[A-Z]/.test(p) && /\d/.test(p),
 );
 assert(hasAllTypes, 'includes lowercase, uppercase, numbers by default');
 
@@ -79,7 +81,7 @@ assertThrows(
       useNumbers: true,
       useUppercase: true,
     }),
-  'throws when min requirements exceed length'
+  'throws when min requirements exceed length',
 );
 assertThrows(
   () =>
@@ -90,13 +92,16 @@ assertThrows(
       useLowercase: false,
       useSymbols: false,
     }),
-  'throws when all charsets disabled'
+  'throws when all charsets disabled',
 );
 
 // Count
 const arr = generatePassword({ length: 8, count: 5 });
 assert(Array.isArray(arr) && arr.length === 5, 'count returns array');
-assert(arr.every((p) => typeof p === 'string' && p.length === 8), 'each has correct length');
+assert(
+  arr.every((p) => typeof p === 'string' && p.length === 8),
+  'each has correct length',
+);
 
 console.log(`\n✅ ${passed} passed, ${failed} failed\n`);
 process.exit(failed > 0 ? 1 : 0);
