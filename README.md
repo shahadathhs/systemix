@@ -7,7 +7,9 @@
 [![Turbo](https://img.shields.io/badge/built%20with-turbo-000000.svg)](https://turbo.build/)
 [![Docs](https://img.shields.io/badge/docs-systemix.vercel.app-blue)](https://systemix.vercel.app)
 
-### Packages on npm
+### Packages
+
+Published to **npm** and **GitHub Packages**:
 
 [![@systemix/password](https://img.shields.io/npm/v/@systemix/password.svg)](https://www.npmjs.com/package/@systemix/password)
 [![@systemix/passphrase](https://img.shields.io/npm/v/@systemix/passphrase.svg)](https://www.npmjs.com/package/@systemix/passphrase)
@@ -63,6 +65,13 @@ With npm:
 ```bash
 npm install @systemix/password @systemix/passphrase
 npm install -D @systemix/eslint @systemix/typescript
+```
+
+From GitHub Packages (add to `.npmrc` first: `@shahadathhs:registry=https://npm.pkg.github.com`):
+
+```bash
+pnpm add @shahadathhs/systemix-password @shahadathhs/systemix-passphrase
+pnpm add -D @shahadathhs/systemix-eslint @shahadathhs/systemix-typescript
 ```
 
 ---

@@ -24,6 +24,9 @@ out/
 # Turbo
 .turbo
 
+# Publish temp dirs
+.tmp-gh-publish
+
 # Vercel
 .vercel
 
