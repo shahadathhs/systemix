@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  release:
+  release-npm:
     name: Build, Version & Publish
     runs-on: ubuntu-latest
 
