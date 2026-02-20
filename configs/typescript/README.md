@@ -16,6 +16,14 @@ or
 npm install -D @systemix/typescript
 ```
 
+From GitHub Packages (add to `.npmrc`: `@shahadathhs:registry=https://npm.pkg.github.com`):
+
+```bash
+pnpm add -D @shahadathhs/typescript
+```
+
+Use `@shahadathhs/typescript/base.json` (etc.) in your tsconfig.
+
 ## Usage
 
 In your `tsconfig.json`:

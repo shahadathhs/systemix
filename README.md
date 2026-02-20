@@ -67,12 +67,14 @@ npm install @systemix/password @systemix/passphrase
 npm install -D @systemix/eslint @systemix/typescript
 ```
 
-From GitHub Packages (add to `.npmrc` first: `@shahadathhs:registry=https://npm.pkg.github.com`):
+From GitHub Packages (add to `.npmrc`: `@shahadathhs:registry=https://npm.pkg.github.com`):
 
 ```bash
-pnpm add @shahadathhs/systemix-password @shahadathhs/systemix-passphrase
-pnpm add -D @shahadathhs/systemix-eslint @shahadathhs/systemix-typescript
+pnpm add @shahadathhs/password @shahadathhs/passphrase
+pnpm add -D @shahadathhs/eslint @shahadathhs/typescript
 ```
+
+> **Recommendation:** Use npm (`@systemix/*`) — no extra config.
 
 ---
 

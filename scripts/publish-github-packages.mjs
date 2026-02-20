@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Publishes Systemix packages to GitHub Packages with @shahadathhs/systemix-* names.
- * Run after npm publish. Requires NODE_AUTH_TOKEN (GITHUB_TOKEN) and registry config.
+ * Publishes Systemix packages to GitHub Packages.
+ * Uses @shahadathhs/* (GitHub requires scope = repo owner).
  */
 
 import { execSync } from 'child_process';
@@ -21,10 +21,10 @@ const ROOT = join(__dirname, '..');
 const TEMP_DIR = join(ROOT, '.tmp-gh-publish');
 
 const PACKAGES = [
-  { path: 'packages/password', ghName: '@shahadathhs/systemix-password' },
-  { path: 'packages/passphrase', ghName: '@shahadathhs/systemix-passphrase' },
-  { path: 'configs/eslint', ghName: '@shahadathhs/systemix-eslint' },
-  { path: 'configs/typescript', ghName: '@shahadathhs/systemix-typescript' },
+  { path: 'packages/password', ghName: '@shahadathhs/password' },
+  { path: 'packages/passphrase', ghName: '@shahadathhs/passphrase' },
+  { path: 'configs/eslint', ghName: '@shahadathhs/eslint' },
+  { path: 'configs/typescript', ghName: '@shahadathhs/typescript' },
 ];
 
 /**

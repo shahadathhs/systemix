@@ -25,6 +25,14 @@ or
 npm install @systemix/passphrase
 ```
 
+From GitHub Packages (add to `.npmrc`: `@shahadathhs:registry=https://npm.pkg.github.com`):
+
+```bash
+pnpm add @shahadathhs/passphrase
+```
+
+Use `@shahadathhs/passphrase` in imports.
+
 ## Usage
 
 ### Simple Example

@@ -16,6 +16,14 @@ or
 npm install -D @systemix/eslint
 ```
 
+From GitHub Packages (add to `.npmrc`: `@shahadathhs:registry=https://npm.pkg.github.com`):
+
+```bash
+pnpm add -D @shahadathhs/eslint
+```
+
+Use `@shahadathhs/eslint/base` (etc.) in your config.
+
 ## Usage
 
 In your `eslint.config.mjs`:
