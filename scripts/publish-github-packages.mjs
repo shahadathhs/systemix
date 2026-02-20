@@ -18,6 +18,7 @@ import { execSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
+const TEMP_DIR = join(ROOT, '.tmp-gh-publish');
 
 const PACKAGES = [
   { path: 'packages/password', ghName: '@shahadathhs/systemix-password' },
@@ -26,22 +27,27 @@ const PACKAGES = [
   { path: 'configs/typescript', ghName: '@shahadathhs/systemix-typescript' },
 ];
 
-function copyDir(src, dest) {
-  mkdirSync(dest, { recursive: true });
-  const entries = readdirSync(src, { withFileTypes: true });
-  for (const e of entries) {
-    const s = join(src, e.name);
-    const d = join(dest, e.name);
-    if (e.isDirectory()) copyDir(s, d);
-    else cpSync(s, d);
-  }
-}
+/**
+ * Copies files matching a glob pattern, preserving directory structure.
+ * Supports patterns like "*.js", "dist/*.js", "subdir/*.json".
+ */
+function copyGlob(pkgPath, pattern, tempDir) {
+  const srcFull = join(pkgPath, pattern);
+  const srcDir = dirname(srcFull);
+  const destDir = join(tempDir, dirname(pattern));
 
-function copyGlob(dir, pattern, dest) {
-  if (!existsSync(dir)) return;
-  const ext = pattern.replace('*.', '');
-  for (const name of readdirSync(dir)) {
-    if (name.endsWith(ext)) cpSync(join(dir, name), join(dest, name));
+  if (!existsSync(srcDir)) return;
+
+  const globPart = pattern.split('/').pop(); // e.g. "*.js" from "dist/*.js"
+  const ext = globPart.startsWith('*') ? globPart.replace('*.', '') : null;
+
+  if (!ext) return;
+
+  mkdirSync(destDir, { recursive: true });
+  for (const name of readdirSync(srcDir)) {
+    if (name.endsWith(ext)) {
+      cpSync(join(srcDir, name), join(destDir, name));
+    }
   }
 }
 
@@ -55,11 +61,7 @@ function publishPackage({ path, ghName }) {
     return;
   }
 
-  const tempDir = join(
-    ROOT,
-    '.tmp-gh-publish',
-    ghName.replace('@', '').replace('/', '-'),
-  );
+  const tempDir = join(TEMP_DIR, ghName.replace('@', '').replace('/', '-'));
   mkdirSync(tempDir, { recursive: true });
 
   // Copy files based on package.json "files"
@@ -68,8 +70,7 @@ function publishPackage({ path, ghName }) {
     const src = join(pkgPath, pattern);
     const dest = join(tempDir, pattern);
     if (pattern.includes('*')) {
-      const baseDir = dirname(src);
-      copyGlob(baseDir, pattern, tempDir);
+      copyGlob(pkgPath, pattern, tempDir);
     } else if (existsSync(src)) {
       mkdirSync(dirname(dest), { recursive: true });
       cpSync(src, dest, { recursive: true });
@@ -120,16 +121,29 @@ function publishPackage({ path, ghName }) {
   }
 }
 
-// Run
-for (const pkg of PACKAGES) {
+function cleanup() {
   try {
-    publishPackage(pkg);
-  } catch (err) {
-    console.error(`❌ Failed:`, err.message);
-    process.exit(1);
+    execSync('rm -rf .tmp-gh-publish', { cwd: ROOT });
+  } catch {
+    // Ignore cleanup errors
   }
 }
 
-// Cleanup
-execSync('rm -rf .tmp-gh-publish', { cwd: ROOT });
-console.log('\n✅ GitHub Packages publish complete');
+// Run
+try {
+  for (const pkg of PACKAGES) {
+    try {
+      publishPackage(pkg);
+    } catch (err) {
+      console.error(`❌ Failed:`, err.message);
+      process.exitCode = 1;
+      break;
+    }
+  }
+} finally {
+  cleanup();
+}
+
+if (process.exitCode !== 1) {
+  console.log('\n✅ GitHub Packages publish complete');
+}
