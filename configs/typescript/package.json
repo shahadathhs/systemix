@@ -5,7 +5,18 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Standard TypeScript configurations for Systemix projects.",
+  "description": "Shareable TypeScript configs for base, Express, and Next.js projects. Part of the Systemix toolkit.",
+  "keywords": [
+    "systemix",
+    "typescript",
+    "tsconfig",
+    "typescript-config",
+    "express",
+    "nextjs",
+    "compiler-options"
+  ],
+  "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shahadathhs/systemix.git",
@@ -15,20 +26,21 @@
   "bugs": {
     "url": "https://github.com/shahadathhs/systemix/issues"
   },
-  "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
-  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "exports": {
     "./base.json": "./base.json",
     "./express.json": "./express.json",
     "./nextjs.json": "./nextjs.json"
   },
-  "scripts": {
-    "clean": "rimraf node_modules",
-    "clean:turbo": "rimraf .turbo node_modules"
-  },
   "files": [
     "*.json",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "scripts": {
+    "clean": "rimraf node_modules",
+    "clean:turbo": "rimraf .turbo node_modules"
+  }
 }
