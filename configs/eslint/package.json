@@ -1,7 +1,10 @@
 {
   "name": "@systemix/eslint",
   "version": "0.0.1",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "description": "Standard ESLint configurations for Systemix projects.",
   "repository": {
@@ -41,5 +44,10 @@
     "eslint-plugin-turbo": "^2.8.9",
     "globals": "^17.3.0",
     "typescript-eslint": "^8.55.0"
-  }
+  },
+  "files": [
+    "*.js",
+    "README.md",
+    "LICENSE"
+  ]
 }

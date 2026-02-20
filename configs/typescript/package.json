@@ -1,7 +1,10 @@
 {
   "name": "@systemix/typescript",
   "version": "0.0.1",
-  "private": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Standard TypeScript configurations for Systemix projects.",
   "repository": {
     "type": "git",
@@ -22,5 +25,10 @@
   "scripts": {
     "clean": "rimraf node_modules",
     "clean:turbo": "rimraf .turbo node_modules"
-  }
+  },
+  "files": [
+    "*.json",
+    "README.md",
+    "LICENSE"
+  ]
 }

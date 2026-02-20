@@ -1,5 +1,7 @@
 # @systemix/passphrase
 
+[![npm](https://img.shields.io/npm/v/@systemix/passphrase.svg)](https://www.npmjs.com/package/@systemix/passphrase)
+
 `@systemix/passphrase` is a secure and memorable passphrase generator for JavaScript and TypeScript. It creates human-readable passphrases by combining randomly selected words, offering a secure alternative to complex random character passwords.
 
 ## Features
