@@ -1,5 +1,11 @@
 # @systemix/eslint
 
+## 0.2.2
+
+### Patch Changes
+
+- aff388a: Add browser support, per-package tests, and fix flaky password test
+
 ## 0.2.1
 
 ### Patch Changes
