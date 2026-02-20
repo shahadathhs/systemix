@@ -4,17 +4,17 @@
  * Run after npm publish. Requires NODE_AUTH_TOKEN (GITHUB_TOKEN) and registry config.
  */
 
+import { execSync } from 'child_process';
 import {
-  readFileSync,
-  writeFileSync,
   cpSync,
+  existsSync,
   mkdirSync,
   readdirSync,
-  existsSync,
+  readFileSync,
+  writeFileSync,
 } from 'fs';
-import { join, dirname } from 'path';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -83,13 +83,14 @@ function publishPackage({ path, ghName }) {
     if (existsSync(src)) cpSync(src, join(tempDir, f));
   }
 
-  // Create package.json for GitHub Packages
+  // Create package.json for GitHub Packages (pre-built, no prepublishOnly)
   const ghPkg = {
     ...pkg,
     name: ghName,
     publishConfig: { registry: 'https://npm.pkg.github.com' },
   };
   delete ghPkg.private;
+  delete ghPkg.scripts?.prepublishOnly;
   writeFileSync(join(tempDir, 'package.json'), JSON.stringify(ghPkg, null, 2));
 
   // Publish
