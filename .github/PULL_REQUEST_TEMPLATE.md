@@ -19,8 +19,8 @@ Please delete options that are not relevant.
 
 Please describe the tests that you ran to verify your changes.
 
-- [ ] Workspace build successful (`make build`)
-- [ ] Package-specific checks passed (`make lint-<pkg>`, `make build-<pkg>`)
+- [ ] Workspace build successful (`pnpm build`)
+- [ ] Lint and format checks passed (`pnpm ci:check`)
 - [ ] Local typechecking passed (`pnpm typecheck`)
 
 ## Checklist:

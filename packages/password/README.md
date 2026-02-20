@@ -1,5 +1,7 @@
 # @systemix/password
 
+[![npm](https://img.shields.io/npm/v/@systemix/password.svg)](https://www.npmjs.com/package/@systemix/password)
+
 `@systemix/password` is a customizable, lightweight, and cryptographically secure password generator for JavaScript and TypeScript. Built for maximum security, it relies entirely on Node.js built-in `crypto` modules, ensuring zero external dependencies and a low supply-chain risk profile.
 
 ## Features

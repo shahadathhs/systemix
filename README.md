@@ -8,6 +8,34 @@
 
 ---
 
+## 📦 Packages
+
+| Package                                                                                                   | Description                                                                              |
+| :-------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
+| [`@systemix/password`](packages/password) · [npm](https://www.npmjs.com/package/@systemix/password)       | Cryptographically secure password generator with character guarantees and entropy tools. |
+| [`@systemix/passphrase`](packages/passphrase) · [npm](https://www.npmjs.com/package/@systemix/passphrase) | Human-readable passphrase generator with formatting and entropy tools.                   |
+| [`@systemix/eslint`](configs/eslint) · [npm](https://www.npmjs.com/package/@systemix/eslint)              | ESLint v10 flat configs for JS, TS, React, Express, and Next.js.                         |
+| [`@systemix/typescript`](configs/typescript) · [npm](https://www.npmjs.com/package/@systemix/typescript)  | Base TypeScript configs for various environments.                                        |
+
+### Installation
+
+```bash
+# Utilities
+pnpm add @systemix/password @systemix/passphrase
+
+# Configs (dev dependencies)
+pnpm add -D @systemix/eslint @systemix/typescript
+```
+
+With npm:
+
+```bash
+npm install @systemix/password @systemix/passphrase
+npm install -D @systemix/eslint @systemix/typescript
+```
+
+---
+
 ## 🚀 Vision
 
 In an era where security and performance are paramount, **Systemix** aims to provide developers with a "standard library" of tools that are:
@@ -16,24 +44,6 @@ In an era where security and performance are paramount, **Systemix** aims to pro
 - **Secure**: Built on top of robust cryptographic primitives.
 - **Scalable**: Designed for both small projects and large-scale monorepos.
 - **Developer-First**: Comprehensive types, flat configurations, and seamless DX.
-
----
-
-## 📦 Packages
-
-Systemix is organized as a monorepo, housing specialized packages for different needs:
-
-| Package                                       | Version | Description                                                            |
-| :-------------------------------------------- | :------ | :--------------------------------------------------------------------- |
-| [`@systemix/password`](packages/password)     | `0.0.2` | Secure password generator with character guarantees and entropy tools. |
-| [`@systemix/passphrase`](packages/passphrase) | `0.0.2` | Human-readable passphrase generator with formatting and entropy tools. |
-
-### 🛠 Shared Configs
-
-We also provide standardized configurations to maintain high code quality across projects:
-
-- **`@systemix/eslint`**: Modern ESLint v10 flat configurations for JS, TS, React, and Next.js.
-- **`@systemix/typescript`**: Base TS configurations for various environments.
 
 ---
 
