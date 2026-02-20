@@ -26,8 +26,8 @@
     "clean:turbo": "rimraf .turbo .next node_modules"
   },
   "dependencies": {
-    "@systemix/passphrase": "workspace:*",
-    "@systemix/password": "workspace:*",
+    "@systemix/passphrase": "^0.0.2",
+    "@systemix/password": "^0.0.2",
     "clsx": "^2.1.1",
     "lucide-react": "^0.564.0",
     "motion": "^12.34.0",
@@ -37,8 +37,8 @@
     "tailwind-merge": "^3.4.1"
   },
   "devDependencies": {
-    "@systemix/eslint": "workspace:*",
-    "@systemix/typescript": "workspace:*",
+    "@systemix/eslint": "^0.2.0",
+    "@systemix/typescript": "^0.2.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

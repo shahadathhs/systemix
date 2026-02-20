@@ -47,12 +47,14 @@ export function generatePasswordPropValidation(
     customSymbols,
   } = props;
 
-  // * length validation
-  if (typeof length !== 'number' || length < 1) {
-    throw new Error(lengthError.invalidLength);
-  }
-  if (length > 100) {
-    throw new Error(lengthError.lengthTooLarge);
+  // * length validation (allow undefined for default)
+  if (length !== undefined) {
+    if (typeof length !== 'number' || length < 1) {
+      throw new Error(lengthError.invalidLength);
+    }
+    if (length > 100) {
+      throw new Error(lengthError.lengthTooLarge);
+    }
   }
 
   // * min requirements validation
@@ -72,8 +74,9 @@ export function generatePasswordPropValidation(
     (minUppercase ?? 0) +
     (minLowercase ?? 0) +
     (minSymbols ?? 0);
+  const len = length ?? 12;
 
-  if (totalMin > length) {
+  if (totalMin > len) {
     throw new Error(
       'Total minimum character requirements exceed requested password length.',
     );
@@ -91,46 +94,53 @@ export function generatePasswordPropValidation(
   checkString(customLowercase, 'customLowercase');
   checkString(customSymbols, 'customSymbols');
 
-  // * useNumbers validation
-  if (typeof useNumbers !== 'boolean') {
+  // * useNumbers validation (allow undefined for defaults)
+  if (useNumbers !== undefined && typeof useNumbers !== 'boolean') {
     throw new Error(useNumbersError);
   }
 
   // * useUppercase validation
-  if (typeof useUppercase !== 'boolean') {
+  if (useUppercase !== undefined && typeof useUppercase !== 'boolean') {
     throw new Error(useUppercaseError);
   }
 
   // * useLowercase validation
-  if (typeof useLowercase !== 'boolean') {
+  if (useLowercase !== undefined && typeof useLowercase !== 'boolean') {
     throw new Error(useLowercaseError);
   }
 
   // * useSymbols validation
-  if (typeof useSymbols !== 'boolean') {
+  if (useSymbols !== undefined && typeof useSymbols !== 'boolean') {
     throw new Error(useSymbolsError);
   }
 
   // * excludeSimilarCharacters validation
-  if (typeof excludeSimilarCharacters !== 'boolean') {
+  if (
+    excludeSimilarCharacters !== undefined &&
+    typeof excludeSimilarCharacters !== 'boolean'
+  ) {
     throw new Error(excludeSimilarCharactersError);
   }
 
-  // * exclude validation
-  if (typeof exclude !== 'string') {
+  // * exclude validation (allow undefined)
+  if (exclude !== undefined && typeof exclude !== 'string') {
     throw new Error(excludeError);
   }
 
-  // * count validation
-  if (typeof count !== 'number' || count < 1) {
+  // * count validation (allow undefined)
+  if (count !== undefined && (typeof count !== 'number' || count < 1)) {
     throw new Error(countError.invalidCount);
   }
-  if (count > 10) {
+  if (count !== undefined && count > 10) {
     throw new Error(countError.countTooLarge);
   }
 
   // * throw error if all boolean props are false (excludeSimilarCharacters is not included)
-  if (!useNumbers && !useUppercase && !useLowercase && !useSymbols) {
+  const uN = useNumbers ?? true;
+  const uU = useUppercase ?? true;
+  const uL = useLowercase ?? true;
+  const uS = useSymbols ?? false;
+  if (!uN && !uU && !uL && !uS) {
     throw new Error(allOptionsFalseError);
   }
 }

@@ -3,6 +3,10 @@
   "globalDependencies": ["package.json", "tsconfig.json"],
   "globalEnv": ["NODE_ENV"],
   "tasks": {
+    "test": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true

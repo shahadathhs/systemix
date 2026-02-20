@@ -83,11 +83,11 @@ importers:
   demos:
     dependencies:
       '@systemix/passphrase':
-        specifier: workspace:*
-        version: link:../packages/passphrase
+        specifier: ^0.0.2
+        version: 0.0.2
       '@systemix/password':
-        specifier: workspace:*
-        version: link:../packages/password
+        specifier: ^0.0.2
+        version: 0.0.2
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -111,11 +111,11 @@ importers:
         version: 3.4.1
     devDependencies:
       '@systemix/eslint':
-        specifier: workspace:*
-        version: link:../configs/eslint
+        specifier: ^0.2.0
+        version: 0.2.1(eslint@10.0.0(jiti@2.6.1))(prettier@3.8.1)(turbo@2.8.9)(typescript@5.9.3)
       '@systemix/typescript':
-        specifier: workspace:*
-        version: link:../configs/typescript
+        specifier: ^0.2.0
+        version: 0.2.1
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.1.18
@@ -924,6 +924,20 @@ packages:
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
+
+  '@systemix/eslint@0.2.1':
+    resolution: {integrity: sha512-wMHnDulBnV5Ys++QknkvSX4QOtayQuWly+gsWpdlGSA7S6n2WC0Gvm693ne378CD3eL9Yhf8YoZJggnPhsEI5A==}
+    engines: {node: '>=18.0.0'}
+
+  '@systemix/passphrase@0.0.2':
+    resolution: {integrity: sha512-Vf7Gdb/A4kSkyaVBkRktgP8JEF5J0RkGD1xVetKicSF2pHcU1t3dk8crgjvhzhVuggFwm7A8lFBiAMzNgk5wrQ==}
+
+  '@systemix/password@0.0.2':
+    resolution: {integrity: sha512-jwMDi9g+NTgjaiHapr3BdfmWw1dbqMZwoqEpkolPbqgb4WApBQW6WC6w8z0hkp2cbMbJNwqacDQBtpAut9SdgA==}
+
+  '@systemix/typescript@0.2.1':
+    resolution: {integrity: sha512-XVcGd80vkENKchBtTA9fezZyyzRa17AHolDXyXgqa51K8b81KKz7q4NvwN41g6JgGli2Rrn2OaGHaTT5okikPQ==}
+    engines: {node: '>=18.0.0'}
 
   '@tailwindcss/node@4.1.18':
     resolution: {integrity: sha512-DoR7U1P7iYhw16qJ49fgXUlry1t4CpXeErJHnQ44JgTSKMaZUdf17cfn5mHchfJ4KRBZRFA/Coo+MUF5+gOaCQ==}
@@ -3810,6 +3824,36 @@ snapshots:
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
+
+  '@systemix/eslint@0.2.1(eslint@10.0.0(jiti@2.6.1))(prettier@3.8.1)(turbo@2.8.9)(typescript@5.9.3)':
+    dependencies:
+      '@eslint/js': 10.0.1(eslint@10.0.0(jiti@2.6.1))
+      '@next/eslint-plugin-next': 16.1.6
+      eslint-config-prettier: 10.1.8(eslint@10.0.0(jiti@2.6.1))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.55.0(eslint@10.0.0(jiti@2.6.1))(typescript@5.9.3))(eslint@10.0.0(jiti@2.6.1))
+      eslint-plugin-only-warn: 1.1.0
+      eslint-plugin-prettier: 5.5.5(eslint-config-prettier@10.1.8(eslint@10.0.0(jiti@2.6.1)))(eslint@10.0.0(jiti@2.6.1))(prettier@3.8.1)
+      eslint-plugin-react: 7.37.5(eslint@10.0.0(jiti@2.6.1))
+      eslint-plugin-react-hooks: 7.0.1(eslint@10.0.0(jiti@2.6.1))
+      eslint-plugin-turbo: 2.8.9(eslint@10.0.0(jiti@2.6.1))(turbo@2.8.9)
+      globals: 17.3.0
+      typescript-eslint: 8.55.0(eslint@10.0.0(jiti@2.6.1))(typescript@5.9.3)
+    transitivePeerDependencies:
+      - '@types/eslint'
+      - '@typescript-eslint/parser'
+      - eslint
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - prettier
+      - supports-color
+      - turbo
+      - typescript
+
+  '@systemix/passphrase@0.0.2': {}
+
+  '@systemix/password@0.0.2': {}
+
+  '@systemix/typescript@0.2.1': {}
 
   '@tailwindcss/node@4.1.18':
     dependencies:

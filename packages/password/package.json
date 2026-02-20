@@ -24,6 +24,7 @@
   "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/password#readme",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "pnpm build && node tests/test.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

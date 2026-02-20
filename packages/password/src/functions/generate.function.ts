@@ -1,4 +1,8 @@
-import { webcrypto as crypto } from 'node:crypto';
+// Use globalThis.crypto (browser + Node 18+) for isomorphic support
+const crypto = globalThis.crypto;
+if (!crypto) {
+  throw new Error('Crypto not available. Requires Node 18+ or browser.');
+}
 import { GeneratePasswordFunctionProps } from '../types/props.types';
 import { generatePasswordPropValidation } from './validation.function';
 

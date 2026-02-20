@@ -2,6 +2,8 @@
 
 Live documentation and interactive demos for [Systemix](https://github.com/shahadathhs/systemix) packages.
 
+> **Note:** Demos use published npm packages (`@systemix/password`, `@systemix/passphrase`, etc.), not workspace links. Update demos after publishing new package versions.
+
 ## Getting Started
 
 From the monorepo root:
