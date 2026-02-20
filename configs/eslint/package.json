@@ -6,7 +6,21 @@
     "access": "public"
   },
   "type": "module",
-  "description": "Standard ESLint configurations for Systemix projects.",
+  "description": "Shareable ESLint v10 flat configs for JavaScript, TypeScript, React, Express, and Next.js. Part of the Systemix toolkit.",
+  "keywords": [
+    "systemix",
+    "eslint",
+    "eslint-config",
+    "eslint-flat-config",
+    "typescript",
+    "react",
+    "nextjs",
+    "express",
+    "lint",
+    "code-quality"
+  ],
+  "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shahadathhs/systemix.git",
@@ -16,8 +30,9 @@
   "bugs": {
     "url": "https://github.com/shahadathhs/systemix/issues"
   },
-  "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
-  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "exports": {
     "./base": "./base.js",
     "./express": "./express.js",
@@ -28,6 +43,11 @@
     "./next.js": "./next.js",
     "./next-minimal.js": "./next-minimal.js"
   },
+  "files": [
+    "*.js",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "clean": "rimraf node_modules",
     "clean:turbo": "rimraf .turbo node_modules"
@@ -44,10 +64,5 @@
     "eslint-plugin-turbo": "^2.8.9",
     "globals": "^17.3.0",
     "typescript-eslint": "^8.55.0"
-  },
-  "files": [
-    "*.js",
-    "README.md",
-    "LICENSE"
-  ]
+  }
 }

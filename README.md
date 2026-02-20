@@ -1,10 +1,41 @@
 # Systemix
 
-**Systemix** is a modular, high-performance toolkit designed for building secure and scalable JavaScript and TypeScript systems. It provides a suite of lightweight, cryptographically secure utilities and shared configurations to streamline modern web development.
+**Systemix** is a modular, high-performance toolkit for building secure and scalable JavaScript and TypeScript systems. It provides cryptographically secure password and passphrase generators, plus shareable ESLint and TypeScript configs — a lightweight "standard library" for modern Node.js and web projects.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![pnpm](https://img.shields.io/badge/maintained%20with-pnpm-cc00ff.svg)](https://pnpm.io/)
 [![Turbo](https://img.shields.io/badge/built%20with-turbo-000000.svg)](https://turbo.build/)
+[![Docs](https://img.shields.io/badge/docs-systemix.vercel.app-blue)](https://systemix.vercel.app)
+
+### Packages on npm
+
+[![@systemix/password](https://img.shields.io/npm/v/@systemix/password.svg)](https://www.npmjs.com/package/@systemix/password)
+[![@systemix/passphrase](https://img.shields.io/npm/v/@systemix/passphrase.svg)](https://www.npmjs.com/package/@systemix/passphrase)
+[![@systemix/eslint](https://img.shields.io/npm/v/@systemix/eslint.svg)](https://www.npmjs.com/package/@systemix/eslint)
+[![@systemix/typescript](https://img.shields.io/npm/v/@systemix/typescript.svg)](https://www.npmjs.com/package/@systemix/typescript)
+
+---
+
+## ⚡ Quick Start
+
+```bash
+pnpm add @systemix/password @systemix/passphrase
+```
+
+```typescript
+import { generatePassword } from '@systemix/password';
+import { generatePassphrase } from '@systemix/passphrase';
+
+// Secure random password
+console.log(generatePassword({ length: 16, useSymbols: true }));
+// → "Z#kM@4p*J!h2X&b7"
+
+// Memorable passphrase
+console.log(generatePassphrase({ wordCount: 4 }));
+// → "apple orange banana kiwi"
+```
+
+[**Live demos** →](https://systemix.vercel.app)
 
 ---
 
@@ -20,10 +51,10 @@
 ### Installation
 
 ```bash
-# Utilities
+# Utilities (password generator, passphrase generator)
 pnpm add @systemix/password @systemix/passphrase
 
-# Configs (dev dependencies)
+# Configs (ESLint flat config, TypeScript tsconfig)
 pnpm add -D @systemix/eslint @systemix/typescript
 ```
 
@@ -69,6 +100,9 @@ In an era where security and performance are paramount, **Systemix** aims to pro
 ## 🤝 Contributing
 
 We welcome contributions! Whether it's reporting a bug, suggesting a feature, or submitting a pull request, your help is appreciated.
+
+- **[Contributing Guide](CONTRIBUTING.md)** — Setup and workflow
+- **[Code of Conduct](CODE_OF_CONDUCT.md)** — Community standards
 
 1. Clone the repo: `git clone https://github.com/shahadathhs/systemix.git`
 2. Install dependencies: `pnpm install`
