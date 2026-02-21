@@ -2,12 +2,12 @@
 
 Live documentation and interactive demos for [Systemix](https://github.com/shahadathhs/systemix) packages.
 
-> **Note:** Demos use published npm packages (`@systemix/password`, `@systemix/passphrase`), not workspace links. Update demos after publishing new package versions.
+> **Note:** Demos use published npm packages (`@systemix/password`, `@systemix/passphrase`, `@systemix/token`), not workspace links. Update demos after publishing new package versions.
 
 ## Features
 
 - **MDX Documentation** — Sidebar navigation and markdown-based docs at `/docs`
-- **Interactive Demos** — Password and passphrase generators with live configuration
+- **Interactive Demos** — Password, passphrase, and token generators with live configuration
 - **Dark theme** — Consistent with the Systemix brand
 
 ## Getting Started
@@ -34,8 +34,10 @@ Open [http://localhost:3000](http://localhost:3000) to explore.
 | `/docs`            | Documentation (MDX, sidebar)       |
 | `/docs/password`   | @systemix/password API reference   |
 | `/docs/passphrase` | @systemix/passphrase API reference |
+| `/docs/token`      | @systemix/token API reference      |
 | `/password`        | Password generator demo            |
 | `/passphrase`      | Passphrase generator demo          |
+| `/token`           | Token generator demo               |
 
 ## Scripts
 

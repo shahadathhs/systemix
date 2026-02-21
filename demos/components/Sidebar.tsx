@@ -9,6 +9,7 @@ import {
   Github,
   KeyRound,
   Lock,
+  Shield,
   X,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -105,6 +106,16 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
                 Passphrase
               </Link>
             </li>
+            <li>
+              <Link
+                href="/docs/token"
+                className={linkClass('/docs/token', true)}
+                {...linkProps('/docs/token')}
+              >
+                <Shield className="w-4 h-4 shrink-0 opacity-70" />
+                Token
+              </Link>
+            </li>
           </ul>
         </CollapsibleSection>
 
@@ -128,6 +139,16 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
               >
                 <KeyRound className="w-4 h-4 shrink-0 opacity-70" />
                 Passphrase Generator
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/token"
+                className={linkClass('/token', true)}
+                {...linkProps('/token')}
+              >
+                <Shield className="w-4 h-4 shrink-0 opacity-70" />
+                Token Generator
               </Link>
             </li>
           </ul>
