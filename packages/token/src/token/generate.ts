@@ -1,13 +1,12 @@
-import { getRandomBytes, getRandomInt } from '../shared/crypto';
-import { GenerateTokenFunctionProps } from './types';
-import { generateTokenPropValidation } from './validation';
+import { getRandomBytes } from '../shared/crypto';
 import {
-  ALPHANUMERIC_CHARSET,
   bytesToAlphanumeric,
   bytesToBase64,
   bytesToBase64Url,
   bytesToHex,
 } from './encode';
+import { GenerateTokenFunctionProps } from './types';
+import { generateTokenPropValidation } from './validation';
 
 export function generateToken(
   props: GenerateTokenFunctionProps = {},
@@ -17,20 +16,18 @@ export function generateToken(
   generateTokenPropValidation(props);
 
   const generateSingleToken = (): string => {
+    const bytes = getRandomBytes(byteLength);
     switch (charset) {
       case 'hex':
-        return bytesToHex(getRandomBytes(byteLength));
+        return bytesToHex(bytes);
       case 'base64':
-        return bytesToBase64(getRandomBytes(byteLength));
+        return bytesToBase64(bytes);
       case 'base64url':
-        return bytesToBase64Url(getRandomBytes(byteLength));
+        return bytesToBase64Url(bytes);
       case 'alphanumeric':
-        return Array.from(
-          { length: byteLength },
-          () => ALPHANUMERIC_CHARSET[getRandomInt(ALPHANUMERIC_CHARSET.length)],
-        ).join('');
+        return bytesToAlphanumeric(bytes);
       default:
-        return bytesToHex(getRandomBytes(byteLength));
+        return bytesToHex(bytes);
     }
   };
 
