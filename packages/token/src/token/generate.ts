@@ -16,19 +16,20 @@ export function generateToken(
   generateTokenPropValidation(props);
 
   const generateSingleToken = (): string => {
-    const bytes = getRandomBytes(byteLength);
-
     switch (charset) {
       case 'hex':
-        return bytesToHex(bytes);
+        return bytesToHex(getRandomBytes(byteLength));
       case 'base64':
-        return bytesToBase64(bytes);
+        return bytesToBase64(getRandomBytes(byteLength));
       case 'base64url':
-        return bytesToBase64Url(bytes);
+        return bytesToBase64Url(getRandomBytes(byteLength));
       case 'alphanumeric':
-        return bytesToAlphanumeric(bytes);
+        return Array.from(
+          { length: byteLength },
+          () => ALPHANUMERIC_CHARSET[getRandomInt(ALPHANUMERIC_CHARSET.length)],
+        ).join('');
       default:
-        return bytesToHex(bytes);
+        return bytesToHex(getRandomBytes(byteLength));
     }
   };
 
