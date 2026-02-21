@@ -26,7 +26,7 @@
     "version": "changeset version",
     "publish": "changeset publish",
     "changelog": "changeset add",
-    "test": "turbo run test --filter=@systemix/password --filter=@systemix/passphrase"
+    "test": "turbo run test"
   },
   "workspaces": [
     "packages/*",
