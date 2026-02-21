@@ -1,4 +1,4 @@
-import { getRandomBytes } from '../shared/crypto';
+import { getRandomBytes, getRandomInt } from '../shared/crypto';
 import { GenerateTokenFunctionProps } from './types';
 import { generateTokenPropValidation } from './validation';
 import {
