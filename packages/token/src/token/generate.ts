@@ -2,6 +2,7 @@ import { getRandomBytes, getRandomInt } from '../shared/crypto';
 import { GenerateTokenFunctionProps } from './types';
 import { generateTokenPropValidation } from './validation';
 import {
+  ALPHANUMERIC_CHARSET,
   bytesToAlphanumeric,
   bytesToBase64,
   bytesToBase64Url,
