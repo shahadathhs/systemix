@@ -5,6 +5,7 @@ import {
   Github,
   KeyRound,
   Lock,
+  Shield,
   ShieldCheck,
   Zap,
 } from 'lucide-react';
@@ -92,7 +93,7 @@ export default function Home() {
         </div>
 
         {/* Package Sections */}
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="mt-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <PackageCard
             title="Password Generator"
             description="Cryptographically secure password generator with customizable complexity and entropy tools."
@@ -106,6 +107,13 @@ export default function Home() {
             icon={KeyRound}
             href="/passphrase"
             tag="@systemix/passphrase"
+          />
+          <PackageCard
+            title="Token Generator"
+            description="Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities."
+            icon={Shield}
+            href="/token"
+            tag="@systemix/token"
           />
         </div>
       </div>

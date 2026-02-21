@@ -19,6 +19,7 @@ const navLinks: { href: string; label: string; icon?: typeof Lock }[] = [
   { href: '/docs', label: 'Docs' },
   { href: '/password', label: 'Password', icon: Lock },
   { href: '/passphrase', label: 'Passphrase', icon: KeyRound },
+  { href: '/token', label: 'Token', icon: Shield },
 ];
 
 export function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {

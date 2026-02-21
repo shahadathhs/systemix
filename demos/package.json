@@ -31,6 +31,7 @@
     "@next/mdx": "^16.1.6",
     "@systemix/passphrase": "^0.2.0",
     "@systemix/password": "^0.2.0",
+    "@systemix/token": "^0.2.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.575.0",
     "motion": "^12.34.3",

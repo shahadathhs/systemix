@@ -97,6 +97,9 @@ importers:
       '@systemix/password':
         specifier: ^0.2.0
         version: 0.2.0
+      '@systemix/token':
+        specifier: ^0.2.0
+        version: 0.2.0
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -997,6 +1000,9 @@ packages:
 
   '@systemix/password@0.2.0':
     resolution: {integrity: sha512-z51HB5hXoCtNU7XRR1AidDWgDRaTibU9oIMGD80ejHKLJmyfk7zVBVHNmQVMHe6Xx7PlbOTDEQSzXhcgQIYThQ==}
+
+  '@systemix/token@0.2.0':
+    resolution: {integrity: sha512-k+gd8g3S/EADSabFLZ5apaUVg+pjKQ+0PwvDvNr8m+Sn/YubqXbUT91qaQuAAgbm6FLTgZgY4TWFl8x771ai+w==}
 
   '@systemix/typescript@0.3.0':
     resolution: {integrity: sha512-6v4QaP1UIJPgcpgBnLO44FKZrheyIwFcli+JWNAeM+d19A3rsjwI5KOciN+oajFKKvqPPKBLowJp/apxI3fQkQ==}
@@ -4339,6 +4345,8 @@ snapshots:
   '@systemix/passphrase@0.2.0': {}
 
   '@systemix/password@0.2.0': {}
+
+  '@systemix/token@0.2.0': {}
 
   '@systemix/typescript@0.3.0': {}
 

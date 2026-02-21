@@ -8,25 +8,29 @@ The toolkit provides cryptographically secure utilities with zero external produ
 
 - **@systemix/password** — Generate strong, customizable passwords with entropy calculation
 - **@systemix/passphrase** — Create memorable passphrases from high-entropy word lists
+- **@systemix/token** — Secure token generator with hex, base64, base64url, alphanumeric charsets
 
 All utilities use `globalThis.crypto` (Node.js `crypto` or Web Crypto API) for bias-free randomization.
 
 ## Quick Start
 
 ```bash
-pnpm add @systemix/password @systemix/passphrase
+pnpm add @systemix/password @systemix/passphrase @systemix/token
 ```
 
 ```typescript
 import { generatePassword } from '@systemix/password';
 import { generatePassphrase } from '@systemix/passphrase';
+import { generateToken } from '@systemix/token';
 
 const password = generatePassword({ length: 16, useSymbols: true });
 const passphrase = generatePassphrase({ wordCount: 4, useTitleCase: true });
+const token = generateToken({ byteLength: 32, charset: 'hex' });
 ```
 
 ## Explore
 
 - [Password Generator](/docs/password) — API reference and usage
 - [Passphrase Generator](/docs/passphrase) — API reference and usage
+- [Token Generator](/docs/token) — API reference and usage
 - [Live Demos](/password) — Interactive playgrounds

@@ -8,6 +8,7 @@ export const docsNav = [
     items: [
       { title: 'Password', href: '/docs/password' },
       { title: 'Passphrase', href: '/docs/passphrase' },
+      { title: 'Token', href: '/docs/token' },
     ],
   },
   {
@@ -15,6 +16,7 @@ export const docsNav = [
     items: [
       { title: 'Password Generator', href: '/password' },
       { title: 'Passphrase Generator', href: '/passphrase' },
+      { title: 'Token Generator', href: '/token' },
     ],
   },
 ] as const;

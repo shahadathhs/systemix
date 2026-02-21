@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-const docsSlugs = ['', 'password', 'passphrase'] as const;
+const docsSlugs = ['', 'password', 'passphrase', 'token'] as const;
 
 type Slug = (typeof docsSlugs)[number];
 
@@ -21,6 +21,11 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
     description:
       'API reference for @systemix/passphrase. Secure, memorable passphrase generator using high-entropy word lists.',
   },
+  token: {
+    title: '@systemix/token',
+    description:
+      'API reference for @systemix/token. Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities.',
+  },
 };
 
 const docModules: Record<
@@ -30,6 +35,7 @@ const docModules: Record<
   '': () => import('@/content/docs/index.mdx'),
   password: () => import('@/content/docs/password.mdx'),
   passphrase: () => import('@/content/docs/passphrase.mdx'),
+  token: () => import('@/content/docs/token.mdx'),
 };
 
 export async function generateMetadata({
