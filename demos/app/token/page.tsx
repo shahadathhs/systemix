@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import {
+  bytesToAlphanumeric,
   bytesToBase64,
   bytesToBase64Url,
   bytesToHex,
@@ -46,10 +47,16 @@ export default function TokenPage() {
 
   const displayToken = typeof token === 'string' ? token : token.join('\n');
   const copyToClipboard = () => {
-    void navigator.clipboard.writeText(displayToken).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    if (typeof navigator === 'undefined' || !navigator.clipboard) return;
+    navigator.clipboard
+      .writeText(displayToken)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {
+        /* clipboard unavailable or denied */
+      });
   };
 
   return (
@@ -93,6 +100,7 @@ export default function TokenPage() {
                   onClick={handleGenerate}
                   className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-colors"
                   title="Regenerate"
+                  aria-label="Regenerate token"
                 >
                   <RefreshCw className="w-5 h-5" />
                 </button>
@@ -290,6 +298,7 @@ function EncodingDemo() {
   const hex = bytes.length > 0 ? bytesToHex(bytes) : '';
   const base64 = bytes.length > 0 ? bytesToBase64(bytes) : '';
   const base64url = bytes.length > 0 ? bytesToBase64Url(bytes) : '';
+  const alphanumeric = bytes.length > 0 ? bytesToAlphanumeric(bytes) : '';
 
   return (
     <div className="glass rounded-2xl p-6 border border-white/10 space-y-6">
@@ -306,10 +315,11 @@ function EncodingDemo() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <EncodingOutput label="bytesToHex" value={hex} />
         <EncodingOutput label="bytesToBase64" value={base64} />
         <EncodingOutput label="bytesToBase64Url" value={base64url} />
+        <EncodingOutput label="bytesToAlphanumeric" value={alphanumeric} />
       </div>
     </div>
   );
@@ -318,10 +328,16 @@ function EncodingDemo() {
 function EncodingOutput({ label, value }: { label: string; value: string }) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
-    void navigator.clipboard.writeText(value).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    });
+    if (typeof navigator === 'undefined' || !navigator.clipboard) return;
+    navigator.clipboard
+      .writeText(value)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      })
+      .catch(() => {
+        /* clipboard unavailable or denied */
+      });
   };
 
   return (
@@ -332,6 +348,7 @@ function EncodingOutput({ label, value }: { label: string; value: string }) {
           onClick={copy}
           className="p-1.5 rounded hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
           title="Copy"
+          aria-label={`Copy ${label} output`}
         >
           {copied ? (
             <Check className="w-4 h-4" />
