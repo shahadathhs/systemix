@@ -50,13 +50,15 @@ const cn = (...classes: (string | boolean | undefined)[]) =>
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
-  const linkClass = (href: string) =>
-    cn(
+  const linkClass = (href: string, exact?: boolean) => {
+    const active = exact
+      ? pathname === href
+      : pathname === href || pathname?.startsWith(href + '/');
+    return cn(
       'flex items-center gap-2 text-sm py-2.5 px-3 rounded-lg transition-colors',
-      pathname === href || pathname?.startsWith(href + '/')
-        ? 'bg-blue-500/10 text-blue-400 font-medium'
-        : 'text-gray-400 hover:text-white hover:bg-white/5',
+      active ? 'bg-blue-500/10 text-blue-400 font-medium' : 'text-gray-400 hover:text-white hover:bg-white/5',
     );
+  };
 
   const linkProps = (href: string) =>
     href.startsWith('http') ? {} : { onClick: onNavigate };
@@ -64,9 +66,17 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       <div className="space-y-1 pb-4 border-b border-white/10 mb-4">
-        <Link href="/" className={linkClass('/')} {...linkProps('/')}>
+        <Link href="/" className={linkClass('/', true)} {...linkProps('/')}>
           <FileText className="w-4 h-4 shrink-0 opacity-70" />
           Home
+        </Link>
+        <Link
+          href="/docs"
+          className={linkClass('/docs', true)}
+          {...linkProps('/docs')}
+        >
+          <BookOpen className="w-4 h-4 shrink-0 opacity-70" />
+          Overview
         </Link>
       </div>
 
@@ -75,18 +85,8 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
           <ul className="space-y-0.5 pt-1">
             <li>
               <Link
-                href="/docs"
-                className={linkClass('/docs')}
-                {...linkProps('/docs')}
-              >
-                <BookOpen className="w-4 h-4 shrink-0 opacity-70" />
-                Overview
-              </Link>
-            </li>
-            <li>
-              <Link
                 href="/docs/password"
-                className={linkClass('/docs/password')}
+                className={linkClass('/docs/password', true)}
                 {...linkProps('/docs/password')}
               >
                 <Lock className="w-4 h-4 shrink-0 opacity-70" />
@@ -96,7 +96,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
             <li>
               <Link
                 href="/docs/passphrase"
-                className={linkClass('/docs/passphrase')}
+                className={linkClass('/docs/passphrase', true)}
                 {...linkProps('/docs/passphrase')}
               >
                 <KeyRound className="w-4 h-4 shrink-0 opacity-70" />
@@ -111,7 +111,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
             <li>
               <Link
                 href="/password"
-                className={linkClass('/password')}
+                className={linkClass('/password', true)}
                 {...linkProps('/password')}
               >
                 <Lock className="w-4 h-4 shrink-0 opacity-70" />
@@ -121,7 +121,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
             <li>
               <Link
                 href="/passphrase"
-                className={linkClass('/passphrase')}
+                className={linkClass('/passphrase', true)}
                 {...linkProps('/passphrase')}
               >
                 <KeyRound className="w-4 h-4 shrink-0 opacity-70" />

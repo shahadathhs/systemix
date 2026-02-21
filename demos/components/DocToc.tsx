@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface TocItem {
@@ -9,12 +9,19 @@ interface TocItem {
   level: number;
 }
 
-export function DocToc({ selector = 'article' }: { selector?: string }) {
+interface DocTocProps {
+  scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
+}
+
+export function DocToc({ scrollContainerRef }: DocTocProps) {
+  const pathname = usePathname();
   const [items, setItems] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const containerSelector = '[data-docs-article]';
 
   useEffect(() => {
-    const el = document.querySelector(selector);
+    const el =
+      scrollContainerRef?.current ?? document.querySelector(containerSelector);
     if (!el) return;
 
     const headings = el.querySelectorAll('h2, h3');
@@ -37,12 +44,13 @@ export function DocToc({ selector = 'article' }: { selector?: string }) {
       }
     });
     setItems(toc);
-  }, [selector]);
+  }, [scrollContainerRef, pathname]);
 
   useEffect(() => {
     if (items.length === 0) return;
 
-    const el = document.querySelector(selector);
+    const el =
+      scrollContainerRef?.current ?? document.querySelector(containerSelector);
     if (!el) return;
 
     const headings = items
@@ -50,7 +58,8 @@ export function DocToc({ selector = 'article' }: { selector?: string }) {
       .filter(Boolean) as HTMLElement[];
 
     const scrollContainer =
-      document.querySelector('[data-scroll-container]') ??
+      scrollContainerRef?.current ??
+      document.querySelector(containerSelector) ??
       document.documentElement;
 
     const onScroll = () => {
@@ -71,12 +80,28 @@ export function DocToc({ selector = 'article' }: { selector?: string }) {
     onScroll();
 
     return () => scrollContainer.removeEventListener('scroll', onScroll);
-  }, [items, selector]);
+  }, [items, scrollContainerRef, pathname]);
+
+  const handleClick = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    const container =
+      scrollContainerRef?.current ??
+      document.querySelector(containerSelector);
+    const target = container?.querySelector(`#${id}`) as HTMLElement | null;
+    if (target && container) {
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const scrollTop =
+        container.scrollTop + (targetRect.top - containerRect.top) - 24;
+      container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+      window.history.replaceState(null, '', `#${id}`);
+    }
+  };
 
   if (items.length === 0) return null;
 
   return (
-    <aside className="hidden xl:block w-56 shrink-0 pl-8 self-start sticky top-24">
+    <aside className="hidden xl:block w-56 shrink-0 pl-8">
       <nav className="space-y-2">
         <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
           On this page
@@ -89,16 +114,17 @@ export function DocToc({ selector = 'article' }: { selector?: string }) {
                 item.level === 3 ? 'pl-4 border-l border-white/10' : ''
               }
             >
-              <Link
-                href={`#${item.id}`}
-                className={`block py-0.5 transition-colors ${
+              <button
+                type="button"
+                onClick={(e) => handleClick(e, item.id)}
+                className={`block w-full text-left py-0.5 transition-colors cursor-pointer ${
                   activeId === item.id
                     ? 'text-blue-400 font-medium'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {item.text}
-              </Link>
+              </button>
             </li>
           ))}
         </ul>

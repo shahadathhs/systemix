@@ -1,6 +1,6 @@
+import { AppShell } from '@/components/AppShell';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { AppShell } from '@/components/AppShell';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -70,9 +70,11 @@ export default function RootLayout({
               © {new Date().getFullYear()} Systemix Toolkit. Built by{' '}
               <a
                 href="https://github.com/shahadathhs"
-                className="hover:text-blue-400"
+                className="hover:text-blue-400 underline"
+                target="_blank"
+                rel="noreferrer"
               >
-                Shahadath Hossain
+                Shahadath Hossen Sajib
               </a>
             </p>
           </div>

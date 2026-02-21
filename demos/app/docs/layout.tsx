@@ -1,7 +1,9 @@
+import { DocsLayoutClient } from './DocsLayoutClient';
+
 export default function DocsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <DocsLayoutClient>{children}</DocsLayoutClient>;
 }

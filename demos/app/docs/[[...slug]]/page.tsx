@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { DocToc } from '@/components/DocToc';
 
 const docsSlugs = ['', 'password', 'passphrase'] as const;
 
@@ -70,12 +69,9 @@ export default async function DocsPage({
   const { default: MDX } = await docModules[path]();
 
   return (
-    <div className="flex gap-8 w-full">
-      <article className="flex-1 min-w-0 max-w-3xl">
-        <MDX />
-      </article>
-      <DocToc />
-    </div>
+    <article>
+      <MDX />
+    </article>
   );
 }
 
