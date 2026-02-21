@@ -1,12 +1,12 @@
 ## Description
 
-Please include a summary of the changes and the related issue. Please also include relevant motivation and context.
+<!-- Please include a summary of the changes and the related issue. Include relevant motivation and context. -->
 
-Fixes # (issue number)
+<!-- Fixes # (issue number) -->
 
 ## Type of Change
 
-Please delete options that are not relevant.
+<!-- Please delete options that are not relevant. -->
 
 - [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
 - [ ] 🚀 New feature (non-breaking change which adds functionality)
@@ -17,13 +17,13 @@ Please delete options that are not relevant.
 
 ## How Has This Been Tested?
 
-Please describe the tests that you ran to verify your changes.
+<!-- Please describe the tests that you ran to verify your changes. -->
 
 - [ ] Workspace build successful (`pnpm build`)
 - [ ] Lint and format checks passed (`pnpm ci:check`)
 - [ ] Local typechecking passed (`pnpm typecheck`)
 
-## Checklist:
+## Checklist
 
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my code
