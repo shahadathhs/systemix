@@ -85,8 +85,7 @@ export function DocToc({ scrollContainerRef }: DocTocProps) {
   const handleClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     const container =
-      scrollContainerRef?.current ??
-      document.querySelector(containerSelector);
+      scrollContainerRef?.current ?? document.querySelector(containerSelector);
     const target = container?.querySelector(`#${id}`) as HTMLElement | null;
     if (target && container) {
       const containerRect = container.getBoundingClientRect();

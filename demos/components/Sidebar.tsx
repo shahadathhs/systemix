@@ -56,7 +56,9 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
       : pathname === href || pathname?.startsWith(href + '/');
     return cn(
       'flex items-center gap-2 text-sm py-2.5 px-3 rounded-lg transition-colors',
-      active ? 'bg-blue-500/10 text-blue-400 font-medium' : 'text-gray-400 hover:text-white hover:bg-white/5',
+      active
+        ? 'bg-blue-500/10 text-blue-400 font-medium'
+        : 'text-gray-400 hover:text-white hover:bg-white/5',
     );
   };
 

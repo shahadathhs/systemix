@@ -4,11 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { DocToc } from '@/components/DocToc';
 
-export function DocsLayoutClient({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function DocsLayoutClient({ children }: { children: React.ReactNode }) {
   const articleRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
