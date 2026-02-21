@@ -1,12 +1,15 @@
 import type { MDXComponents } from 'mdx/types';
 import Link from 'next/link';
+import { CodeBlock } from '@/components/CodeBlock';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     a: ({ href, children, ...props }) => {
+      const linkClass =
+        'text-blue-400 hover:text-blue-300 underline underline-offset-2 decoration-blue-400/60 hover:decoration-blue-300';
       if (href?.startsWith('/')) {
         return (
-          <Link href={href} {...props}>
+          <Link href={href} className={linkClass} {...props}>
             {children}
           </Link>
         );
@@ -16,27 +19,30 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           href={href}
           target={href?.startsWith('http') ? '_blank' : undefined}
           rel={href?.startsWith('http') ? 'noreferrer' : undefined}
-          className="text-blue-400 hover:text-blue-300 underline"
+          className={linkClass}
           {...props}
         >
           {children}
         </a>
       );
     },
-    h1: ({ children }) => (
-      <h1 className="text-3xl font-bold tracking-tight text-white mt-8 mb-4 scroll-mt-20">
-        {children}
-      </h1>
+    h1: (props) => (
+      <h1
+        className="text-3xl font-bold tracking-tight text-white mt-8 mb-4 scroll-mt-20"
+        {...props}
+      />
     ),
-    h2: ({ children }) => (
-      <h2 className="text-2xl font-semibold text-white mt-10 mb-3 scroll-mt-20 border-b border-white/10 pb-2">
-        {children}
-      </h2>
+    h2: (props) => (
+      <h2
+        className="text-2xl font-semibold text-white mt-10 mb-3 scroll-mt-20 border-b border-white/10 pb-2"
+        {...props}
+      />
     ),
-    h3: ({ children }) => (
-      <h3 className="text-xl font-semibold text-white mt-8 mb-2 scroll-mt-20">
-        {children}
-      </h3>
+    h3: (props) => (
+      <h3
+        className="text-xl font-semibold text-white mt-8 mb-2 scroll-mt-20"
+        {...props}
+      />
     ),
     p: ({ children }) => (
       <p className="text-gray-400 leading-7 mb-4">{children}</p>
@@ -57,11 +63,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </code>
     ),
-    pre: ({ children }) => (
-      <pre className="p-4 rounded-xl bg-white/5 border border-white/10 overflow-x-auto mb-4 text-sm">
-        {children}
-      </pre>
-    ),
+    pre: (props) => <CodeBlock {...props} />,
     table: ({ children }) => (
       <div className="overflow-x-auto mb-6 rounded-xl border border-white/10">
         <table className="min-w-full divide-y divide-white/10">

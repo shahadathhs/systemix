@@ -25,6 +25,16 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Links - ensure they look clickable across the project */
+a:not([class]) {
+  color: #60a5fa;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+a:not([class]):hover {
+  color: #93c5fd;
+}
+
 @layer utilities {
   .glass {
     background: rgba(255, 255, 255, 0.03);

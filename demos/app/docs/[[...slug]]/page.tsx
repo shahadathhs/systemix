@@ -1,8 +1,28 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { DocToc } from '@/components/DocToc';
 
 const docsSlugs = ['', 'password', 'passphrase'] as const;
 
 type Slug = (typeof docsSlugs)[number];
+
+const docMeta: Record<Slug, { title: string; description: string }> = {
+  '': {
+    title: 'Documentation',
+    description:
+      'Systemix documentation. Cryptographically secure password and passphrase generators for JavaScript and TypeScript.',
+  },
+  password: {
+    title: '@systemix/password',
+    description:
+      'API reference for @systemix/password. Cryptographically secure password generator with customizable complexity and entropy tools.',
+  },
+  passphrase: {
+    title: '@systemix/passphrase',
+    description:
+      'API reference for @systemix/passphrase. Secure, memorable passphrase generator using high-entropy word lists.',
+  },
+};
 
 const docModules: Record<
   Slug,
@@ -12,6 +32,29 @@ const docModules: Record<
   password: () => import('@/content/docs/password.mdx'),
   passphrase: () => import('@/content/docs/passphrase.mdx'),
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug?: string[] }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const path = (slug?.join('/') ?? '') as Slug;
+  const validSlug = docsSlugs.includes(path);
+  const meta = validSlug ? docMeta[path] : docMeta[''];
+  return {
+    title: meta.title,
+    description: meta.description,
+    openGraph: {
+      title: `${meta.title} | Systemix Demos`,
+      description: meta.description,
+    },
+    twitter: {
+      title: `${meta.title} | Systemix Demos`,
+      description: meta.description,
+    },
+  };
+}
 
 export default async function DocsPage({
   params,
@@ -27,9 +70,12 @@ export default async function DocsPage({
   const { default: MDX } = await docModules[path]();
 
   return (
-    <article className="max-w-3xl">
-      <MDX />
-    </article>
+    <div className="flex gap-8 w-full">
+      <article className="flex-1 min-w-0 max-w-3xl">
+        <MDX />
+      </article>
+      <DocToc />
+    </div>
   );
 }
 
