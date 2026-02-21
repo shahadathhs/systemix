@@ -1,4 +1,4 @@
-const ALPHANUMERIC_CHARSET =
+export const ALPHANUMERIC_CHARSET =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 export function bytesToHex(bytes: Uint8Array): string {
