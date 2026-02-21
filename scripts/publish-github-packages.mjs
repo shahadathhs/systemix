@@ -23,6 +23,7 @@ const TEMP_DIR = join(ROOT, '.tmp-gh-publish');
 const PACKAGES = [
   { path: 'packages/password', ghName: '@shahadathhs/password' },
   { path: 'packages/passphrase', ghName: '@shahadathhs/passphrase' },
+  { path: 'packages/token', ghName: '@shahadathhs/token' },
   { path: 'configs/eslint', ghName: '@shahadathhs/eslint' },
   { path: 'configs/typescript', ghName: '@shahadathhs/typescript' },
 ];
