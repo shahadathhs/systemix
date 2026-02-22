@@ -286,7 +286,9 @@ export function SignedTokenSection() {
         {tab === 'decode' && (
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Token</label>
+              <label className="text-sm font-medium text-slate-300">
+                Token
+              </label>
               <textarea
                 value={decodeToken}
                 onChange={(e) => setDecodeToken(e.target.value)}
@@ -334,7 +336,9 @@ export function SignedTokenSection() {
         {tab === 'verify' && (
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Token</label>
+              <label className="text-sm font-medium text-slate-300">
+                Token
+              </label>
               <textarea
                 value={verifyToken}
                 onChange={(e) => handleVerifyTokenChange(e.target.value)}

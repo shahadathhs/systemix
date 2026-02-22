@@ -152,7 +152,9 @@ export function GenerateTokenSection() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Count</label>
+              <label className="text-sm font-medium text-slate-300">
+                Count
+              </label>
               <div className="flex gap-2">
                 {[1, 3, 5].map((n) => (
                   <button
