@@ -10,6 +10,7 @@ import {
   KeyRound,
   Lock,
   Shield,
+  User,
   X,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -80,6 +81,14 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
         >
           <BookOpen className="w-4 h-4 shrink-0 opacity-70" />
           Overview
+        </Link>
+        <Link
+          href="/about"
+          className={linkClass('/about', true)}
+          {...linkProps('/about')}
+        >
+          <User className="w-4 h-4 shrink-0 opacity-70" />
+          About
         </Link>
       </div>
 
@@ -216,7 +225,7 @@ export function Sidebar({
           'fixed lg:sticky top-0 lg:top-14 left-0 z-[60] lg:z-40 w-72 shrink-0',
           'h-screen lg:h-[calc(100vh-3.5rem)]',
           'bg-background/95 lg:bg-background border-r border-white/5',
-          'flex flex-col p-4 overflow-y-auto',
+          'flex flex-col p-4 overflow-y-auto scrollbar-hide',
           'transition-transform duration-300 ease-in-out',
           'lg:translate-x-0 lg:shadow-none',
           open ? 'translate-x-0 shadow-2xl' : '-translate-x-full',

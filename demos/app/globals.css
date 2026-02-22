@@ -42,3 +42,12 @@ a:not([class]):hover {
     border: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
+
+/* Hide scrollbars while keeping scroll functionality - use @utility for Tailwind v4 */
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

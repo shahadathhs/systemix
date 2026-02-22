@@ -68,7 +68,7 @@ export default function Home() {
         </div>
 
         <div className="mx-auto mt-24 max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 sm:mt-20 lg:grid-cols-3">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.name}
@@ -93,28 +93,30 @@ export default function Home() {
         </div>
 
         {/* Package Sections */}
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <PackageCard
-            title="Password Generator"
-            description="Cryptographically secure password generator with customizable complexity and entropy tools."
-            icon={Lock}
-            href="/password"
-            tag="@systemix/password"
-          />
-          <PackageCard
-            title="Passphrase Generator"
-            description="Secure, memorable passphrase generator using high-entropy words and random injectors."
-            icon={KeyRound}
-            href="/passphrase"
-            tag="@systemix/passphrase"
-          />
-          <PackageCard
-            title="Token Generator"
-            description="Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities."
-            icon={Shield}
-            href="/token"
-            tag="@systemix/token"
-          />
+        <div className="mx-auto mt-32 max-w-7xl px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <PackageCard
+              title="Password Generator"
+              description="Cryptographically secure password generator with customizable complexity and entropy tools."
+              icon={Lock}
+              href="/password"
+              tag="@systemix/password"
+            />
+            <PackageCard
+              title="Passphrase Generator"
+              description="Secure, memorable passphrase generator using high-entropy words and random injectors."
+              icon={KeyRound}
+              href="/passphrase"
+              tag="@systemix/passphrase"
+            />
+            <PackageCard
+              title="Token Generator"
+              description="Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities."
+              icon={Shield}
+              href="/token"
+              tag="@systemix/token"
+            />
+          </div>
         </div>
       </div>
     </div>
