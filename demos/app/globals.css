@@ -16,10 +16,11 @@
   --border: #21262d;
   --input: #21262d;
   --ring: #22d3ee;
-  --radius: 0.5rem;
   --card-bg: rgba(22, 27, 34, 0.7);
   --card-border: rgba(48, 54, 61, 0.8);
   --card-accent: #22d3ee;
+  --glass-bg: rgba(22, 27, 34, 0.8);
+  --glass-border: rgba(48, 54, 61, 0.8);
 }
 
 body {
@@ -29,11 +30,17 @@ body {
 
 /* Links - ensure they look clickable across the project */
 a:not([class]) {
-  color: #22d3ee;
+  color: #0891b2;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 a:not([class]):hover {
+  color: #0e7490;
+}
+.root a:not([class]) {
+  color: #22d3ee;
+}
+.root a:not([class]):hover {
   color: #67e8f9;
 }
 
@@ -51,9 +58,9 @@ a:not([class]):hover {
   }
   /* Demo panels - slightly different from cards */
   .glass {
-    background: rgba(22, 27, 34, 0.8);
+    background: var(--glass-bg);
     backdrop-filter: blur(12px);
-    border: 1px solid var(--card-border);
+    border: 1px solid var(--glass-border);
   }
 }
 

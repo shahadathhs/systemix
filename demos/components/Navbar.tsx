@@ -79,9 +79,6 @@ export function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
             <span className="hidden sm:inline">GitHub</span>
             <ExternalLink className="w-3 h-3 opacity-60 hidden sm:inline" />
           </a>
-          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-            v0.2.0
-          </span>
         </div>
       </div>
     </header>

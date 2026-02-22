@@ -163,7 +163,7 @@ export default function PasswordPage() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <label className="text-sm font-medium text-gray-300">
+                  <label className="text-sm font-medium text-slate-300">
                     Length
                   </label>
                   <span className="text-sm font-mono text-cyan-400">
@@ -233,7 +233,7 @@ export default function PasswordPage() {
               </h3>
               <div className="group relative">
                 <AlertCircle className="w-4 h-4 text-muted-foreground cursor-help" />
-                <div className="absolute bottom-full right-0 mb-2 w-48 p-2 rounded bg-gray-800 text-[10px] text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                <div className="absolute bottom-full right-0 mb-2 w-48 p-2 rounded bg-slate-800 text-[10px] text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
                   Ensures at least this many characters of the specified type
                   are included in the result.
                 </div>
@@ -306,7 +306,7 @@ function Checkbox({
           {checked && <Check className="w-full h-full text-white p-0.5" />}
         </div>
       </div>
-      <span className="text-sm text-gray-300 group-hover:text-white transition-colors flex items-center gap-1">
+      <span className="text-sm text-slate-300 group-hover:text-white transition-colors flex items-center gap-1">
         {label}
       </span>
     </label>
@@ -331,7 +331,7 @@ function NumberInput({
         disabled && 'opacity-40 pointer-events-none',
       )}
     >
-      <label className="text-sm text-gray-400">{label}</label>
+      <label className="text-sm text-slate-400">{label}</label>
       <div className="flex items-center gap-3">
         <button
           onClick={() => onChange(Math.max(0, value - 1))}

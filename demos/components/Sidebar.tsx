@@ -69,6 +69,58 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <>
+      {/* Icon section - visible only on sm (mobile drawer) */}
+      <div className="lg:hidden flex gap-2 pb-4 mb-4 border-b border-slate-700/80">
+        <Link
+          href="/"
+          className={cn(
+            'p-2.5 rounded-lg transition-colors',
+            pathname === '/'
+              ? 'bg-cyan-500/10 text-cyan-400'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
+          )}
+          {...linkProps('/')}
+          title="Home"
+        >
+          <FileText className="w-5 h-5" />
+        </Link>
+        <Link
+          href="/docs"
+          className={cn(
+            'p-2.5 rounded-lg transition-colors',
+            pathname === '/docs' || pathname?.startsWith('/docs')
+              ? 'bg-cyan-500/10 text-cyan-400'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
+          )}
+          {...linkProps('/docs')}
+          title="Docs"
+        >
+          <BookOpen className="w-5 h-5" />
+        </Link>
+        <Link
+          href="/about"
+          className={cn(
+            'p-2.5 rounded-lg transition-colors',
+            pathname === '/about'
+              ? 'bg-cyan-500/10 text-cyan-400'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
+          )}
+          {...linkProps('/about')}
+          title="About"
+        >
+          <User className="w-5 h-5" />
+        </Link>
+        <a
+          href="https://github.com/shahadathhs/systemix"
+          target="_blank"
+          rel="noreferrer"
+          className="p-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors"
+          title="GitHub"
+        >
+          <Github className="w-5 h-5" />
+        </a>
+      </div>
+
       <div className="space-y-1 pb-4 border-b border-slate-700/80 mb-4">
         <Link href="/" className={linkClass('/', true)} {...linkProps('/')}>
           <FileText className="w-4 h-4 shrink-0 opacity-70" />
@@ -173,12 +225,6 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
           GitHub
           <ExternalLink className="w-3 h-3 opacity-60" />
         </a>
-      </div>
-
-      <div className="mt-8 pt-6 border-t border-slate-700/80">
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-          v0.2.0
-        </span>
       </div>
     </>
   );

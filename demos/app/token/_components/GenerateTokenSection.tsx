@@ -107,7 +107,7 @@ export function GenerateTokenSection() {
           <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex justify-between">
-                <label className="text-sm font-medium text-gray-300">
+                <label className="text-sm font-medium text-slate-300">
                   Byte Length
                 </label>
                 <span className="text-sm font-mono text-cyan-400">
@@ -130,7 +130,7 @@ export function GenerateTokenSection() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">
+              <label className="text-sm font-medium text-slate-300">
                 Charset
               </label>
               <div className="flex flex-wrap gap-2">
@@ -152,7 +152,7 @@ export function GenerateTokenSection() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Count</label>
+              <label className="text-sm font-medium text-slate-300">Count</label>
               <div className="flex gap-2">
                 {[1, 3, 5].map((n) => (
                   <button

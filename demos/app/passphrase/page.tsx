@@ -130,7 +130,7 @@ export default function PassphrasePage() {
             <div className="space-y-6">
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <label className="text-sm font-medium text-gray-300">
+                  <label className="text-sm font-medium text-slate-300">
                     Word Count
                   </label>
                   <span className="text-sm font-mono text-cyan-400">
@@ -153,7 +153,7 @@ export default function PassphrasePage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">
+                <label className="text-sm font-medium text-slate-300">
                   Separator
                 </label>
                 <div className="flex gap-2">
@@ -259,14 +259,16 @@ function ToggleCard({
       <div
         className={cn(
           'p-2 rounded-lg shrink-0',
-          active ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800/50 text-slate-400',
+          active
+            ? 'bg-cyan-500 text-slate-950'
+            : 'bg-slate-800/50 text-slate-400',
         )}
       >
         <Icon className="w-5 h-5" />
       </div>
       <div>
         <div className="text-sm font-semibold text-white">{title}</div>
-        <div className="text-xs text-gray-400 mt-1">{description}</div>
+        <div className="text-xs text-slate-400 mt-1">{description}</div>
       </div>
     </button>
   );

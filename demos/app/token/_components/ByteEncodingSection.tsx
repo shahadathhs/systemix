@@ -40,7 +40,7 @@ export function ByteEncodingSection() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-300">
+              <label className="text-sm font-medium text-slate-300">
                 Byte length
               </label>
               <div className="flex items-center gap-2">
