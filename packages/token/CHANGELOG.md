@@ -1,5 +1,11 @@
 # @systemix/token
 
+## 1.1.0
+
+### Minor Changes
+
+- d38a6c3: Impore browser support and code structure
+
 ## 1.0.0
 
 ### Major Changes
