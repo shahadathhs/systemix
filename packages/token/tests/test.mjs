@@ -10,6 +10,11 @@ import {
   bytesToHex,
   bytesToBase64,
 } from '../dist/token/index.js';
+import {
+  encodeSigned,
+  decodeSigned,
+  verifySigned,
+} from '../dist/signed/index.js';
 
 let passed = 0;
 let failed = 0;
@@ -102,6 +107,101 @@ assert(
   bytesToBase64(testBytes) === 'SGVsbG8=',
   'bytesToBase64 sub-function works',
 );
+
+// Signed token tests
+const secret = 'my-secret-key-for-hmac';
+const verifyOpts = (opts = {}) => ({ algorithms: ['HS256'], ...opts });
+
+const token = encodeSigned({ userId: '123', role: 'admin' }, secret);
+assert(typeof token === 'string', 'encodeSigned returns string');
+assert(
+  token.split('.').length === 3,
+  'token has 3 parts (header.payload.signature)',
+);
+
+const decoded = decodeSigned(token);
+assert(decoded.header.alg === 'HS256', 'decoded header has alg');
+assert(decoded.payload.userId === '123', 'decoded payload correct');
+assert(decoded.payload.role === 'admin', 'decoded payload has role');
+
+const verified = verifySigned(token, secret, verifyOpts());
+assert(verified.userId === '123', 'verifySigned returns payload');
+
+assertThrows(
+  () => verifySigned(token, 'wrong-secret', verifyOpts()),
+  'verifySigned throws on wrong secret',
+);
+
+const tokenWithExp = encodeSigned({ foo: 'bar' }, secret, { expiresIn: -1 });
+assertThrows(
+  () => verifySigned(tokenWithExp, secret, verifyOpts()),
+  'verifySigned throws on expired token',
+);
+
+const tokenWithNbf = encodeSigned({ foo: 'bar' }, secret, {
+  notBefore: 999999,
+});
+assertThrows(
+  () => verifySigned(tokenWithNbf, secret, verifyOpts()),
+  'verifySigned throws on nbf in future',
+);
+
+const tokenWithTolerance = encodeSigned({ foo: 'bar' }, secret, {
+  expiresIn: 5,
+});
+assert(
+  typeof verifySigned(
+    tokenWithTolerance,
+    secret,
+    verifyOpts({ clockTolerance: 10 }),
+  ) === 'object',
+  'clockTolerance allows slight skew',
+);
+
+const tokenWithClaims = encodeSigned({ custom: 'data' }, secret, {
+  issuer: 'my-app',
+  audience: 'my-api',
+  subject: 'user-1',
+  tokenId: true,
+});
+const verifiedClaims = verifySigned(
+  tokenWithClaims,
+  secret,
+  verifyOpts({
+    issuer: 'my-app',
+    audience: 'my-api',
+    subject: 'user-1',
+  }),
+);
+assert(verifiedClaims.iss === 'my-app', 'issuer claim set');
+assert(verifiedClaims.aud === 'my-api', 'audience claim set');
+assert(verifiedClaims.sub === 'user-1', 'subject claim set');
+assert(
+  typeof verifiedClaims.jti === 'string' && verifiedClaims.jti.length > 0,
+  'jti auto-generated',
+);
+
+assertThrows(
+  () =>
+    verifySigned(
+      tokenWithClaims,
+      secret,
+      verifyOpts({ issuer: 'wrong-issuer' }),
+    ),
+  'verifySigned throws on issuer mismatch',
+);
+
+assertThrows(
+  () => verifySigned(token, secret, { algorithms: [] }),
+  'verifySigned throws when algorithms empty',
+);
+
+assertThrows(
+  () => decodeSigned('invalid'),
+  'decodeSigned throws on malformed token',
+);
+assertThrows(() => decodeSigned('a.b'), 'decodeSigned throws on 2-part token');
+assertThrows(() => decodeSigned(''), 'decodeSigned throws on empty string');
 
 console.log(`\n✅ ${passed} passed, ${failed} failed\n`);
 process.exit(failed > 0 ? 1 : 0);

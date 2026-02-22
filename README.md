@@ -17,6 +17,8 @@ Published to **npm** and **GitHub Packages**:
 [![@systemix/eslint](https://img.shields.io/npm/v/@systemix/eslint.svg)](https://www.npmjs.com/package/@systemix/eslint)
 [![@systemix/typescript](https://img.shields.io/npm/v/@systemix/typescript.svg)](https://www.npmjs.com/package/@systemix/typescript)
 
+**Links:** [npm org](https://www.npmjs.com/org/systemix) · [npm profile](https://www.npmjs.com/~shahadathhs)
+
 ---
 
 ## ⚡ Quick Start
@@ -137,4 +139,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="center">
   Built with ❤️ by <a href="https://github.com/shahadathhs">@shahadathhs</a>
+  · <a href="https://www.npmjs.com/~shahadathhs">npm</a>
+  · <a href="https://www.npmjs.com/org/systemix">@systemix</a>
 </p>

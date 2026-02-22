@@ -4,8 +4,8 @@ import {
   bytesToBase64,
   bytesToBase64Url,
   bytesToHex,
-} from './encode';
-import { GenerateTokenFunctionProps } from './types';
+} from '../common/utils';
+import type { GenerateTokenFunctionProps } from '../common/types';
 import { generateTokenPropValidation } from './validation';
 
 export function generateToken(
