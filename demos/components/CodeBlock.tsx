@@ -28,7 +28,7 @@ export function CodeBlock({ children, ...props }: React.ComponentProps<'pre'>) {
   return (
     <div className="group relative">
       <pre
-        className="p-4 pr-12 rounded-xl bg-white/5 border border-white/10 overflow-x-auto mb-4 text-sm"
+        className="p-4 pr-12 rounded-xl bg-slate-800/50 border border-slate-700/80 overflow-x-auto mb-4 text-sm"
         {...props}
       >
         {children}
@@ -36,7 +36,7 @@ export function CodeBlock({ children, ...props }: React.ComponentProps<'pre'>) {
       <button
         type="button"
         onClick={copy}
-        className="absolute top-2 right-2 p-2 rounded-lg bg-white/10 hover:bg-white/15 text-gray-400 hover:text-white transition-colors"
+        className="absolute top-2 right-2 p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-slate-400 hover:text-white transition-colors"
         title="Copy code"
       >
         {copied ? (

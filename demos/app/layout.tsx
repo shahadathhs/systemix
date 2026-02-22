@@ -62,23 +62,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
+      <body
+        className={`${inter.className} min-h-screen flex flex-col antialiased`}
+      >
         <AppShell>{children}</AppShell>
-        <footer className="border-t border-white/5 py-8 bg-background w-full">
-          <div className="max-w-7xl mx-auto px-4 text-center text-sm text-muted-foreground">
-            <p>
-              © {new Date().getFullYear()} Systemix Toolkit. Built by{' '}
-              <a
-                href="https://github.com/shahadathhs"
-                className="hover:text-blue-400 underline"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Shahadath Hossen Sajib
-              </a>
-            </p>
-          </div>
-        </footer>
       </body>
     </html>
   );

@@ -1,13 +1,37 @@
-import { createHmac, createSign } from 'node:crypto';
-import { getRandomBytes } from '../shared/crypto';
-import { bytesToHex } from '../common/utils';
-import { base64UrlEncode } from '../common/utils/base64';
-import { ALG_TO_HASH, isHmac, isRsa } from '../common/enums';
-import type {
-  SignedPayload,
-  EncodeSignedOptions,
-} from '../common/types/signed.types';
+import { getRandomBytes } from '../common/crypto';
 import type { SignedAlgorithm } from '../common/enums';
+import { HMAC_WEB_CRYPTO_HASH, isHmac, isRsa } from '../common/enums';
+import type {
+  EncodeSignedOptions,
+  SignedPayload,
+} from '../common/types/signed.types';
+import { bytesToBase64Url, bytesToHex } from '../common/utils';
+import { base64UrlEncode } from '../common/utils/base64';
+import { signRsa } from '../rsa';
+
+async function signHmac(
+  signingInput: string,
+  secret: string,
+  alg: 'HS256' | 'HS384' | 'HS512',
+): Promise<Uint8Array> {
+  const crypto = globalThis.crypto;
+  if (!crypto?.subtle) {
+    throw new Error('Web Crypto API (crypto.subtle) is required');
+  }
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: HMAC_WEB_CRYPTO_HASH[alg] },
+    false,
+    ['sign'],
+  );
+  const sig = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    new TextEncoder().encode(signingInput),
+  );
+  return new Uint8Array(sig);
+}
 
 function generateJti(): string {
   return bytesToHex(getRandomBytes(16));
@@ -15,14 +39,14 @@ function generateJti(): string {
 
 /**
  * Encode a payload into a signed compact token.
- * Supports HMAC (HS256/384/512) and RSA (RS256/384/512).
- * Pure Node.js - no external dependencies.
+ * Supports HMAC (HS256/384/512) in browser and Node.
+ * RSA (RS256/384/512) requires Node.js.
  */
-export function encodeSigned(
+export async function encodeSigned(
   payload: SignedPayload,
   secret: string,
   options?: EncodeSignedOptions,
-): string {
+): Promise<string> {
   const alg: SignedAlgorithm = options?.algorithm ?? 'HS256';
   const typ = options?.typ ?? 'ST';
   const now = Math.floor(Date.now() / 1000);
@@ -46,19 +70,15 @@ export function encodeSigned(
   const payloadB64 = base64UrlEncode(JSON.stringify(payloadCopy));
   const signingInput = `${headerB64}.${payloadB64}`;
 
-  let signature: Buffer;
+  let signatureB64: string;
   if (isHmac(alg)) {
-    const hmac = createHmac(ALG_TO_HASH[alg], secret);
-    hmac.update(signingInput, 'utf8');
-    signature = hmac.digest();
+    const signature = await signHmac(signingInput, secret, alg);
+    signatureB64 = bytesToBase64Url(signature);
   } else if (isRsa(alg)) {
-    const sign = createSign(ALG_TO_HASH[alg]);
-    sign.update(signingInput, 'utf8');
-    sign.end();
-    signature = sign.sign(secret);
+    signatureB64 = await signRsa(signingInput, secret, alg);
   } else {
     throw new Error(`Unsupported algorithm: ${String(alg)}`);
   }
 
-  return `${signingInput}.${signature.toString('base64url')}`;
+  return `${signingInput}.${signatureB64}`;
 }

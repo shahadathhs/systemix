@@ -1,8 +1,8 @@
 'use client';
 
+import { DocToc } from '@/components/DocToc';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import { DocToc } from '@/components/DocToc';
 
 export function DocsLayoutClient({ children }: { children: React.ReactNode }) {
   const articleRef = useRef<HTMLDivElement>(null);
@@ -17,7 +17,7 @@ export function DocsLayoutClient({ children }: { children: React.ReactNode }) {
     <div className="flex h-[calc(100vh-3.5rem-4rem)] min-h-[32rem] gap-8">
       <div
         ref={articleRef}
-        className="flex-1 min-w-0 max-w-3xl overflow-y-auto pr-4 scroll-smooth"
+        className="flex-1 min-w-0 max-w-3xl border-red-500 overflow-y-auto pr-4 scroll-smooth scrollbar-hide"
         data-docs-article
       >
         {children}

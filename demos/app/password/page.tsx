@@ -67,7 +67,7 @@ export default function PasswordPage() {
     if (entropy < 60)
       return { label: 'Weak', color: 'text-orange-500', bg: 'bg-orange-500' };
     if (entropy < 80)
-      return { label: 'Good', color: 'text-blue-500', bg: 'bg-blue-500' };
+      return { label: 'Good', color: 'text-cyan-500', bg: 'bg-cyan-500' };
     if (entropy < 100)
       return {
         label: 'Strong',
@@ -100,8 +100,8 @@ export default function PasswordPage() {
         </div>
 
         {/* Password Display */}
-        <div className="glass rounded-2xl p-8 relative group overflow-hidden border border-white/10">
-          <div className="absolute inset-x-0 bottom-0 h-1 bg-white/5">
+        <div className="glass rounded-2xl p-8 relative group overflow-hidden">
+          <div className="absolute inset-x-0 bottom-0 h-1 bg-slate-700/50">
             <motion.div
               className={cn('h-full transition-all duration-500', strength.bg)}
               initial={{ width: 0 }}
@@ -110,20 +110,20 @@ export default function PasswordPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between relative z-10">
-            <div className="text-2xl sm:text-3xl font-mono font-medium text-white break-all tracking-wider selection:bg-blue-500/30">
+            <div className="text-2xl sm:text-3xl font-mono font-medium text-white break-all tracking-wider selection:bg-cyan-500/30">
               {password}
             </div>
             <div className="flex gap-2">
               <button
                 onClick={handleGenerate}
-                className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-colors"
+                className="p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 text-white transition-colors"
                 title="Regenerate"
               >
                 <RefreshCw className="w-5 h-5" />
               </button>
               <button
                 onClick={copyToClipboard}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all active:scale-95"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium transition-all active:scale-95"
               >
                 {copied ? (
                   <Check className="w-5 h-5" />
@@ -135,7 +135,7 @@ export default function PasswordPage() {
             </div>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-6 items-center border-t border-white/5 pt-6">
+          <div className="mt-8 flex flex-wrap gap-6 items-center border-t border-slate-700/50 pt-6">
             <div className="flex items-center gap-2">
               <Shield className={cn('w-4 h-4', strength.color)} />
               <span className="text-sm font-medium text-white">
@@ -157,16 +157,16 @@ export default function PasswordPage() {
 
         {/* Controls */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="glass rounded-2xl p-6 border border-white/10 space-y-6">
+          <div className="glass rounded-2xl p-6 space-y-6">
             <h3 className="text-lg font-semibold text-white">Configuration</h3>
 
             <div className="space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <label className="text-sm font-medium text-gray-300">
+                  <label className="text-sm font-medium text-slate-300">
                     Length
                   </label>
-                  <span className="text-sm font-mono text-blue-400">
+                  <span className="text-sm font-mono text-cyan-400">
                     {options.length}
                   </span>
                 </div>
@@ -178,7 +178,7 @@ export default function PasswordPage() {
                   onChange={(e) =>
                     setOptions({ ...options, length: parseInt(e.target.value) })
                   }
-                  className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  className="w-full h-2 bg-slate-700/80 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                 />
               </div>
 
@@ -226,14 +226,14 @@ export default function PasswordPage() {
             </div>
           </div>
 
-          <div className="glass rounded-2xl p-6 border border-white/10 space-y-6">
+          <div className="glass rounded-2xl p-6 space-y-6">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-white">
                 Character Guarantees
               </h3>
               <div className="group relative">
                 <AlertCircle className="w-4 h-4 text-muted-foreground cursor-help" />
-                <div className="absolute bottom-full right-0 mb-2 w-48 p-2 rounded bg-gray-800 text-[10px] text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                <div className="absolute bottom-full right-0 mb-2 w-48 p-2 rounded bg-slate-800 text-[10px] text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
                   Ensures at least this many characters of the specified type
                   are included in the result.
                 </div>
@@ -299,14 +299,14 @@ function Checkbox({
         />
         <div
           className={cn(
-            'w-5 h-5 rounded border border-white/20 transition-all group-hover:border-blue-500/50',
-            checked ? 'bg-blue-600 border-blue-600' : 'bg-white/5',
+            'w-5 h-5 rounded border border-slate-600 transition-all group-hover:border-cyan-500/50',
+            checked ? 'bg-cyan-500 border-cyan-500' : 'bg-slate-800/50',
           )}
         >
           {checked && <Check className="w-full h-full text-white p-0.5" />}
         </div>
       </div>
-      <span className="text-sm text-gray-300 group-hover:text-white transition-colors flex items-center gap-1">
+      <span className="text-sm text-slate-300 group-hover:text-white transition-colors flex items-center gap-1">
         {label}
       </span>
     </label>
@@ -331,11 +331,11 @@ function NumberInput({
         disabled && 'opacity-40 pointer-events-none',
       )}
     >
-      <label className="text-sm text-gray-400">{label}</label>
+      <label className="text-sm text-slate-400">{label}</label>
       <div className="flex items-center gap-3">
         <button
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors"
+          className="w-8 h-8 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-white flex items-center justify-center transition-colors"
         >
           -
         </button>
@@ -344,7 +344,7 @@ function NumberInput({
         </span>
         <button
           onClick={() => onChange(value + 1)}
-          className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors"
+          className="w-8 h-8 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-white flex items-center justify-center transition-colors"
         >
           +
         </button>

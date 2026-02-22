@@ -1,11 +1,5 @@
-import { createHmac, createVerify } from 'node:crypto';
-import { base64UrlDecode } from '../common/utils/base64';
-import { decodeSigned } from './decode';
-import { ALG_TO_HASH, isHmac, isRsa } from '../common/enums';
-import type {
-  SignedPayload,
-  VerifySignedOptions,
-} from '../common/types/signed.types';
+import { secureCompare } from '../common/crypto';
+import { HMAC_WEB_CRYPTO_HASH, isHmac, isRsa } from '../common/enums';
 import {
   AudienceMismatchError,
   InvalidSignatureError,
@@ -14,29 +8,38 @@ import {
   NotBeforeError,
   TokenExpiredError,
 } from '../common/errors';
+import type {
+  SignedPayload,
+  VerifySignedOptions,
+} from '../common/types/signed.types';
+import { bytesToBase64Url } from '../common/utils';
+import { verifyRsa } from '../rsa';
+import { decodeSigned } from './decode';
 
-function verifyHmacSignature(
+async function verifyHmacSignature(
   signingInput: string,
   signatureB64: string,
   secret: string,
   alg: 'HS256' | 'HS384' | 'HS512',
-): boolean {
-  const hmac = createHmac(ALG_TO_HASH[alg], secret);
-  hmac.update(signingInput, 'utf8');
-  return hmac.digest().toString('base64url') === signatureB64;
-}
-
-function verifyRsaSignature(
-  signingInput: string,
-  signatureB64: string,
-  publicKey: string,
-  alg: 'RS256' | 'RS384' | 'RS512',
-): boolean {
-  const signature = base64UrlDecode(signatureB64);
-  const verify = createVerify(ALG_TO_HASH[alg]);
-  verify.update(signingInput, 'utf8');
-  verify.end();
-  return verify.verify(publicKey, signature);
+): Promise<boolean> {
+  const crypto = globalThis.crypto;
+  if (!crypto?.subtle) {
+    throw new Error('Web Crypto API (crypto.subtle) is required');
+  }
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: HMAC_WEB_CRYPTO_HASH[alg] },
+    false,
+    ['sign'],
+  );
+  const expectedSig = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    new TextEncoder().encode(signingInput),
+  );
+  const expectedB64 = bytesToBase64Url(new Uint8Array(expectedSig));
+  return secureCompare(expectedB64, signatureB64);
 }
 
 function checkAudience(
@@ -72,12 +75,13 @@ function checkIssuer(
 
 /**
  * Decode and verify a signed token.
+ * HMAC works in browser and Node. RSA requires Node.js.
  */
-export function verifySigned<T = SignedPayload>(
+export async function verifySigned<T = SignedPayload>(
   token: string,
   secret: string,
   options: VerifySignedOptions,
-): T {
+): Promise<T> {
   const decoded = decodeSigned<T & SignedPayload>(token);
   const { header, payload, signature } = decoded;
   const alg = header.alg;
@@ -102,9 +106,9 @@ export function verifySigned<T = SignedPayload>(
   let valid = false;
 
   if (isHmac(alg)) {
-    valid = verifyHmacSignature(signingInput, signature, secret, alg);
+    valid = await verifyHmacSignature(signingInput, signature, secret, alg);
   } else if (isRsa(alg)) {
-    valid = verifyRsaSignature(signingInput, signature, secret, alg);
+    valid = await verifyRsa(signingInput, signature, secret, alg);
   } else {
     throw new InvalidTokenError(`Unsupported algorithm: ${String(alg)}`);
   }

@@ -29,9 +29,9 @@
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.1.6",
-    "@systemix/passphrase": "^0.2.0",
-    "@systemix/password": "^0.2.0",
-    "@systemix/token": "^0.2.0",
+    "@systemix/passphrase": "workspace:*",
+    "@systemix/password": "workspace:*",
+    "@systemix/token": "workspace:*",
     "clsx": "^2.1.1",
     "lucide-react": "^0.575.0",
     "motion": "^12.34.3",
@@ -43,8 +43,8 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
-    "@systemix/eslint": "^0.3.0",
-    "@systemix/typescript": "^0.3.0",
+    "@systemix/eslint": "workspace:*",
+    "@systemix/typescript": "workspace:*",
     "@tailwindcss/postcss": "^4.2.0",
     "@types/mdx": "^2.0.13",
     "@types/node": "^25.3.0",

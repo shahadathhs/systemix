@@ -1,18 +1,18 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Token Generator',
+  title: 'Token Playground',
   description:
-    'Cryptographically secure token generator for API keys, session tokens, and more. Hex, base64, base64url, alphanumeric charsets. See the Systemix token demo.',
+    'Cryptographically secure token generator and signed-token module for API keys, session tokens, and auth. Hex, base64, base64url, alphanumeric. HMAC and RSA signing.',
   openGraph: {
     title: 'Token Generator | Systemix Demos',
     description:
-      'Secure token generator with multiple charsets and encoding utilities.',
+      'Token generator, byte encoding, and signed token encode/decode/verify playground.',
   },
   twitter: {
     title: 'Token Generator | Systemix Demos',
     description:
-      'Secure token generator with multiple charsets and encoding utilities.',
+      'Token generator, byte encoding, and signed token encode/decode/verify playground.',
   },
 };
 

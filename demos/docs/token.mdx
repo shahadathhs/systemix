@@ -1,37 +1,6 @@
 # @systemix/token
 
-[![npm](https://img.shields.io/npm/v/@systemix/token.svg)](https://www.npmjs.com/package/@systemix/token)
-
-A cryptographically secure token generator and signed-token module for API keys, session tokens, CSRF tokens, and auth. Zero external dependencies, pure Node.js and browser built-ins.
-
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Package Structure](#package-structure)
-- [Token Generator](#token-generator)
-- [Signed Tokens](#signed-tokens)
-- [RSA Module](#rsa-module)
-- [Common Module (Internals)](#common-module-internals)
-- [Error Handling](#error-handling)
-- [Usage Examples](#usage-examples)
-- [Security Notes](#security-notes)
-- [API Reference](#api-reference)
-
----
-
-## Features
-
-- **Secure**: Uses `crypto.getRandomValues()` for cryptographically strong randomness.
-- **Multiple Charsets**: Hex, base64, base64url (URL-safe), and alphanumeric.
-- **Signed Tokens**: HMAC (HS256/384/512) and RSA (RS256/384/512) with standard claims.
-- **Subpath Exports**: Import only what you need (`/token`, `/signed`, `/rsa`, `/common`).
-- **Zero Dependencies**: Built with Node.js/browser built-ins only.
-- **TypeScript Ready**: Full type definitions included.
-
----
+A cryptographically secure token generator and signed-token module for API keys, session tokens, CSRF tokens, and auth. Zero external dependencies, pure Node.js and browser built-ins. HMAC and RSA work in both environments.
 
 ## Installation
 
@@ -59,7 +28,7 @@ npm install @systemix/token
 
 ## Token Generator
 
-### `generateToken(props?)`
+### generateToken(props?)
 
 Generates cryptographically secure random tokens. Returns a single string or array of strings.
 
@@ -78,7 +47,7 @@ const apiKey = generateToken({
 
 const sessionToken = generateToken({
   byteLength: 24,
-  charset: 'base64url', // URL-safe, no + or /
+  charset: 'base64url',
 });
 
 const batch = generateToken({
@@ -89,7 +58,7 @@ const batch = generateToken({
 // → ["Ab3xYz...", "Mn7pQr...", ...]
 ```
 
-#### Props
+### Props
 
 | Property     | Type                                                 | Default | Description                                                        |
 | :----------- | :--------------------------------------------------- | :------ | :----------------------------------------------------------------- |
@@ -97,7 +66,7 @@ const batch = generateToken({
 | `charset`    | `'hex' \| 'base64' \| 'base64url' \| 'alphanumeric'` | `'hex'` | Encoding format.                                                   |
 | `count`      | `number`                                             | `1`     | Number of tokens to generate (1–10). Returns `string[]` when > 1.  |
 
-#### Charset behavior
+### Charset behavior
 
 | Charset        | Output length                 | Use case                         |
 | :------------- | :---------------------------- | :------------------------------- |
@@ -106,18 +75,15 @@ const batch = generateToken({
 | `base64url`    | ~`byteLength × 4/3`, URL-safe | URLs, cookies                    |
 | `alphanumeric` | `byteLength`                  | Human-readable, no special chars |
 
----
+### generateTokenPropValidation(props)
 
-### `generateTokenPropValidation(props)`
-
-Validates props before generation. Throws if invalid. Useful when building custom flows.
+Validates props before generation. Throws if invalid.
 
 ```typescript
 import { generateTokenPropValidation } from '@systemix/token/token';
 
 try {
   generateTokenPropValidation({ byteLength: 64, charset: 'hex' });
-  // proceed with generation
 } catch (e) {
   console.error(e.message);
 }
@@ -125,9 +91,9 @@ try {
 
 ---
 
-### Encoding utilities
+## Encoding Utilities
 
-Use these when you need to encode raw bytes yourself:
+Use when you need to encode raw bytes yourself:
 
 ```typescript
 import {
@@ -141,8 +107,8 @@ const bytes = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
 
 bytesToHex(bytes); // → "48656c6c6f"
 bytesToBase64(bytes); // → "SGVsbG8="
-bytesToBase64Url(bytes); // → "SGVsbG8" (no padding)
-bytesToAlphanumeric(bytes); // → "NkF2bB2" (A–Z, a–z, 0–9)
+bytesToBase64Url(bytes); // → "SGVsbG8"
+bytesToAlphanumeric(bytes); // → "NkF2bB2"
 ```
 
 | Function                     | Input        | Output          |
@@ -154,26 +120,13 @@ bytesToAlphanumeric(bytes); // → "NkF2bB2" (A–Z, a–z, 0–9)
 
 ---
 
-### Token enums and types
-
-```typescript
-import { CHARSETS, TokenPropsEnum, type Charset } from '@systemix/token/token';
-import type { GenerateTokenFunctionProps } from '@systemix/token/token';
-
-// CHARSETS: ['hex', 'base64', 'base64url', 'alphanumeric']
-// Charset: 'hex' | 'base64' | 'base64url' | 'alphanumeric'
-// TokenPropsEnum: BYTE_LENGTH, CHARSET, COUNT
-```
-
----
-
 ## Signed Tokens
 
 Signed tokens are compact, URL-safe strings with a header, payload, and signature. Use for auth, sessions, or any signed claims. **HMAC and RSA work in both Node and browser** (Web Crypto API; RSA auto-detects environment).
 
-### `encodeSigned(payload, secret, options?)`
+### encodeSigned(payload, secret, options?)
 
-Creates a signed token. Returns `Promise<string>`. Supports HMAC (shared secret) and RSA (PEM private key).
+Creates a signed token. Returns a `Promise<string>`. Supports HMAC (shared secret) and RSA (PEM private key).
 
 ```typescript
 import { encodeSigned } from '@systemix/token/signed';
@@ -188,11 +141,11 @@ const token = await encodeSigned(
     issuer: 'my-app',
     audience: 'api',
     subject: 'user-123',
-    tokenId: true, // auto-generate jti
+    tokenId: true,
   },
 );
 
-// RSA (PEM private key) — Node.js only
+// RSA (PEM private key) — works in browser and Node
 const tokenRsa = await encodeSigned({ userId: '123' }, privateKeyPem, {
   algorithm: 'RS256',
   expiresIn: 3600,
@@ -215,11 +168,9 @@ const tokenRsa = await encodeSigned({ userId: '123' }, privateKeyPem, {
 | `audience`  | `string \| string[]` | —         | `aud` claim.                         |
 | `tokenId`   | `string \| true`     | —         | `jti` claim. `true` = auto-generate. |
 
----
+### decodeSigned(token)
 
-### `decodeSigned(token)`
-
-Decodes a token **without** verifying the signature. Use when you need to inspect header/payload before deciding whether to verify.
+Decodes a token **without** verifying the signature.
 
 ```typescript
 import { decodeSigned } from '@systemix/token/signed';
@@ -230,21 +181,9 @@ console.log(header.alg); // "HS256"
 console.log(payload.userId); // "123"
 ```
 
-Returns `DecodedToken<T>`:
+### verifySigned(token, secret, options)
 
-```typescript
-interface DecodedToken<T> {
-  header: SignedHeader;
-  payload: T;
-  signature: string;
-}
-```
-
----
-
-### `verifySigned(token, secret, options)`
-
-Decodes and verifies a token. Validates signature and optional claims. **`algorithms` is required** to prevent algorithm confusion.
+Decodes and verifies a token. **`algorithms` is required** to prevent algorithm confusion.
 
 ```typescript
 import { verifySigned } from '@systemix/token/signed';
@@ -253,8 +192,7 @@ const payload = await verifySigned<{ userId: string }>(token, 'my-secret', {
   algorithms: ['HS256'],
   issuer: 'my-app',
   audience: 'api',
-  subject: 'user-123',
-  clockTolerance: 60, // 60s skew for exp/nbf
+  clockTolerance: 60,
 });
 ```
 
@@ -270,26 +208,12 @@ const payload = await verifySigned<{ userId: string }>(token, 'my-secret', {
 | `ignoreExpiration` | `boolean`            | No       | Skip `exp` check.                                    |
 | `ignoreNotBefore`  | `boolean`            | No       | Skip `nbf` check.                                    |
 
----
-
 ### Algorithms
 
 | Algorithm           | Type             | Secret / key                                      |
 | :------------------ | :--------------- | :------------------------------------------------ |
 | HS256, HS384, HS512 | HMAC (symmetric) | Shared secret string                              |
 | RS256, RS384, RS512 | RSA (asymmetric) | PEM private key (encode), PEM public key (verify) |
-
-```typescript
-import {
-  HMAC_ALGORITHMS,
-  RSA_ALGORITHMS,
-  type SignedAlgorithm,
-  type HmacAlgorithm,
-  type RsaAlgorithm,
-} from '@systemix/token/common';
-```
-
----
 
 ### Standard claims
 
@@ -305,33 +229,22 @@ import {
 
 ---
 
-### Signed token types
+## Common Utilities
+
+Low-level crypto primitives and constant-time comparison:
 
 ```typescript
-import type {
-  SignedHeader,
-  SignedPayload,
-  EncodeSignedOptions,
-  VerifySignedOptions,
-  DecodedToken,
-  StandardClaims,
-} from '@systemix/token/signed';
-```
+import {
+  getRandomBytes,
+  getRandomInt,
+  bytesEqual,
+  secureCompare,
+} from '@systemix/token/common';
 
----
-
-## Shared Utilities
-
-Low-level crypto primitives. Use when building custom token logic.
-
-```typescript
-import { getRandomBytes, getRandomInt } from '@systemix/token/common';
-
-// Cryptographically secure random bytes
 const bytes = getRandomBytes(32);
-
-// Random integer in [0, max)
-const n = getRandomInt(100);
+const n = getRandomInt(100); // [0, 100)
+bytesEqual(a, b); // constant-time byte comparison
+secureCompare(sig1, sig2); // constant-time string comparison
 ```
 
 | Function                 | Description                                    |
@@ -343,45 +256,18 @@ const n = getRandomInt(100);
 
 ---
 
-## Common Module (Internals)
+## Common Module
 
-For advanced use: enums, types, errors, and encoding utils.
+For advanced use: enums, types, errors, and utils.
 
 ```typescript
 import {
-  // Enums
   CHARSETS,
   HMAC_ALGORITHMS,
   RSA_ALGORITHMS,
   TokenPropsEnum,
-  ALG_TO_HASH,
-  isHmac,
-  isRsa,
-  // Types
   type Charset,
   type SignedAlgorithm,
-  type HmacAlgorithm,
-  type RsaAlgorithm,
-  type GenerateTokenFunctionProps,
-  type SignedHeader,
-  type SignedPayload,
-  type StandardClaims,
-  // Errors
-  SignedTokenError,
-  TokenExpiredError,
-  NotBeforeError,
-  InvalidSignatureError,
-  InvalidTokenError,
-  AudienceMismatchError,
-  IssuerMismatchError,
-  // Utils
-  bytesToHex,
-  bytesToBase64,
-  bytesToBase64Url,
-  bytesToAlphanumeric,
-  base64UrlEncode,
-  base64UrlDecode,
-  base64UrlDecodeToUtf8,
 } from '@systemix/token/common';
 ```
 
@@ -391,25 +277,23 @@ import {
 
 ### Token generator errors
 
-`generateToken` and `generateTokenPropValidation` throw generic `Error` with messages such as:
+Throws generic `Error` with messages like:
 
 - `Invalid byteLength. Must be a positive number.`
 - `Invalid charset. Must be one of: hex, base64, base64url, alphanumeric.`
-- `Invalid count. Count must be less than or equal to 10.`
-- `Invalid prop(s): foo. Only the following options are allowed: byteLength, charset, count.`
 
 ### Signed token errors
 
 All extend `SignedTokenError`:
 
-| Error                   | When                                                    |
-| :---------------------- | :------------------------------------------------------ |
-| `InvalidTokenError`     | Malformed token, invalid encoding, missing alg          |
-| `InvalidSignatureError` | Signature mismatch, wrong secret, algorithm not allowed |
-| `TokenExpiredError`     | `exp` in the past                                       |
-| `NotBeforeError`        | `nbf` in the future                                     |
-| `AudienceMismatchError` | `aud` does not match                                    |
-| `IssuerMismatchError`   | `iss` does not match                                    |
+| Error                   | When                              |
+| :---------------------- | :-------------------------------- |
+| `InvalidTokenError`     | Malformed token, invalid encoding |
+| `InvalidSignatureError` | Signature mismatch, wrong secret  |
+| `TokenExpiredError`     | `exp` in the past                 |
+| `NotBeforeError`        | `nbf` in the future               |
+| `AudienceMismatchError` | `aud` does not match              |
+| `IssuerMismatchError`   | `iss` does not match              |
 
 ```typescript
 import {
@@ -436,28 +320,21 @@ try {
 ### API key generation
 
 ```typescript
-import { generateToken } from '@systemix/token';
-
 const apiKey = generateToken({
   byteLength: 32,
   charset: 'hex',
 });
-// Store hashed in DB, return plain once to user
 ```
 
 ### Session token with signed payload
 
 ```typescript
-import { encodeSigned, verifySigned } from '@systemix/token/signed';
-
-// On login
 const sessionToken = await encodeSigned(
   { userId: user.id, email: user.email },
   process.env.SESSION_SECRET!,
   { expiresIn: 86400, issuer: 'my-app' },
 );
 
-// On request
 const payload = await verifySigned(sessionToken, process.env.SESSION_SECRET!, {
   algorithms: ['HS256'],
   issuer: 'my-app',
@@ -467,31 +344,14 @@ const payload = await verifySigned(sessionToken, process.env.SESSION_SECRET!, {
 ### RSA for distributed verification
 
 ```typescript
-import { encodeSigned, verifySigned } from '@systemix/token/signed';
-import { readFileSync } from 'fs';
-
-const privateKey = readFileSync('private.pem', 'utf8');
-const publicKey = readFileSync('public.pem', 'utf8');
-
 const token = await encodeSigned({ sub: 'user-1' }, privateKey, {
   algorithm: 'RS256',
   expiresIn: 3600,
 });
 
-// Any service with public key can verify
 const payload = await verifySigned(token, publicKey, {
   algorithms: ['RS256'],
 });
-```
-
-### Custom encoding pipeline
-
-```typescript
-import { getRandomBytes } from '@systemix/token/common';
-import { bytesToBase64Url } from '@systemix/token/common';
-
-const bytes = getRandomBytes(24);
-const token = bytesToBase64Url(bytes);
 ```
 
 ---
@@ -500,58 +360,12 @@ const token = bytesToBase64Url(bytes);
 
 - **Algorithm whitelist**: Always pass `algorithms` to `verifySigned`. Never trust the token header.
 - **Secret strength**: Use at least 256 bits (32 bytes) for HMAC secrets.
-- **RSA keys**: Use 2048+ bit keys. Keep the private key secret.
+- **RSA keys**: Use 2048+ bit keys.
 - **Clock skew**: Use `clockTolerance` when servers may have time drift.
 - **Sensitive data**: Signed tokens are signed, not encrypted. Do not put secrets in the payload.
 
 ---
 
-## API Reference
+## Try it
 
-### Main exports (`@systemix/token`)
-
-Re-exports everything from `/token`, `/signed`, `/rsa`, and `/common`.
-
-### Token (`@systemix/token/token`)
-
-- `generateToken(props?)` → `string | string[]`
-- `generateTokenPropValidation(props)` → `void`
-- `bytesToHex`, `bytesToBase64`, `bytesToBase64Url`, `bytesToAlphanumeric`
-- `CHARSETS`, `TokenPropsEnum`, `Charset`, `GenerateTokenFunctionProps`
-
-### Signed (`@systemix/token/signed`)
-
-- `encodeSigned(payload, secret, options?)` → `Promise<string>`
-- `decodeSigned(token)` → `DecodedToken<T>`
-- `verifySigned(token, secret, options)` → `Promise<T>`
-- Types: `SignedHeader`, `SignedPayload`, `EncodeSignedOptions`, `VerifySignedOptions`, `DecodedToken`, `StandardClaims`
-- Algorithms: `SignedAlgorithm`, `HmacAlgorithm`, `RsaAlgorithm`
-- Errors: `SignedTokenError`, `TokenExpiredError`, `NotBeforeError`, `InvalidSignatureError`, `InvalidTokenError`, `AudienceMismatchError`, `IssuerMismatchError`
-
-### RSA (`@systemix/token/rsa`)
-
-Direct RSA sign/verify for custom formats. Auto-detects Node vs browser.
-
-```typescript
-import { signRsa, verifyRsa } from '@systemix/token/rsa';
-
-const sig = await signRsa('data', privateKeyPem, 'RS256');
-const valid = await verifyRsa('data', sig, publicKeyPem, 'RS256');
-```
-
-### Common (`@systemix/token/common`)
-
-- `getRandomBytes(length)` → `Uint8Array`
-- `getRandomInt(max)` → `number`
-- `bytesEqual(a, b)` → `boolean` (constant-time)
-- `secureCompare(a, b)` → `boolean` (constant-time)
-- Enums: `CHARSETS`, `HMAC_ALGORITHMS`, `RSA_ALGORITHMS`, `TokenPropsEnum`, `HMAC_WEB_CRYPTO_HASH`, `RSA_NODE_HASH`, `isHmac`, `isRsa`
-- Types: `Charset`, `SignedAlgorithm`, `HmacAlgorithm`, `RsaAlgorithm`, `GenerateTokenFunctionProps`, `SignedHeader`, `SignedPayload`, `StandardClaims`, etc.
-- Errors: All signed token error classes
-- Utils: `bytesToHex`, `bytesToBase64`, `bytesToBase64Url`, `bytesToAlphanumeric`, `base64UrlEncode`, `base64UrlDecode`, `base64UrlDecodeToUtf8`
-
----
-
-## License
-
-MIT © [shahadathhs](https://github.com/shahadathhs)
+[Open the Token Generator demo](/token) to experiment interactively.

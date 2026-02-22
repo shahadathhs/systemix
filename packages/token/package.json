@@ -25,15 +25,15 @@
       "import": "./dist/signed/index.js",
       "require": "./dist/signed/index.cjs"
     },
-    "./shared": {
-      "types": "./dist/shared/index.d.ts",
-      "import": "./dist/shared/index.js",
-      "require": "./dist/shared/index.cjs"
-    },
     "./common": {
       "types": "./dist/common/index.d.ts",
       "import": "./dist/common/index.js",
       "require": "./dist/common/index.cjs"
+    },
+    "./rsa": {
+      "types": "./dist/rsa/index.d.ts",
+      "import": "./dist/rsa/index.js",
+      "require": "./dist/rsa/index.cjs"
     }
   },
   "repository": {
@@ -95,5 +95,8 @@
     "dist",
     "README.md",
     "package.json"
-  ]
+  ],
+  "browser": {
+    "node:crypto": false
+  }
 }

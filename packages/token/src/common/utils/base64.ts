@@ -1,17 +1,25 @@
+/** Browser and Node compatible (uses TextEncoder, btoa, atob) */
 export function base64UrlEncode(input: string | Uint8Array | Buffer): string {
-  const buf =
+  const bytes =
     typeof input === 'string'
-      ? Buffer.from(input, 'utf8')
-      : Buffer.isBuffer(input)
+      ? new TextEncoder().encode(input)
+      : input instanceof Uint8Array
         ? input
-        : Buffer.from(input);
-  return buf.toString('base64url');
+        : new Uint8Array(input as ArrayLike<number> & { length: number });
+  const binary = String.fromCharCode(...bytes);
+  const base64 = btoa(binary);
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-export function base64UrlDecode(input: string): Buffer {
-  return Buffer.from(input, 'base64url');
+/** Browser and Node compatible (returns Uint8Array) */
+export function base64UrlDecode(input: string): Uint8Array {
+  let base64 = input.replace(/-/g, '+').replace(/_/g, '/');
+  const pad = base64.length % 4;
+  if (pad) base64 += '='.repeat(4 - pad);
+  const binary = atob(base64);
+  return new Uint8Array([...binary].map((c) => c.charCodeAt(0)));
 }
 
 export function base64UrlDecodeToUtf8(input: string): string {
-  return base64UrlDecode(input).toString('utf8');
+  return new TextDecoder().decode(base64UrlDecode(input));
 }

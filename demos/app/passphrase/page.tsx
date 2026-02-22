@@ -57,7 +57,7 @@ export default function PassphrasePage() {
   const strength =
     entropy > 80
       ? { label: 'Excellent', color: 'text-emerald-400' }
-      : { label: 'Good', color: 'text-blue-400' };
+      : { label: 'Good', color: 'text-cyan-400' };
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -76,21 +76,21 @@ export default function PassphrasePage() {
         </div>
 
         {/* Display */}
-        <div className="glass rounded-2xl p-8 border border-white/10 group relative overflow-hidden">
+        <div className="glass rounded-2xl p-8 group relative overflow-hidden">
           <div className="flex flex-col sm:flex-row gap-6 items-center justify-between relative z-10">
-            <div className="text-xl sm:text-2xl font-medium text-white break-all tracking-tight leading-relaxed selection:bg-blue-500/30">
+            <div className="text-xl sm:text-2xl font-medium text-white break-all tracking-tight leading-relaxed selection:bg-cyan-500/30">
               {passphrase}
             </div>
             <div className="flex gap-2 shrink-0">
               <button
                 onClick={handleGenerate}
-                className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-colors"
+                className="p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 text-white transition-colors"
               >
                 <RefreshCw className="w-5 h-5" />
               </button>
               <button
                 onClick={copyToClipboard}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all active:scale-95"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium transition-all active:scale-95"
               >
                 {copied ? (
                   <Check className="w-5 h-5" />
@@ -102,7 +102,7 @@ export default function PassphrasePage() {
             </div>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-6 items-center border-t border-white/5 pt-6">
+          <div className="mt-8 flex flex-wrap gap-6 items-center border-t border-slate-700/50 pt-6">
             <div className="flex items-center gap-2">
               <Shield className={cn('w-4 h-4', strength.color)} />
               <span className="text-sm font-medium text-white">
@@ -124,16 +124,16 @@ export default function PassphrasePage() {
 
         {/* Controls */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="glass rounded-2xl p-6 border border-white/10 space-y-6">
+          <div className="glass rounded-2xl p-6 space-y-6">
             <h3 className="text-lg font-semibold text-white">Core Options</h3>
 
             <div className="space-y-6">
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <label className="text-sm font-medium text-gray-300">
+                  <label className="text-sm font-medium text-slate-300">
                     Word Count
                   </label>
-                  <span className="text-sm font-mono text-blue-400">
+                  <span className="text-sm font-mono text-cyan-400">
                     {options.wordCount}
                   </span>
                 </div>
@@ -148,12 +148,12 @@ export default function PassphrasePage() {
                       wordCount: parseInt(e.target.value),
                     })
                   }
-                  className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  className="w-full h-2 bg-slate-700/80 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">
+                <label className="text-sm font-medium text-slate-300">
                   Separator
                 </label>
                 <div className="flex gap-2">
@@ -170,8 +170,8 @@ export default function PassphrasePage() {
                       className={cn(
                         'flex-1 py-2 rounded-lg border text-sm transition-all',
                         options.separator === s && !options.randomSeparator
-                          ? 'bg-blue-600 border-blue-600 text-white'
-                          : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10',
+                          ? 'bg-cyan-500 border-cyan-500 text-slate-950'
+                          : 'bg-slate-800/50 border-slate-700/80 text-slate-400 hover:bg-slate-700/50',
                       )}
                     >
                       {s === ' ' ? 'Space' : s}
@@ -182,7 +182,7 @@ export default function PassphrasePage() {
             </div>
           </div>
 
-          <div className="glass rounded-2xl p-6 border border-white/10 space-y-6">
+          <div className="glass rounded-2xl p-6 space-y-6">
             <h3 className="text-lg font-semibold text-white">
               Advanced Formatting
             </h3>
@@ -252,21 +252,23 @@ function ToggleCard({
       className={cn(
         'flex items-start gap-4 p-4 rounded-xl border transition-all text-left',
         active
-          ? 'bg-blue-600/10 border-blue-500/50 ring-1 ring-blue-500/20'
-          : 'bg-white/5 border-white/10 hover:bg-white/10',
+          ? 'bg-cyan-500/10 border-cyan-500/50 ring-1 ring-cyan-500/20'
+          : 'bg-slate-800/50 border-slate-700/80 hover:bg-slate-700/50',
       )}
     >
       <div
         className={cn(
           'p-2 rounded-lg shrink-0',
-          active ? 'bg-blue-600 text-white' : 'bg-white/5 text-gray-400',
+          active
+            ? 'bg-cyan-500 text-slate-950'
+            : 'bg-slate-800/50 text-slate-400',
         )}
       >
         <Icon className="w-5 h-5" />
       </div>
       <div>
         <div className="text-sm font-semibold text-white">{title}</div>
-        <div className="text-xs text-gray-400 mt-1">{description}</div>
+        <div className="text-xs text-slate-400 mt-1">{description}</div>
       </div>
     </button>
   );

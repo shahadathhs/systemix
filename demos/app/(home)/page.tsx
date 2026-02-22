@@ -15,12 +15,12 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <div className="relative isolate overflow-hidden">
-      {/* Background Gradients */}
+      {/* Background - cyan/teal gradient blob */}
       <div
         className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
         aria-hidden="true"
       >
-        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#3b82f6] to-[#6366f1] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-cyan-500 to-teal-600 opacity-15 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
       </div>
 
       <div className="container mx-auto px-4 pt-24 pb-16 sm:pt-32">
@@ -30,7 +30,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400">
+            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl bg-clip-text text-transparent bg-gradient-to-b from-white via-cyan-100/90 to-slate-400">
               Secure, Scalable, and Minimalist.
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-400">
@@ -47,13 +47,13 @@ export default function Home() {
           >
             <Link
               href="/docs"
-              className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all hover:scale-105 active:scale-95"
+              className="rounded-lg bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 hover:bg-cyan-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 transition-all hover:scale-105 active:scale-95"
             >
               Documentation
             </Link>
             <Link
               href="/password"
-              className="rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold text-white hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-all"
+              className="rounded-lg border border-slate-500/40 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-all"
             >
               Demos
             </Link>
@@ -68,18 +68,18 @@ export default function Home() {
         </div>
 
         <div className="mx-auto mt-24 max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 sm:mt-20 lg:grid-cols-3">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.name}
-                className="flex flex-col rounded-2xl bg-white/5 p-8 ring-1 ring-white/10 hover:ring-white/20 transition-all hover:bg-white/10"
+                className="card flex flex-col rounded-xl p-8 transition-all"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index + 0.3 }}
               >
                 <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-white">
                   <feature.icon
-                    className="h-5 w-5 flex-none text-blue-500"
+                    className="h-5 w-5 flex-none text-cyan-400"
                     aria-hidden="true"
                   />
                   {feature.name}
@@ -93,28 +93,30 @@ export default function Home() {
         </div>
 
         {/* Package Sections */}
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <PackageCard
-            title="Password Generator"
-            description="Cryptographically secure password generator with customizable complexity and entropy tools."
-            icon={Lock}
-            href="/password"
-            tag="@systemix/password"
-          />
-          <PackageCard
-            title="Passphrase Generator"
-            description="Secure, memorable passphrase generator using high-entropy words and random injectors."
-            icon={KeyRound}
-            href="/passphrase"
-            tag="@systemix/passphrase"
-          />
-          <PackageCard
-            title="Token Generator"
-            description="Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities."
-            icon={Shield}
-            href="/token"
-            tag="@systemix/token"
-          />
+        <div className="mx-auto mt-32 max-w-7xl px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <PackageCard
+              title="Password Generator"
+              description="Cryptographically secure password generator with customizable complexity and entropy tools."
+              icon={Lock}
+              href="/password"
+              tag="@systemix/password"
+            />
+            <PackageCard
+              title="Passphrase Generator"
+              description="Secure, memorable passphrase generator using high-entropy words and random injectors."
+              icon={KeyRound}
+              href="/passphrase"
+              tag="@systemix/passphrase"
+            />
+            <PackageCard
+              title="Token Generator"
+              description="Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities."
+              icon={Shield}
+              href="/token"
+              tag="@systemix/token"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -158,16 +160,16 @@ function PackageCard({
   return (
     <Link
       href={href}
-      className="group overflow-hidden relative rounded-2xl border border-white/10 bg-white/5 p-8 transition-all hover:border-blue-500/50 hover:bg-white/10"
+      className="card group overflow-hidden relative rounded-xl p-8 transition-all"
     >
-      <div className="absolute -right-4 -top-4 text-white/5 group-hover:text-blue-500/10 transition-colors">
+      <div className="absolute -right-4 -top-4 text-slate-700 group-hover:text-cyan-500/20 transition-colors">
         <Icon size={120} />
       </div>
       <div className="relative z-10">
-        <span className="text-xs font-mono text-blue-400">{tag}</span>
+        <span className="text-xs font-mono text-cyan-400">{tag}</span>
         <h2 className="mt-4 text-2xl font-bold text-white">{title}</h2>
-        <p className="mt-2 text-gray-400 line-clamp-2">{description}</p>
-        <div className="mt-6 flex items-center text-blue-400 font-medium text-sm">
+        <p className="mt-2 text-slate-400 line-clamp-2">{description}</p>
+        <div className="mt-6 flex items-center text-cyan-400 font-medium text-sm">
           Try Live Demo{' '}
           <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
         </div>
