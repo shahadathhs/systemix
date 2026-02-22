@@ -47,13 +47,13 @@ npm install @systemix/token
 
 ## Package Structure
 
-| Subpath | Contents |
-| :------ | :------- |
-| `@systemix/token` | Main entry — re-exports token, signed, shared |
-| `@systemix/token/token` | Token generator, encoding utils, validation |
-| `@systemix/token/signed` | Signed token encode/decode/verify |
+| Subpath                  | Contents                                         |
+| :----------------------- | :----------------------------------------------- |
+| `@systemix/token`        | Main entry — re-exports token, signed, shared    |
+| `@systemix/token/token`  | Token generator, encoding utils, validation      |
+| `@systemix/token/signed` | Signed token encode/decode/verify                |
 | `@systemix/token/shared` | Crypto primitives (getRandomBytes, getRandomInt) |
-| `@systemix/token/common` | Enums, types, errors, utils (for advanced use) |
+| `@systemix/token/common` | Enums, types, errors, utils (for advanced use)   |
 
 ---
 
@@ -91,20 +91,20 @@ const batch = generateToken({
 
 #### Props
 
-| Property | Type | Default | Description |
-| :------- | :--- | :------ | :---------- |
-| `byteLength` | `number` | `32` | Number of random bytes (1–1024). Output length depends on charset. |
-| `charset` | `'hex' \| 'base64' \| 'base64url' \| 'alphanumeric'` | `'hex'` | Encoding format. |
-| `count` | `number` | `1` | Number of tokens to generate (1–10). Returns `string[]` when > 1. |
+| Property     | Type                                                 | Default | Description                                                        |
+| :----------- | :--------------------------------------------------- | :------ | :----------------------------------------------------------------- |
+| `byteLength` | `number`                                             | `32`    | Number of random bytes (1–1024). Output length depends on charset. |
+| `charset`    | `'hex' \| 'base64' \| 'base64url' \| 'alphanumeric'` | `'hex'` | Encoding format.                                                   |
+| `count`      | `number`                                             | `1`     | Number of tokens to generate (1–10). Returns `string[]` when > 1.  |
 
 #### Charset behavior
 
-| Charset | Output length | Use case |
-| :------ | :------------ | :------- |
-| `hex` | `byteLength × 2` | API keys, opaque IDs |
-| `base64` | ~`byteLength × 4/3` | Compact tokens |
-| `base64url` | ~`byteLength × 4/3`, URL-safe | URLs, cookies |
-| `alphanumeric` | `byteLength` | Human-readable, no special chars |
+| Charset        | Output length                 | Use case                         |
+| :------------- | :---------------------------- | :------------------------------- |
+| `hex`          | `byteLength × 2`              | API keys, opaque IDs             |
+| `base64`       | ~`byteLength × 4/3`           | Compact tokens                   |
+| `base64url`    | ~`byteLength × 4/3`, URL-safe | URLs, cookies                    |
+| `alphanumeric` | `byteLength`                  | Human-readable, no special chars |
 
 ---
 
@@ -139,18 +139,18 @@ import {
 
 const bytes = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f]);
 
-bytesToHex(bytes);        // → "48656c6c6f"
-bytesToBase64(bytes);     // → "SGVsbG8="
-bytesToBase64Url(bytes);  // → "SGVsbG8" (no padding)
+bytesToHex(bytes); // → "48656c6c6f"
+bytesToBase64(bytes); // → "SGVsbG8="
+bytesToBase64Url(bytes); // → "SGVsbG8" (no padding)
 bytesToAlphanumeric(bytes); // → "NkF2bB2" (A–Z, a–z, 0–9)
 ```
 
-| Function | Input | Output |
-| :------- | :---- | :----- |
-| `bytesToHex(bytes)` | `Uint8Array` | Hex string |
-| `bytesToBase64(bytes)` | `Uint8Array` | Base64 string |
-| `bytesToBase64Url(bytes)` | `Uint8Array` | URL-safe base64 |
-| `bytesToAlphanumeric(bytes)` | `Uint8Array` | A–Z, a–z, 0–9 |
+| Function                     | Input        | Output          |
+| :--------------------------- | :----------- | :-------------- |
+| `bytesToHex(bytes)`          | `Uint8Array` | Hex string      |
+| `bytesToBase64(bytes)`       | `Uint8Array` | Base64 string   |
+| `bytesToBase64Url(bytes)`    | `Uint8Array` | URL-safe base64 |
+| `bytesToAlphanumeric(bytes)` | `Uint8Array` | A–Z, a–z, 0–9   |
 
 ---
 
@@ -179,42 +179,37 @@ Creates a signed token. Supports HMAC (shared secret) and RSA (PEM private key).
 import { encodeSigned } from '@systemix/token/signed';
 
 // HMAC (shared secret)
-const token = encodeSigned(
-  { userId: '123', role: 'admin' },
-  'my-secret-key',
-  {
-    algorithm: 'HS256',
-    expiresIn: 3600,
-    issuer: 'my-app',
-    audience: 'api',
-    subject: 'user-123',
-    tokenId: true, // auto-generate jti
-  }
-);
+const token = encodeSigned({ userId: '123', role: 'admin' }, 'my-secret-key', {
+  algorithm: 'HS256',
+  expiresIn: 3600,
+  issuer: 'my-app',
+  audience: 'api',
+  subject: 'user-123',
+  tokenId: true, // auto-generate jti
+});
 
 // RSA (PEM private key)
-const tokenRsa = encodeSigned(
-  { userId: '123' },
-  privateKeyPem,
-  { algorithm: 'RS256', expiresIn: 3600 }
-);
+const tokenRsa = encodeSigned({ userId: '123' }, privateKeyPem, {
+  algorithm: 'RS256',
+  expiresIn: 3600,
+});
 ```
 
 #### Encode options
 
-| Option | Type | Default | Description |
-| :----- | :--- | :------ | :---------- |
-| `algorithm` | `SignedAlgorithm` | `'HS256'` | Signing algorithm. |
-| `typ` | `string` | `'ST'` | Token type in header. |
-| `kid` | `string` | — | Key ID for key rotation. |
-| `cty` | `string` | — | Content type. |
-| `expiresIn` | `number` | — | Expiration in seconds from now. |
-| `notBefore` | `number` | — | Not-before in seconds from now. |
-| `issuedAt` | `number` | `now` | Issued-at timestamp. |
-| `issuer` | `string` | — | `iss` claim. |
-| `subject` | `string` | — | `sub` claim. |
-| `audience` | `string \| string[]` | — | `aud` claim. |
-| `tokenId` | `string \| true` | — | `jti` claim. `true` = auto-generate. |
+| Option      | Type                 | Default   | Description                          |
+| :---------- | :------------------- | :-------- | :----------------------------------- |
+| `algorithm` | `SignedAlgorithm`    | `'HS256'` | Signing algorithm.                   |
+| `typ`       | `string`             | `'ST'`    | Token type in header.                |
+| `kid`       | `string`             | —         | Key ID for key rotation.             |
+| `cty`       | `string`             | —         | Content type.                        |
+| `expiresIn` | `number`             | —         | Expiration in seconds from now.      |
+| `notBefore` | `number`             | —         | Not-before in seconds from now.      |
+| `issuedAt`  | `number`             | `now`     | Issued-at timestamp.                 |
+| `issuer`    | `string`             | —         | `iss` claim.                         |
+| `subject`   | `string`             | —         | `sub` claim.                         |
+| `audience`  | `string \| string[]` | —         | `aud` claim.                         |
+| `tokenId`   | `string \| true`     | —         | `jti` claim. `true` = auto-generate. |
 
 ---
 
@@ -227,7 +222,7 @@ import { decodeSigned } from '@systemix/token/signed';
 
 const { header, payload, signature } = decodeSigned<{ userId: string }>(token);
 
-console.log(header.alg);   // "HS256"
+console.log(header.alg); // "HS256"
 console.log(payload.userId); // "123"
 ```
 
@@ -261,23 +256,23 @@ const payload = verifySigned<{ userId: string }>(token, 'my-secret', {
 
 #### Verify options
 
-| Option | Type | Required | Description |
-| :----- | :--- | :------- | :---------- |
-| `algorithms` | `SignedAlgorithm[]` | **Yes** | Allowed algorithms. Prevents algorithm-swap attacks. |
-| `issuer` | `string \| string[]` | No | Expected `iss`. |
-| `audience` | `string \| string[]` | No | Expected `aud`. |
-| `subject` | `string` | No | Expected `sub`. |
-| `clockTolerance` | `number` | No | Seconds of skew for `exp`/`nbf`. |
-| `ignoreExpiration` | `boolean` | No | Skip `exp` check. |
-| `ignoreNotBefore` | `boolean` | No | Skip `nbf` check. |
+| Option             | Type                 | Required | Description                                          |
+| :----------------- | :------------------- | :------- | :--------------------------------------------------- |
+| `algorithms`       | `SignedAlgorithm[]`  | **Yes**  | Allowed algorithms. Prevents algorithm-swap attacks. |
+| `issuer`           | `string \| string[]` | No       | Expected `iss`.                                      |
+| `audience`         | `string \| string[]` | No       | Expected `aud`.                                      |
+| `subject`          | `string`             | No       | Expected `sub`.                                      |
+| `clockTolerance`   | `number`             | No       | Seconds of skew for `exp`/`nbf`.                     |
+| `ignoreExpiration` | `boolean`            | No       | Skip `exp` check.                                    |
+| `ignoreNotBefore`  | `boolean`            | No       | Skip `nbf` check.                                    |
 
 ---
 
 ### Algorithms
 
-| Algorithm | Type | Secret / key |
-| :-------- | :--- | :----------- |
-| HS256, HS384, HS512 | HMAC (symmetric) | Shared secret string |
+| Algorithm           | Type             | Secret / key                                      |
+| :------------------ | :--------------- | :------------------------------------------------ |
+| HS256, HS384, HS512 | HMAC (symmetric) | Shared secret string                              |
 | RS256, RS384, RS512 | RSA (asymmetric) | PEM private key (encode), PEM public key (verify) |
 
 ```typescript
@@ -294,15 +289,15 @@ import {
 
 ### Standard claims
 
-| Claim | Type | Description |
-| :---- | :--- | :---------- |
-| `iss` | `string` | Issuer |
-| `sub` | `string` | Subject |
-| `aud` | `string \| string[]` | Audience |
-| `exp` | `number` | Expiration (Unix seconds) |
-| `nbf` | `number` | Not before (Unix seconds) |
-| `iat` | `number` | Issued at (Unix seconds) |
-| `jti` | `string` | Token ID |
+| Claim | Type                 | Description               |
+| :---- | :------------------- | :------------------------ |
+| `iss` | `string`             | Issuer                    |
+| `sub` | `string`             | Subject                   |
+| `aud` | `string \| string[]` | Audience                  |
+| `exp` | `number`             | Expiration (Unix seconds) |
+| `nbf` | `number`             | Not before (Unix seconds) |
+| `iat` | `number`             | Issued at (Unix seconds)  |
+| `jti` | `string`             | Token ID                  |
 
 ---
 
@@ -335,10 +330,10 @@ const bytes = getRandomBytes(32);
 const n = getRandomInt(100);
 ```
 
-| Function | Description |
-| :------- | :---------- |
+| Function                 | Description                           |
+| :----------------------- | :------------------------------------ |
 | `getRandomBytes(length)` | Returns `Uint8Array` of random bytes. |
-| `getRandomInt(max)` | Returns random integer in `[0, max)`. |
+| `getRandomInt(max)`      | Returns random integer in `[0, max)`. |
 
 ---
 
@@ -401,14 +396,14 @@ import {
 
 All extend `SignedTokenError`:
 
-| Error | When |
-| :---- | :--- |
-| `InvalidTokenError` | Malformed token, invalid encoding, missing alg |
+| Error                   | When                                                    |
+| :---------------------- | :------------------------------------------------------ |
+| `InvalidTokenError`     | Malformed token, invalid encoding, missing alg          |
 | `InvalidSignatureError` | Signature mismatch, wrong secret, algorithm not allowed |
-| `TokenExpiredError` | `exp` in the past |
-| `NotBeforeError` | `nbf` in the future |
-| `AudienceMismatchError` | `aud` does not match |
-| `IssuerMismatchError` | `iss` does not match |
+| `TokenExpiredError`     | `exp` in the past                                       |
+| `NotBeforeError`        | `nbf` in the future                                     |
+| `AudienceMismatchError` | `aud` does not match                                    |
+| `IssuerMismatchError`   | `iss` does not match                                    |
 
 ```typescript
 import {
@@ -453,7 +448,7 @@ import { encodeSigned, verifySigned } from '@systemix/token/signed';
 const sessionToken = encodeSigned(
   { userId: user.id, email: user.email },
   process.env.SESSION_SECRET!,
-  { expiresIn: 86400, issuer: 'my-app' }
+  { expiresIn: 86400, issuer: 'my-app' },
 );
 
 // On request
@@ -472,11 +467,10 @@ import { readFileSync } from 'fs';
 const privateKey = readFileSync('private.pem', 'utf8');
 const publicKey = readFileSync('public.pem', 'utf8');
 
-const token = encodeSigned(
-  { sub: 'user-1' },
-  privateKey,
-  { algorithm: 'RS256', expiresIn: 3600 }
-);
+const token = encodeSigned({ sub: 'user-1' }, privateKey, {
+  algorithm: 'RS256',
+  expiresIn: 3600,
+});
 
 // Any service with public key can verify
 const payload = verifySigned(token, publicKey, {

@@ -1,7 +1,9 @@
 {
   "name": "@systemix/token",
   "version": "0.2.0",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "private": false,
   "type": "module",
   "main": "./dist/index.cjs",
@@ -79,8 +81,19 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-  "directories": { "test": "tests" },
-  "sideEffects": ["*.css", "*.scss"],
-  "bugs": { "url": "https://github.com/shahadathhs/systemix/issues" },
-  "files": ["dist", "README.md", "package.json"]
+  "directories": {
+    "test": "tests"
+  },
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
+  "bugs": {
+    "url": "https://github.com/shahadathhs/systemix/issues"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ]
 }
