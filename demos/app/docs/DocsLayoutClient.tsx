@@ -1,8 +1,8 @@
 'use client';
 
+import { DocToc } from '@/components/DocToc';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import { DocToc } from '@/components/DocToc';
 
 export function DocsLayoutClient({ children }: { children: React.ReactNode }) {
   const articleRef = useRef<HTMLDivElement>(null);

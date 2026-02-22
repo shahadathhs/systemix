@@ -1,9 +1,9 @@
 {
   "extends": "@systemix/typescript/nextjs.json",
   "compilerOptions": {
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "paths": { "@/*": ["./*"] },
+    "moduleResolution": "bundler",
+    "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",

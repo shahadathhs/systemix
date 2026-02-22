@@ -32,10 +32,10 @@ const docModules: Record<
   Slug,
   () => Promise<{ default: React.ComponentType }>
 > = {
-  '': () => import('@/content/docs/index.mdx'),
-  password: () => import('@/content/docs/password.mdx'),
-  passphrase: () => import('@/content/docs/passphrase.mdx'),
-  token: () => import('@/content/docs/token.mdx'),
+  '': () => import('@/docs/index.mdx'),
+  password: () => import('@/docs/password.mdx'),
+  passphrase: () => import('@/docs/passphrase.mdx'),
+  token: () => import('@/docs/token.mdx'),
 };
 
 export async function generateMetadata({

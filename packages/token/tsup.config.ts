@@ -5,7 +5,7 @@ export default defineConfig({
     'src/index.ts',
     'src/token/index.ts',
     'src/signed/index.ts',
-    'src/shared/index.ts',
+    'src/rsa/index.ts',
     'src/common/index.ts',
   ],
   format: ['cjs', 'esm'],

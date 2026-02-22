@@ -7,13 +7,25 @@ export type HmacAlgorithm = (typeof HMAC_ALGORITHMS)[number];
 export type RsaAlgorithm = (typeof RSA_ALGORITHMS)[number];
 export type SignedAlgorithm = HmacAlgorithm | RsaAlgorithm;
 
-export const ALG_TO_HASH: Record<SignedAlgorithm, string> = {
-  HS256: 'sha256',
-  HS384: 'sha384',
-  HS512: 'sha512',
+/** Web Crypto API hash names (HMAC) — browser and Node 18+ */
+export const HMAC_WEB_CRYPTO_HASH: Record<HmacAlgorithm, string> = {
+  HS256: 'SHA-256',
+  HS384: 'SHA-384',
+  HS512: 'SHA-512',
+};
+
+/** Node crypto algorithm names (RSA sign/verify) */
+export const RSA_NODE_HASH: Record<RsaAlgorithm, string> = {
   RS256: 'RSA-SHA256',
   RS384: 'RSA-SHA384',
   RS512: 'RSA-SHA512',
+};
+
+/** Web Crypto API algorithm (RSA) — browser and Node 18+ */
+export const RSA_WEB_CRYPTO_HASH: Record<RsaAlgorithm, string> = {
+  RS256: 'SHA-256',
+  RS384: 'SHA-384',
+  RS512: 'SHA-512',
 };
 
 export function isHmac(alg: SignedAlgorithm): alg is HmacAlgorithm {

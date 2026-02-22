@@ -128,7 +128,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
                 {...linkProps('/password')}
               >
                 <Lock className="w-4 h-4 shrink-0 opacity-70" />
-                Password Generator
+                Password
               </Link>
             </li>
             <li>
@@ -138,7 +138,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
                 {...linkProps('/passphrase')}
               >
                 <KeyRound className="w-4 h-4 shrink-0 opacity-70" />
-                Passphrase Generator
+                Passphrase
               </Link>
             </li>
             <li>
@@ -148,7 +148,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
                 {...linkProps('/token')}
               >
                 <Shield className="w-4 h-4 shrink-0 opacity-70" />
-                Token Generator
+                Token
               </Link>
             </li>
           </ul>

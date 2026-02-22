@@ -92,14 +92,14 @@ importers:
         specifier: ^16.1.6
         version: 16.1.6(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.2.14)(react@19.2.4))
       '@systemix/passphrase':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: workspace:*
+        version: link:../packages/passphrase
       '@systemix/password':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: workspace:*
+        version: link:../packages/password
       '@systemix/token':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: workspace:*
+        version: link:../packages/token
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -129,11 +129,11 @@ importers:
         version: 3.5.0
     devDependencies:
       '@systemix/eslint':
-        specifier: ^0.3.0
-        version: 0.3.0(eslint@10.0.1(jiti@2.6.1))(prettier@3.8.1)(turbo@2.8.10)(typescript@5.9.3)
+        specifier: workspace:*
+        version: link:../configs/eslint
       '@systemix/typescript':
-        specifier: ^0.3.0
-        version: 0.3.0
+        specifier: workspace:*
+        version: link:../configs/typescript
       '@tailwindcss/postcss':
         specifier: ^4.2.0
         version: 4.2.0
@@ -990,23 +990,6 @@ packages:
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
-
-  '@systemix/eslint@0.3.0':
-    resolution: {integrity: sha512-brNaRvPDGudx+H692zrmxlx+/wWOnHZlloyI8di0NSSbD0Z+FZjcV3qk6ja+7MWQSTh7y8AAhfXmD85/zmm8ng==}
-    engines: {node: '>=18.0.0'}
-
-  '@systemix/passphrase@0.2.0':
-    resolution: {integrity: sha512-//LuvSPYYx5u9+ERpduoGMyd4pkQps2R3jRUNBX9lCYoiJBQCGTrsTd8+r8PYrTgR9fS0iiGqQ1tw1feXa7phQ==}
-
-  '@systemix/password@0.2.0':
-    resolution: {integrity: sha512-z51HB5hXoCtNU7XRR1AidDWgDRaTibU9oIMGD80ejHKLJmyfk7zVBVHNmQVMHe6Xx7PlbOTDEQSzXhcgQIYThQ==}
-
-  '@systemix/token@0.2.0':
-    resolution: {integrity: sha512-k+gd8g3S/EADSabFLZ5apaUVg+pjKQ+0PwvDvNr8m+Sn/YubqXbUT91qaQuAAgbm6FLTgZgY4TWFl8x771ai+w==}
-
-  '@systemix/typescript@0.3.0':
-    resolution: {integrity: sha512-6v4QaP1UIJPgcpgBnLO44FKZrheyIwFcli+JWNAeM+d19A3rsjwI5KOciN+oajFKKvqPPKBLowJp/apxI3fQkQ==}
-    engines: {node: '>=18.0.0'}
 
   '@tailwindcss/node@4.2.0':
     resolution: {integrity: sha512-Yv+fn/o2OmL5fh/Ir62VXItdShnUxfpkMA4Y7jdeC8O81WPB8Kf6TT6GSHvnqgSwDzlB5iT7kDpeXxLsUS0T6Q==}
@@ -4317,38 +4300,6 @@ snapshots:
   '@swc/helpers@0.5.15':
     dependencies:
       tslib: 2.8.1
-
-  '@systemix/eslint@0.3.0(eslint@10.0.1(jiti@2.6.1))(prettier@3.8.1)(turbo@2.8.10)(typescript@5.9.3)':
-    dependencies:
-      '@eslint/js': 10.0.1(eslint@10.0.1(jiti@2.6.1))
-      '@next/eslint-plugin-next': 16.1.6
-      eslint-config-prettier: 10.1.8(eslint@10.0.1(jiti@2.6.1))
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.56.0(eslint@10.0.1(jiti@2.6.1))(typescript@5.9.3))(eslint@10.0.1(jiti@2.6.1))
-      eslint-plugin-only-warn: 1.1.0
-      eslint-plugin-prettier: 5.5.5(eslint-config-prettier@10.1.8(eslint@10.0.1(jiti@2.6.1)))(eslint@10.0.1(jiti@2.6.1))(prettier@3.8.1)
-      eslint-plugin-react: 7.37.5(eslint@10.0.1(jiti@2.6.1))
-      eslint-plugin-react-hooks: 7.0.1(eslint@10.0.1(jiti@2.6.1))
-      eslint-plugin-turbo: 2.8.10(eslint@10.0.1(jiti@2.6.1))(turbo@2.8.10)
-      globals: 17.3.0
-      typescript-eslint: 8.56.0(eslint@10.0.1(jiti@2.6.1))(typescript@5.9.3)
-    transitivePeerDependencies:
-      - '@types/eslint'
-      - '@typescript-eslint/parser'
-      - eslint
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - prettier
-      - supports-color
-      - turbo
-      - typescript
-
-  '@systemix/passphrase@0.2.0': {}
-
-  '@systemix/password@0.2.0': {}
-
-  '@systemix/token@0.2.0': {}
-
-  '@systemix/typescript@0.3.0': {}
 
   '@tailwindcss/node@4.2.0':
     dependencies:
