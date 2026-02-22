@@ -1,9 +1,7 @@
 {
   "name": "@systemix/token",
   "version": "0.2.0",
-  "publishConfig": {
-    "access": "public"
-  },
+  "publishConfig": { "access": "public" },
   "private": false,
   "type": "module",
   "main": "./dist/index.cjs",
@@ -29,6 +27,11 @@
       "types": "./dist/shared/index.d.ts",
       "import": "./dist/shared/index.js",
       "require": "./dist/shared/index.cjs"
+    },
+    "./common": {
+      "types": "./dist/common/index.d.ts",
+      "import": "./dist/common/index.js",
+      "require": "./dist/common/index.cjs"
     }
   },
   "repository": {
@@ -56,6 +59,10 @@
     "secure-token",
     "api-key",
     "session-token",
+    "signed-token",
+    "auth",
+    "hmac",
+    "rsa",
     "crypto",
     "typescript",
     "node",
@@ -63,7 +70,7 @@
   ],
   "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
   "license": "MIT",
-  "description": "A cryptographically secure token generator for API keys, session tokens, and more. Part of the Systemix toolkit.",
+  "description": "A cryptographically secure token generator and signed-token module for API keys, session tokens, and auth. Zero dependencies, pure Node.js.",
   "devDependencies": {
     "@systemix/eslint": "workspace:*",
     "@systemix/typescript": "workspace:*",
@@ -72,19 +79,8 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-  "directories": {
-    "test": "tests"
-  },
-  "sideEffects": [
-    "*.css",
-    "*.scss"
-  ],
-  "bugs": {
-    "url": "https://github.com/shahadathhs/systemix/issues"
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "package.json"
-  ]
+  "directories": { "test": "tests" },
+  "sideEffects": ["*.css", "*.scss"],
+  "bugs": { "url": "https://github.com/shahadathhs/systemix/issues" },
+  "files": ["dist", "README.md", "package.json"]
 }

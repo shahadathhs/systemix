@@ -1,15 +1,9 @@
-import type { DecodedToken, SignedHeader } from './types';
-import { InvalidTokenError } from './errors';
-import { base64UrlDecodeToUtf8 } from './utils';
+import { base64UrlDecodeToUtf8 } from '../common/utils/base64';
+import type { DecodedToken, SignedHeader } from '../common/types/signed.types';
+import { InvalidTokenError } from '../common/errors';
 
 /**
  * Decode a signed token without verification.
- * Use this when you need to inspect the payload before deciding whether to verify.
- * For verified decoding, use verifySigned instead.
- *
- * @param token - The signed token string
- * @returns Decoded header, payload, and raw signature
- * @throws InvalidTokenError if token is malformed
  */
 export function decodeSigned<T = unknown>(token: string): DecodedToken<T> {
   if (typeof token !== 'string' || !token.trim()) {
@@ -29,15 +23,13 @@ export function decodeSigned<T = unknown>(token: string): DecodedToken<T> {
   let payload: T;
 
   try {
-    const headerJson = base64UrlDecodeToUtf8(headerB64);
-    header = JSON.parse(headerJson) as SignedHeader;
+    header = JSON.parse(base64UrlDecodeToUtf8(headerB64)) as SignedHeader;
   } catch {
     throw new InvalidTokenError('Invalid header encoding');
   }
 
   try {
-    const payloadJson = base64UrlDecodeToUtf8(payloadB64);
-    payload = JSON.parse(payloadJson) as T;
+    payload = JSON.parse(base64UrlDecodeToUtf8(payloadB64)) as T;
   } catch {
     throw new InvalidTokenError('Invalid payload encoding');
   }
@@ -46,9 +38,5 @@ export function decodeSigned<T = unknown>(token: string): DecodedToken<T> {
     throw new InvalidTokenError('Header must be an object');
   }
 
-  return {
-    header,
-    payload,
-    signature: signatureB64,
-  };
+  return { header, payload, signature: signatureB64 };
 }

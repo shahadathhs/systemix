@@ -1,21 +1,20 @@
-import { GenerateTokenPropsEnum } from './props.enum';
-import { GenerateTokenFunctionProps } from './types';
+import { CHARSETS, TokenPropsEnum } from '../common/enums';
+import type { GenerateTokenFunctionProps } from '../common/types';
 import {
   byteLengthError,
   charsetError,
   countError,
   unwantedPropsError,
-} from './errors';
+} from '../common/errors';
 
-const VALID_CHARSETS = ['hex', 'base64', 'base64url', 'alphanumeric'] as const;
-const allValidProps = Object.values(GenerateTokenPropsEnum) as string[];
+const VALID_PROPS = Object.values(TokenPropsEnum) as string[];
 
 export function generateTokenPropValidation(
   props: GenerateTokenFunctionProps,
 ): void {
   const propsValue = Object.keys(props);
   const unwantedProps = propsValue.filter(
-    (prop) => !allValidProps.includes(prop),
+    (prop) => !VALID_PROPS.includes(prop),
   );
 
   if (unwantedProps.length > 0) {
@@ -34,7 +33,7 @@ export function generateTokenPropValidation(
   }
 
   if (charset !== undefined) {
-    if (typeof charset !== 'string' || !VALID_CHARSETS.includes(charset)) {
+    if (typeof charset !== 'string' || !CHARSETS.includes(charset)) {
       throw new Error(charsetError);
     }
   }

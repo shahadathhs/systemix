@@ -6,6 +6,7 @@ export default defineConfig({
     'src/token/index.ts',
     'src/signed/index.ts',
     'src/shared/index.ts',
+    'src/common/index.ts',
   ],
   format: ['cjs', 'esm'],
   dts: true,

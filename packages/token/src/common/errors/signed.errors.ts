@@ -1,8 +1,3 @@
-/**
- * Errors for signed token operations.
- * Pure Node.js - no external dependencies.
- */
-
 export class SignedTokenError extends Error {
   override name = 'SignedTokenError';
   constructor(message: string) {

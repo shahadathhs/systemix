@@ -1,5 +1,11 @@
 import { createHmac, createVerify } from 'node:crypto';
+import { base64UrlDecode } from '../common/utils/base64';
 import { decodeSigned } from './decode';
+import { ALG_TO_HASH, isHmac, isRsa } from '../common/enums';
+import type {
+  SignedPayload,
+  VerifySignedOptions,
+} from '../common/types/signed.types';
 import {
   AudienceMismatchError,
   InvalidSignatureError,
@@ -7,33 +13,7 @@ import {
   IssuerMismatchError,
   NotBeforeError,
   TokenExpiredError,
-} from './errors';
-import type {
-  SignedAlgorithm,
-  SignedPayload,
-  VerifySignedOptions,
-} from './types';
-import { base64UrlDecode } from './utils';
-
-const HMAC_ALGORITHMS = ['HS256', 'HS384', 'HS512'] as const;
-const RSA_ALGORITHMS = ['RS256', 'RS384', 'RS512'] as const;
-
-const ALG_TO_HASH: Record<string, string> = {
-  HS256: 'sha256',
-  HS384: 'sha384',
-  HS512: 'sha512',
-  RS256: 'RSA-SHA256',
-  RS384: 'RSA-SHA384',
-  RS512: 'RSA-SHA512',
-};
-
-function isHmac(alg: SignedAlgorithm): alg is 'HS256' | 'HS384' | 'HS512' {
-  return HMAC_ALGORITHMS.includes(alg as (typeof HMAC_ALGORITHMS)[number]);
-}
-
-function isRsa(alg: SignedAlgorithm): alg is 'RS256' | 'RS384' | 'RS512' {
-  return RSA_ALGORITHMS.includes(alg as (typeof RSA_ALGORITHMS)[number]);
-}
+} from '../common/errors';
 
 function verifyHmacSignature(
   signingInput: string,
@@ -43,8 +23,7 @@ function verifyHmacSignature(
 ): boolean {
   const hmac = createHmac(ALG_TO_HASH[alg], secret);
   hmac.update(signingInput, 'utf8');
-  const expected = hmac.digest().toString('base64url');
-  return expected === signatureB64;
+  return hmac.digest().toString('base64url') === signatureB64;
 }
 
 function verifyRsaSignature(
@@ -69,8 +48,7 @@ function checkAudience(
   }
   const expectedArr = Array.isArray(expected) ? expected : [expected];
   const tokenArr = Array.isArray(tokenAud) ? tokenAud : [tokenAud];
-  const hasMatch = expectedArr.some((e) => tokenArr.includes(e));
-  if (!hasMatch) {
+  if (!expectedArr.some((e) => tokenArr.includes(e))) {
     throw new AudienceMismatchError(
       `Expected audience in [${expectedArr.join(', ')}], got ${JSON.stringify(tokenAud)}`,
     );
@@ -94,13 +72,6 @@ function checkIssuer(
 
 /**
  * Decode and verify a signed token.
- * Validates signature and optionally standard claims (exp, nbf, iss, aud, sub).
- *
- * @param token - The signed token string
- * @param secret - HMAC secret or RSA public key (PEM)
- * @param options - Verification options (algorithms, claims, clock tolerance)
- * @returns Decoded and verified payload
- * @throws Various SignedTokenError subclasses on failure
  */
 export function verifySigned<T = SignedPayload>(
   token: string,
@@ -171,14 +142,8 @@ export function verifySigned<T = SignedPayload>(
     }
   }
 
-  if (options?.issuer != null) {
-    checkIssuer(payload.iss, options.issuer);
-  }
-
-  if (options?.audience != null) {
-    checkAudience(payload.aud, options.audience);
-  }
-
+  if (options?.issuer != null) checkIssuer(payload.iss, options.issuer);
+  if (options?.audience != null) checkAudience(payload.aud, options.audience);
   if (options?.subject != null && payload.sub !== options.subject) {
     throw new InvalidTokenError(
       `Expected subject "${options.subject}", got "${payload.sub ?? 'undefined'}"`,
