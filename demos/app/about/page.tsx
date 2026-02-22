@@ -31,7 +31,7 @@ export default function AboutPage() {
         className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
         aria-hidden="true"
       >
-        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#3b82f6] to-[#6366f1] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
+        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-cyan-500 to-teal-600 opacity-15 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
       </div>
 
       <div className="container mx-auto px-4 pt-24 pb-16 sm:pt-32">
@@ -50,17 +50,17 @@ export default function AboutPage() {
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
             >
               <div className="relative">
-                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center ring-4 ring-white/10 shadow-xl">
+                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center ring-4 ring-slate-700/50 shadow-xl shadow-cyan-500/10">
                   <User className="w-14 h-14 text-white/90" />
                 </div>
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 opacity-0"
+                  className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 opacity-0"
                   whileHover={{ opacity: 0.2 }}
                   transition={{ duration: 0.2 }}
                 />
               </div>
             </motion.div>
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400">
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl bg-clip-text text-transparent bg-gradient-to-b from-white via-cyan-100/90 to-slate-400">
               Shahadath Hossen Sajib
             </h1>
             <p className="text-muted-foreground text-lg">
@@ -71,14 +71,14 @@ export default function AboutPage() {
           {/* Cards with staggered animation */}
           <div className="space-y-6">
             <motion.div
-              className="flex flex-col rounded-2xl bg-white/5 p-8 ring-1 ring-white/10 hover:ring-white/20 transition-all hover:bg-white/10"
+              className="card flex flex-col rounded-xl p-8 transition-all"
               variants={cardVariants}
               initial="hidden"
               animate="visible"
               custom={0}
             >
               <h2 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
-                <Shield className="w-5 h-5 text-blue-500" />
+                <Shield className="w-5 h-5 text-cyan-400" />
                 About
               </h2>
               <p className="text-muted-foreground leading-relaxed">
@@ -97,14 +97,14 @@ export default function AboutPage() {
             </motion.div>
 
             <motion.div
-              className="flex flex-col rounded-2xl bg-white/5 p-8 ring-1 ring-white/10 hover:ring-white/20 transition-all hover:bg-white/10"
+              className="card flex flex-col rounded-xl p-8 transition-all"
               variants={cardVariants}
               initial="hidden"
               animate="visible"
               custom={1}
             >
               <h2 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
-                <PenLine className="w-5 h-5 text-blue-500" />
+                <PenLine className="w-5 h-5 text-cyan-400" />
                 Writing
               </h2>
               <p className="text-muted-foreground text-sm mb-4">
@@ -116,7 +116,7 @@ export default function AboutPage() {
                   href="https://medium.com/@shahadathhs"
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all border border-white/5 hover:border-white/10"
+                  className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 hover:text-white transition-all border border-slate-700/50 hover:border-cyan-500/30"
                 >
                   Medium
                   <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -125,7 +125,7 @@ export default function AboutPage() {
                   href="https://substack.com/@shahadathhs"
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all border border-white/5 hover:border-white/10"
+                  className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 hover:text-white transition-all border border-slate-700/50 hover:border-cyan-500/30"
                 >
                   Substack
                   <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -134,7 +134,7 @@ export default function AboutPage() {
             </motion.div>
 
             <motion.div
-              className="flex flex-col rounded-2xl bg-white/5 p-8 ring-1 ring-white/10 hover:ring-white/20 transition-all hover:bg-white/10"
+              className="card flex flex-col rounded-xl p-8 transition-all"
               variants={cardVariants}
               initial="hidden"
               animate="visible"
@@ -169,7 +169,7 @@ export default function AboutPage() {
                     href={href}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all border border-white/5 hover:border-white/10 hover:scale-[1.02]"
+                    className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 hover:text-white transition-all border border-slate-700/50 hover:border-cyan-500/30 hover:scale-[1.02]"
                   >
                     <Icon className="w-4 h-4" />
                     {label}
@@ -180,7 +180,7 @@ export default function AboutPage() {
             </motion.div>
 
             <motion.div
-              className="flex flex-col rounded-2xl bg-white/5 p-8 ring-1 ring-white/10 hover:ring-white/20 transition-all hover:bg-white/10"
+              className="card flex flex-col rounded-xl p-8 transition-all"
               variants={cardVariants}
               initial="hidden"
               animate="visible"
@@ -190,7 +190,7 @@ export default function AboutPage() {
               <div className="flex flex-wrap gap-3">
                 <a
                   href="mailto:shahadathhossensajib732@gmail.com"
-                  className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all border border-white/5 hover:border-white/10 hover:scale-[1.02]"
+                  className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 hover:text-white transition-all border border-slate-700/50 hover:border-cyan-500/30 hover:scale-[1.02]"
                 >
                   <Mail className="w-4 h-4" />
                   Email
@@ -199,7 +199,7 @@ export default function AboutPage() {
                   href="https://drive.google.com/file/d/1E8-4vCZD0VW1QflvoRHTAJBedZRtUJ3f/view"
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all border border-white/5 hover:border-white/10 hover:scale-[1.02]"
+                  className="group flex items-center gap-2 px-4 py-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 hover:text-white transition-all border border-slate-700/50 hover:border-cyan-500/30 hover:scale-[1.02]"
                 >
                   <FileText className="w-4 h-4" />
                   Resume
@@ -209,7 +209,7 @@ export default function AboutPage() {
             </motion.div>
 
             <motion.blockquote
-              className="text-center text-muted-foreground italic py-8 px-6 rounded-2xl border border-white/10 bg-white/5"
+              className="card text-center text-muted-foreground italic py-8 px-6 rounded-xl"
               variants={cardVariants}
               initial="hidden"
               animate="visible"
@@ -228,7 +228,7 @@ export default function AboutPage() {
           >
             <Link
               href="/"
-              className="group inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium transition-colors"
+              className="group inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
             >
               <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
               Back to Home

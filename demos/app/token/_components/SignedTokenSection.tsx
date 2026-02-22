@@ -126,10 +126,10 @@ export function SignedTokenSection() {
   return (
     <section className="space-y-6">
       <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-        <Shield className="w-5 h-5 text-blue-400" />
+        <Shield className="w-5 h-5 text-cyan-400" />
         Signed Tokens
       </h2>
-      <div className="glass rounded-2xl p-6 border border-white/10 space-y-6">
+      <div className="glass rounded-2xl p-6 space-y-6">
         <div className="flex gap-2">
           {(['encode', 'decode', 'verify'] as const).map((t) => (
             <button
@@ -138,8 +138,8 @@ export function SignedTokenSection() {
               className={cn(
                 'px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all',
                 tab === t
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white/5 text-gray-400 hover:bg-white/10',
+                  ? 'bg-cyan-500 text-slate-950'
+                  : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50',
               )}
             >
               {t}
@@ -161,8 +161,8 @@ export function SignedTokenSection() {
                     className={cn(
                       'px-4 py-2 rounded-lg text-sm font-medium transition-all',
                       encodeAlg === alg
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white/5 text-gray-400 hover:bg-white/10',
+                        ? 'bg-cyan-500 text-slate-950'
+                        : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50',
                     )}
                   >
                     {alg}
@@ -180,7 +180,7 @@ export function SignedTokenSection() {
                   value={secret}
                   onChange={(e) => setSecret(e.target.value)}
                   placeholder="my-secret-key"
-                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 rounded-lg bg-slate-800/50 border border-slate-700/80 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
               </div>
             ) : (
@@ -192,7 +192,7 @@ export function SignedTokenSection() {
                   <button
                     type="button"
                     onClick={() => setPrivateKey(SAMPLE_RSA_PRIVATE_KEY)}
-                    className="text-xs text-blue-400 hover:underline"
+                    className="text-xs text-cyan-400 hover:underline"
                   >
                     Use sample keys
                   </button>
@@ -229,23 +229,23 @@ export function SignedTokenSection() {
                 onChange={(e) =>
                   setExpiresIn(parseInt(e.target.value, 10) || 0)
                 }
-                className="w-32 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-32 px-4 py-2 rounded-lg bg-slate-800/50 border border-slate-700/80 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
             <button
               onClick={handleEncode}
               disabled={loading}
-              className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium disabled:opacity-50"
+              className="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium disabled:opacity-50"
             >
               {loading ? 'Encoding…' : 'Encode'}
             </button>
             {encodedToken && !encodedToken.startsWith('Error') && (
-              <div className="space-y-2 pt-4 border-t border-white/5">
+              <div className="space-y-2 pt-4 border-t border-slate-700/50">
                 <label className="text-sm font-medium text-gray-300">
                   Token
                 </label>
                 <div className="flex gap-2">
-                  <pre className="flex-1 font-mono text-sm text-white break-all bg-white/5 rounded-lg px-3 py-2 overflow-x-auto">
+                  <pre className="flex-1 font-mono text-sm text-white break-all bg-slate-800/50 rounded-lg px-3 py-2 overflow-x-auto">
                     {encodedToken}
                   </pre>
                   <CopyButton text={encodedToken} />
@@ -257,7 +257,7 @@ export function SignedTokenSection() {
                       setDecodeToken(encodedToken);
                       setTab('decode');
                     }}
-                    className="text-xs text-blue-400 hover:underline"
+                    className="text-xs text-cyan-400 hover:underline"
                   >
                     Try in Decode →
                   </button>
@@ -273,7 +273,7 @@ export function SignedTokenSection() {
                       }
                       setTab('verify');
                     }}
-                    className="text-xs text-blue-400 hover:underline"
+                    className="text-xs text-cyan-400 hover:underline"
                   >
                     Try in Verify →
                   </button>
@@ -298,12 +298,12 @@ export function SignedTokenSection() {
             <button
               onClick={handleDecode}
               disabled={loading}
-              className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium disabled:opacity-50"
+              className="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium disabled:opacity-50"
             >
               {loading ? 'Decoding…' : 'Decode'}
             </button>
             {decodeResult && (
-              <div className="space-y-4 pt-4 border-t border-white/5">
+              <div className="space-y-4 pt-4 border-t border-slate-700/50">
                 {'error' in decodeResult ? (
                   <p className="text-sm text-red-400">{decodeResult.error}</p>
                 ) : (
@@ -312,7 +312,7 @@ export function SignedTokenSection() {
                       <label className="text-sm font-medium text-gray-300">
                         Header
                       </label>
-                      <pre className="font-mono text-sm text-white bg-white/5 rounded-lg px-3 py-2 overflow-x-auto">
+                      <pre className="font-mono text-sm text-white bg-slate-800/50 rounded-lg px-3 py-2 overflow-x-auto">
                         {JSON.stringify(decodeResult.header, null, 2)}
                       </pre>
                     </div>
@@ -320,7 +320,7 @@ export function SignedTokenSection() {
                       <label className="text-sm font-medium text-gray-300">
                         Payload
                       </label>
-                      <pre className="font-mono text-sm text-white bg-white/5 rounded-lg px-3 py-2 overflow-x-auto">
+                      <pre className="font-mono text-sm text-white bg-slate-800/50 rounded-lg px-3 py-2 overflow-x-auto">
                         {JSON.stringify(decodeResult.payload, null, 2)}
                       </pre>
                     </div>
@@ -352,7 +352,7 @@ export function SignedTokenSection() {
                   <button
                     type="button"
                     onClick={() => setVerifyPublicKey(SAMPLE_RSA_PUBLIC_KEY)}
-                    className="text-xs text-blue-400 hover:underline"
+                    className="text-xs text-cyan-400 hover:underline"
                   >
                     Use sample keys
                   </button>
@@ -375,7 +375,7 @@ export function SignedTokenSection() {
                   value={verifySecret}
                   onChange={(e) => setVerifySecret(e.target.value)}
                   placeholder="Same secret used to encode"
-                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 rounded-lg bg-slate-800/50 border border-slate-700/80 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
               </div>
             )}
@@ -389,18 +389,18 @@ export function SignedTokenSection() {
                   ? !verifyPublicKey.trim()
                   : !verifySecret.trim())
               }
-              className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium disabled:opacity-50"
+              className="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium disabled:opacity-50"
             >
               {loading ? 'Verifying…' : 'Verify'}
             </button>
             {verifyResult && (
-              <div className="pt-4 border-t border-white/5 space-y-2">
+              <div className="pt-4 border-t border-slate-700/50 space-y-2">
                 {verifyResult.valid ? (
                   <>
                     <p className="text-sm font-medium text-emerald-400">
                       ✓ Valid signature
                     </p>
-                    <pre className="font-mono text-sm text-white bg-white/5 rounded-lg px-3 py-2 overflow-x-auto">
+                    <pre className="font-mono text-sm text-white bg-slate-800/50 rounded-lg px-3 py-2 overflow-x-auto">
                       {JSON.stringify(verifyResult.payload, null, 2)}
                     </pre>
                   </>

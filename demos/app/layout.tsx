@@ -62,7 +62,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
+      <body
+        className={`${inter.className} min-h-screen flex flex-col antialiased`}
+      >
         <AppShell>{children}</AppShell>
       </body>
     </html>

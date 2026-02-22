@@ -110,7 +110,7 @@ export function DocToc({ scrollContainerRef }: DocTocProps) {
             <li
               key={item.id}
               className={
-                item.level === 3 ? 'pl-4 border-l border-white/10' : ''
+                item.level === 3 ? 'pl-4 border-l border-slate-700/80' : ''
               }
             >
               <button
@@ -118,8 +118,8 @@ export function DocToc({ scrollContainerRef }: DocTocProps) {
                 onClick={(e) => handleClick(e, item.id)}
                 className={`block w-full text-left py-0.5 transition-colors cursor-pointer ${
                   activeId === item.id
-                    ? 'text-blue-400 font-medium'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'text-cyan-400 font-medium'
+                    : 'text-slate-400 hover:text-white'
                 }`}
               >
                 {item.text}

@@ -25,7 +25,7 @@ export function CopyButton({
   return (
     <button
       onClick={copy}
-      className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-white text-xs transition-colors"
+      className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-muted-foreground hover:text-white text-xs transition-colors"
     >
       {copied ? (
         <Check className="w-3.5 h-3.5" />

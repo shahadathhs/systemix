@@ -6,7 +6,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     a: ({ href, children, ...props }) => {
       const linkClass =
-        'text-blue-400 hover:text-blue-300 underline underline-offset-2 decoration-blue-400/60 hover:decoration-blue-300';
+        'text-cyan-400 hover:text-cyan-300 underline underline-offset-2 decoration-cyan-400/60 hover:decoration-cyan-300';
       if (href?.startsWith('/')) {
         return (
           <Link href={href} className={linkClass} {...props}>
@@ -34,7 +34,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     h2: (props) => (
       <h2
-        className="text-2xl font-semibold text-white mt-10 mb-3 scroll-mt-20 border-b border-white/10 pb-2"
+        className="text-2xl font-semibold text-white mt-10 mb-3 scroll-mt-20 border-b border-slate-700/80 pb-2"
         {...props}
       />
     ),
@@ -59,24 +59,26 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     li: ({ children }) => <li className="leading-7">{children}</li>,
     code: ({ children }) => (
-      <code className="px-1.5 py-0.5 rounded bg-white/10 text-blue-300 font-mono text-sm">
+      <code className="px-1.5 py-0.5 rounded bg-slate-800/60 text-cyan-300 font-mono text-sm">
         {children}
       </code>
     ),
     pre: (props) => <CodeBlock {...props} />,
     table: ({ children }) => (
-      <div className="overflow-x-auto mb-6 rounded-xl border border-white/10">
-        <table className="min-w-full divide-y divide-white/10">
+      <div className="overflow-x-auto mb-6 rounded-xl border border-slate-700/80">
+        <table className="min-w-full divide-y divide-slate-700/80">
           {children}
         </table>
       </div>
     ),
-    thead: ({ children }) => <thead className="bg-white/5">{children}</thead>,
+    thead: ({ children }) => (
+      <thead className="bg-slate-800/50">{children}</thead>
+    ),
     tbody: ({ children }) => (
-      <tbody className="divide-y divide-white/5">{children}</tbody>
+      <tbody className="divide-y divide-slate-700/50">{children}</tbody>
     ),
     tr: ({ children }) => (
-      <tr className="hover:bg-white/5 transition-colors">{children}</tr>
+      <tr className="hover:bg-slate-800/50 transition-colors">{children}</tr>
     ),
     th: ({ children }) => (
       <th className="px-4 py-3 text-left text-sm font-semibold text-white">
@@ -87,7 +89,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <td className="px-4 py-3 text-sm text-gray-400">{children}</td>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-blue-500 pl-4 py-2 my-4 text-gray-400 italic">
+      <blockquote className="border-l-4 border-cyan-500 pl-4 py-2 my-4 text-slate-400 italic">
         {children}
       </blockquote>
     ),

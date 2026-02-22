@@ -22,7 +22,7 @@ export default function TokenPage() {
           </h1>
           <p className="text-muted-foreground">
             Generate tokens, encode bytes, and create/verify signed tokens. See{' '}
-            <Link href="/docs/token" className="text-blue-400 hover:underline">
+            <Link href="/docs/token" className="text-cyan-400 hover:underline">
               full documentation
             </Link>
             .

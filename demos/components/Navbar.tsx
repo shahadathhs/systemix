@@ -25,13 +25,13 @@ export function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="flex h-14 items-center justify-between gap-2 sm:gap-4 px-3 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           <button
             type="button"
             onClick={onMenuClick}
-            className="lg:hidden p-2 -ml-1 rounded-lg hover:bg-white/10 text-white transition-colors shrink-0"
+            className="lg:hidden p-2 -ml-1 rounded-lg hover:bg-slate-800/50 text-white transition-colors shrink-0"
             aria-label="Open menu"
           >
             <Menu className="w-5 h-5" />
@@ -40,7 +40,7 @@ export function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
             href="/"
             className="flex items-center gap-2 hover:opacity-90 transition-opacity shrink-0"
           >
-            <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-blue-500" />
+            <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400" />
             <span className="font-bold text-base sm:text-lg tracking-tight text-white hidden sm:inline">
               Systemix
             </span>
@@ -56,8 +56,8 @@ export function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
                 'flex items-center gap-1.5 px-2 sm:px-3 py-2 rounded-lg text-sm font-medium transition-colors shrink-0',
                 pathname === href ||
                   (href !== '/' && pathname?.startsWith(href))
-                  ? 'text-blue-400 bg-blue-500/10'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5',
+                  ? 'text-cyan-400 bg-cyan-500/10'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
               )}
               title={label}
             >
@@ -72,14 +72,14 @@ export function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
             href="https://github.com/shahadathhs/systemix"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1.5 px-2 sm:px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+            className="flex items-center gap-1.5 px-2 sm:px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors"
             title="GitHub"
           >
             <Github className="w-4 h-4 shrink-0" />
             <span className="hidden sm:inline">GitHub</span>
             <ExternalLink className="w-3 h-3 opacity-60 hidden sm:inline" />
           </a>
-          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
             v0.2.0
           </span>
         </div>

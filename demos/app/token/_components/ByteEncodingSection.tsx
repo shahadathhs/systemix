@@ -33,10 +33,10 @@ export function ByteEncodingSection() {
   return (
     <section className="space-y-6">
       <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-        <Info className="w-5 h-5 text-blue-400" />
+        <Info className="w-5 h-5 text-cyan-400" />
         Byte Encoding
       </h2>
-      <div className="glass rounded-2xl p-6 border border-white/10 space-y-6">
+      <div className="glass rounded-2xl p-6 space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="space-y-1">
@@ -50,16 +50,16 @@ export function ByteEncodingSection() {
                   max="64"
                   value={byteLength}
                   onChange={(e) => setByteLength(parseInt(e.target.value, 10))}
-                  className="w-24 h-2 bg-white/10 rounded-lg accent-blue-500"
+                  className="w-24 h-2 bg-slate-700/80 rounded-lg accent-cyan-500"
                 />
-                <span className="text-sm font-mono text-blue-400 w-8">
+                <span className="text-sm font-mono text-cyan-400 w-8">
                   {byteLength}
                 </span>
               </div>
             </div>
             <button
               onClick={regenerate}
-              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-colors"
+              className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 text-white transition-colors"
               title="Regenerate bytes"
             >
               <RefreshCw className="w-4 h-4" />
@@ -76,7 +76,7 @@ export function ByteEncodingSection() {
                   </span>
                   <CopyButton text={encodings[format]} />
                 </div>
-                <pre className="font-mono text-sm text-white break-all bg-white/5 rounded-lg px-3 py-2">
+                <pre className="font-mono text-sm text-white break-all bg-slate-800/50 rounded-lg px-3 py-2">
                   {encodings[format]}
                 </pre>
               </div>

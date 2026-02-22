@@ -48,12 +48,12 @@ export function GenerateTokenSection() {
   return (
     <section className="space-y-6">
       <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-        <Shield className="w-5 h-5 text-blue-400" />
+        <Shield className="w-5 h-5 text-cyan-400" />
         Generate Token
       </h2>
-      <div className="glass rounded-2xl p-8 border border-white/10 relative group overflow-hidden">
+      <div className="glass rounded-2xl p-8 relative group overflow-hidden">
         <div className="flex flex-col sm:flex-row gap-4 items-start justify-between relative z-10">
-          <div className="font-mono text-lg sm:text-xl text-white break-all tracking-wider min-w-0 flex-1 selection:bg-blue-500/30">
+          <div className="font-mono text-lg sm:text-xl text-white break-all tracking-wider min-w-0 flex-1 selection:bg-cyan-500/30">
             {typeof token === 'string' ? (
               token
             ) : (
@@ -67,7 +67,7 @@ export function GenerateTokenSection() {
           <div className="flex gap-2 shrink-0">
             <button
               onClick={handleGenerate}
-              className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white transition-colors"
+              className="p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 text-white transition-colors"
               title="Regenerate"
               aria-label="Regenerate token"
             >
@@ -75,7 +75,7 @@ export function GenerateTokenSection() {
             </button>
             <button
               onClick={copyToClipboard}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all active:scale-95"
+              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium transition-all active:scale-95"
             >
               {copied ? (
                 <Check className="w-5 h-5" />
@@ -87,9 +87,9 @@ export function GenerateTokenSection() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-6 items-center border-t border-white/5 pt-6">
+        <div className="mt-8 flex flex-wrap gap-6 items-center border-t border-slate-700/50 pt-6">
           <div className="flex items-center gap-2">
-            <Info className="w-4 h-4 text-blue-400" />
+            <Info className="w-4 h-4 text-cyan-400" />
             <span className="text-sm text-muted-foreground">
               <span className="text-white font-mono">{tokenLength}</span> chars
             </span>
@@ -110,7 +110,7 @@ export function GenerateTokenSection() {
                 <label className="text-sm font-medium text-gray-300">
                   Byte Length
                 </label>
-                <span className="text-sm font-mono text-blue-400">
+                <span className="text-sm font-mono text-cyan-400">
                   {options.byteLength}
                 </span>
               </div>
@@ -125,7 +125,7 @@ export function GenerateTokenSection() {
                     byteLength: parseInt(e.target.value),
                   })
                 }
-                className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                className="w-full h-2 bg-slate-700/80 rounded-lg appearance-none cursor-pointer accent-cyan-500"
               />
             </div>
 
@@ -141,8 +141,8 @@ export function GenerateTokenSection() {
                     className={cn(
                       'px-4 py-2 rounded-lg text-sm font-medium transition-all',
                       options.charset === c
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white/5 text-gray-400 hover:bg-white/10',
+                        ? 'bg-cyan-500 text-slate-950'
+                        : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50',
                     )}
                   >
                     {c}
@@ -161,8 +161,8 @@ export function GenerateTokenSection() {
                     className={cn(
                       'px-4 py-2 rounded-lg text-sm font-medium transition-all',
                       options.count === n
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white/5 text-gray-400 hover:bg-white/10',
+                        ? 'bg-cyan-500 text-slate-950'
+                        : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700/50',
                     )}
                   >
                     {n}

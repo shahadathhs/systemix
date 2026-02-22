@@ -1,45 +1,59 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
-  --secondary: #27272a;
-  --secondary-foreground: #fafafa;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #d4d4d4;
+  --background: #0a0c10;
+  --foreground: #e6edf3;
+  --primary: #22d3ee;
+  --primary-foreground: #0a0c10;
+  --secondary: #1a1f2e;
+  --secondary-foreground: #e6edf3;
+  --muted: #1a1f2e;
+  --muted-foreground: #8b949e;
+  --accent: #1a1f2e;
+  --accent-foreground: #e6edf3;
+  --destructive: #f87171;
+  --destructive-foreground: #0a0c10;
+  --border: #21262d;
+  --input: #21262d;
+  --ring: #22d3ee;
   --radius: 0.5rem;
+  --card-bg: rgba(22, 27, 34, 0.7);
+  --card-border: rgba(48, 54, 61, 0.8);
+  --card-accent: #22d3ee;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Links - ensure they look clickable across the project */
 a:not([class]) {
-  color: #60a5fa;
+  color: #22d3ee;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 a:not([class]):hover {
-  color: #93c5fd;
+  color: #67e8f9;
 }
 
 @layer utilities {
+  /* Distinctive card: dark base, left accent, subtle border - not generic shadcn */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-left: 3px solid var(--card-accent);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  .card:hover {
+    border-color: rgba(34, 211, 238, 0.3);
+    box-shadow: 0 4px 12px rgba(34, 211, 238, 0.08);
+  }
+  /* Demo panels - slightly different from cards */
   .glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(22, 27, 34, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
   }
 }
 

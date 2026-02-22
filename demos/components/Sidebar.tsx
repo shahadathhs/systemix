@@ -32,7 +32,7 @@ function CollapsibleSection({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 w-full text-xs font-semibold text-gray-500 uppercase tracking-wider py-2 px-3 rounded-lg hover:bg-white/5 hover:text-gray-400 transition-colors"
+        className="flex items-center gap-2 w-full text-xs font-semibold text-slate-500 uppercase tracking-wider py-2 px-3 rounded-lg hover:bg-slate-800/50 hover:text-slate-400 transition-colors"
       >
         {open ? (
           <ChevronDown className="w-4 h-4 transition-transform" />
@@ -59,8 +59,8 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
     return cn(
       'flex items-center gap-2 text-sm py-2.5 px-3 rounded-lg transition-colors',
       active
-        ? 'bg-blue-500/10 text-blue-400 font-medium'
-        : 'text-gray-400 hover:text-white hover:bg-white/5',
+        ? 'bg-cyan-500/10 text-cyan-400 font-medium'
+        : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
     );
   };
 
@@ -69,7 +69,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <>
-      <div className="space-y-1 pb-4 border-b border-white/10 mb-4">
+      <div className="space-y-1 pb-4 border-b border-slate-700/80 mb-4">
         <Link href="/" className={linkClass('/', true)} {...linkProps('/')}>
           <FileText className="w-4 h-4 shrink-0 opacity-70" />
           Home
@@ -167,7 +167,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
           href="https://github.com/shahadathhs/systemix"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2 text-sm text-gray-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
+          className="flex items-center gap-2 text-sm text-slate-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-slate-800/50 transition-colors"
         >
           <Github className="w-4 h-4 shrink-0" />
           GitHub
@@ -175,8 +175,8 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
         </a>
       </div>
 
-      <div className="mt-8 pt-6 border-t border-white/10">
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+      <div className="mt-8 pt-6 border-t border-slate-700/80">
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
           v0.2.0
         </span>
       </div>
@@ -224,7 +224,7 @@ export function Sidebar({
         className={cn(
           'fixed lg:sticky top-0 lg:top-14 left-0 z-[60] lg:z-40 w-72 shrink-0',
           'h-screen lg:h-[calc(100vh-3.5rem)]',
-          'bg-background/95 lg:bg-background border-r border-white/5',
+          'bg-background/95 lg:bg-background border-r border-slate-800/80',
           'flex flex-col p-4 overflow-y-auto scrollbar-hide',
           'transition-transform duration-300 ease-in-out',
           'lg:translate-x-0 lg:shadow-none',
@@ -234,7 +234,7 @@ export function Sidebar({
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="lg:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-white/10 text-gray-400"
+          className="lg:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-800/50 text-slate-400"
           aria-label="Close menu"
         >
           <X className="w-5 h-5" />
