@@ -79,7 +79,7 @@ import {
 } from '@systemix/token/token';
 ```
 
-Import signed-token module (encode/decode/verify, coming soon):
+Import signed-token module (encode/decode/verify):
 
 ```typescript
 import {
@@ -114,6 +114,46 @@ import { getRandomInt, getRandomBytes } from '@systemix/token/shared';
 | `bytesToBase64Url(bytes)`            | Encode bytes to URL-safe base64.        |
 | `bytesToAlphanumeric(bytes)`         | Encode bytes to alphanumeric string.    |
 | `generateTokenPropValidation(props)` | Validate token props before generation. |
+
+### Signed Tokens
+
+Import from `@systemix/token/signed`:
+
+| Function                                  | Description                                     |
+| :---------------------------------------- | :---------------------------------------------- |
+| `encodeSigned(payload, secret, options?)` | Create a signed token (HMAC or RSA).            |
+| `decodeSigned(token)`                     | Decode without verification (header + payload). |
+| `verifySigned(token, secret, options)`    | Decode and verify signature + claims.           |
+
+**Algorithms:** HS256, HS384, HS512 (HMAC), RS256, RS384, RS512 (RSA).
+
+**Standard claims:** `iss`, `sub`, `aud`, `exp`, `nbf`, `iat`, `jti`.
+
+**Encode options:** `algorithm`, `expiresIn`, `notBefore`, `issuer`, `subject`, `audience`, `tokenId`, `kid`, `clockTolerance`.
+
+**Verify options:** `algorithms` (required), `issuer`, `audience`, `subject`, `clockTolerance`, `ignoreExpiration`, `ignoreNotBefore`.
+
+**Errors:** `TokenExpiredError`, `NotBeforeError`, `InvalidSignatureError`, `InvalidTokenError`, `AudienceMismatchError`, `IssuerMismatchError`.
+
+**Design choices (vs common alternatives):**
+
+- **Explicit algorithm whitelist** — `algorithms` is required when verifying. Never trust the token header; you declare what you accept. Prevents algorithm-swap forgery.
+- **No `alg: none`** — Only HMAC and RSA; no unsigned or weak variants.
+- **Generic naming** — Token type defaults to `ST` (signed token); no vendor-specific identifiers.
+
+```typescript
+import { encodeSigned, verifySigned } from '@systemix/token/signed';
+
+const token = encodeSigned({ userId: '123' }, 'my-secret', {
+  expiresIn: 3600,
+  issuer: 'my-app',
+});
+
+const payload = verifySigned(token, 'my-secret', {
+  algorithms: ['HS256'],
+  issuer: 'my-app',
+});
+```
 
 ## License
 
