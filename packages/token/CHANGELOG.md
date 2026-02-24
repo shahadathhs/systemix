@@ -1,5 +1,11 @@
 # @systemix/token
 
+## 1.2.0
+
+### Minor Changes
+
+- d4a5ee4: Some small fixes. No bracking chages
+
 ## 1.1.0
 
 ### Minor Changes

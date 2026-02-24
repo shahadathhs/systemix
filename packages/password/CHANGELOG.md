@@ -1,5 +1,11 @@
 # @systemix/password
 
+## 0.3.0
+
+### Minor Changes
+
+- d4a5ee4: Some small fixes. No bracking chages
+
 ## 0.2.0
 
 ### Minor Changes
