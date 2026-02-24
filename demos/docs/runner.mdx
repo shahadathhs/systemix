@@ -31,7 +31,7 @@ runSuites(
     { name: 'load', ...loadSuite },
     { name: 'parse', ...parseSuite },
   ],
-  { packageName: '@systemix/env' }
+  { packageName: '@systemix/env' },
 );
 ```
 
@@ -74,8 +74,8 @@ const { run, getCounts } = createRunner(
 
 ## API
 
-| Export         | Description                                                                 |
-| :------------- | :-------------------------------------------------------------------------- |
+| Export         | Description                                                                                 |
+| :------------- | :------------------------------------------------------------------------------------------ |
 | `createRunner` | Returns `{ run, getCounts }`. Suite receives `{ assert, assertThrows, assertThrowsAsync }`. |
-| `runSuites`    | Runs suites, prints summary, exits with 0 or 1. `options.packageName` for header. |
-| `run`          | Run a single suite and exit. Convenience for one-suite packages.            |
+| `runSuites`    | Runs suites, prints summary, exits with 0 or 1. `options.packageName` for header.           |
+| `run`          | Run a single suite and exit. Convenience for one-suite packages.                            |
