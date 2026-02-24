@@ -58,7 +58,7 @@ export function generatePasswordPropValidation(
   }
 
   // * min requirements validation
-  const checkMin = (val: any, name: string) => {
+  const checkMin = (val: unknown, name: string) => {
     if (val !== undefined && (typeof val !== 'number' || val < 0)) {
       throw new Error(`${name} must be a non-negative number.`);
     }
@@ -83,7 +83,7 @@ export function generatePasswordPropValidation(
   }
 
   // * custom charsets validation
-  const checkString = (val: any, name: string) => {
+  const checkString = (val: unknown, name: string) => {
     if (val !== undefined && typeof val !== 'string') {
       throw new Error(`${name} must be a string.`);
     }

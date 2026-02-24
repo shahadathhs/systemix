@@ -1,6 +1,6 @@
 export const lengthError = {
   invalidLength: 'Invalid length. Length must be a positive number.',
-  lengthTooLarge: 'Invalid length. Length must be less than or equal to 50.',
+  lengthTooLarge: 'Invalid length. Length must be less than or equal to 100.',
 };
 
 export const useNumbersError =
@@ -21,7 +21,7 @@ export const countError = {
 };
 
 export const unwantedPropsError = (unwantedProps: string[]) => {
-  return `Invalid prop(s): ${unwantedProps.join(', ')}. Only the following options are allowed: length, useNumbers, useUppercase, useLowercase, useSymbols, excludeSimilarCharacters, exclude, count.`;
+  return `Invalid prop(s): ${unwantedProps.join(', ')}. Only the following options are allowed: length, useNumbers, useUppercase, useLowercase, useSymbols, excludeSimilarCharacters, exclude, count, minNumbers, minUppercase, minLowercase, minSymbols, customUppercase, customLowercase, customNumbers, customSymbols.`;
 };
 
 export const allOptionsFalseError = 'At least one of the options must be true.';

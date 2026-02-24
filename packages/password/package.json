@@ -60,10 +60,7 @@
   "directories": {
     "test": "tests"
   },
-  "sideEffects": [
-    "*.css",
-    "*.scss"
-  ],
+  "sideEffects": false,
   "bugs": {
     "url": "https://github.com/shahadathhs/systemix/issues"
   },
