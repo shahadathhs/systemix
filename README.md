@@ -1,6 +1,6 @@
 # Systemix
 
-**Systemix** is a modular, high-performance toolkit for building secure and scalable JavaScript and TypeScript systems. It provides cryptographically secure password, passphrase, and token generators, plus shareable ESLint and TypeScript configs — a lightweight "standard library" for modern Node.js and web projects.
+**Systemix** is a modular, high-performance toolkit for building secure and scalable JavaScript and TypeScript systems. It provides typed env loading, cryptographically secure password, passphrase, and token generators, plus shareable ESLint, TypeScript, and test runner configs — a lightweight "standard library" for modern Node.js and web projects.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![pnpm](https://img.shields.io/badge/maintained%20with-pnpm-cc00ff.svg)](https://pnpm.io/)
@@ -11,11 +11,13 @@
 
 Published to **npm** and **GitHub Packages**:
 
+[![@systemix/env](https://img.shields.io/npm/v/@systemix/env.svg)](https://www.npmjs.com/package/@systemix/env)
 [![@systemix/password](https://img.shields.io/npm/v/@systemix/password.svg)](https://www.npmjs.com/package/@systemix/password)
 [![@systemix/passphrase](https://img.shields.io/npm/v/@systemix/passphrase.svg)](https://www.npmjs.com/package/@systemix/passphrase)
 [![@systemix/token](https://img.shields.io/npm/v/@systemix/token.svg)](https://www.npmjs.com/package/@systemix/token)
 [![@systemix/eslint](https://img.shields.io/npm/v/@systemix/eslint.svg)](https://www.npmjs.com/package/@systemix/eslint)
 [![@systemix/typescript](https://img.shields.io/npm/v/@systemix/typescript.svg)](https://www.npmjs.com/package/@systemix/typescript)
+[![@systemix/runner](https://img.shields.io/npm/v/@systemix/runner.svg)](https://www.npmjs.com/package/@systemix/runner)
 
 **Links:** [npm org](https://www.npmjs.com/org/systemix) · [npm profile](https://www.npmjs.com/~shahadathhs)
 
@@ -24,13 +26,17 @@ Published to **npm** and **GitHub Packages**:
 ## ⚡ Quick Start
 
 ```bash
-pnpm add @systemix/password @systemix/passphrase @systemix/token
+pnpm add @systemix/env @systemix/password @systemix/passphrase @systemix/token
 ```
 
 ```typescript
+import { load } from '@systemix/env';
 import { generatePassword } from '@systemix/password';
 import { generatePassphrase } from '@systemix/passphrase';
 import { generateToken } from '@systemix/token';
+
+// Typed env vars
+const env = load({ PORT: { type: 'number', default: 3000 } });
 
 // Secure random password
 console.log(generatePassword({ length: 16, useSymbols: true }));
@@ -53,34 +59,36 @@ console.log(generateToken({ byteLength: 32, charset: 'hex' }));
 
 | Package                                                                                                   | Description                                                                              |
 | :-------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
+| [`@systemix/env`](packages/env) · [npm](https://www.npmjs.com/package/@systemix/env)                      | Typed environment variable loading and validation with .env file support.                |
 | [`@systemix/password`](packages/password) · [npm](https://www.npmjs.com/package/@systemix/password)       | Cryptographically secure password generator with character guarantees and entropy tools. |
 | [`@systemix/passphrase`](packages/passphrase) · [npm](https://www.npmjs.com/package/@systemix/passphrase) | Human-readable passphrase generator with formatting and entropy tools.                   |
 | [`@systemix/token`](packages/token) · [npm](https://www.npmjs.com/package/@systemix/token)                | Secure token generator (hex, base64, base64url) and signed-token module.                 |
 | [`@systemix/eslint`](configs/eslint) · [npm](https://www.npmjs.com/package/@systemix/eslint)              | ESLint v10 flat configs for JS, TS, React, Express, and Next.js.                         |
 | [`@systemix/typescript`](configs/typescript) · [npm](https://www.npmjs.com/package/@systemix/typescript)  | Base TypeScript configs for various environments.                                        |
+| [`@systemix/runner`](configs/runner) · [npm](https://www.npmjs.com/package/@systemix/runner)              | Minimal test runner with assert, assertThrows, createRunner, runSuites.                  |
 
 ### Installation
 
 ```bash
-# Utilities (password, passphrase, token generators)
-pnpm add @systemix/password @systemix/passphrase @systemix/token
+# Utilities (env, password, passphrase, token generators)
+pnpm add @systemix/env @systemix/password @systemix/passphrase @systemix/token
 
-# Configs (ESLint flat config, TypeScript tsconfig)
-pnpm add -D @systemix/eslint @systemix/typescript
+# Configs (ESLint flat config, TypeScript tsconfig, test runner)
+pnpm add -D @systemix/eslint @systemix/typescript @systemix/runner
 ```
 
 With npm:
 
 ```bash
-npm install @systemix/password @systemix/passphrase @systemix/token
-npm install -D @systemix/eslint @systemix/typescript
+npm install @systemix/env @systemix/password @systemix/passphrase @systemix/token
+npm install -D @systemix/eslint @systemix/typescript @systemix/runner
 ```
 
 From GitHub Packages (add to `.npmrc`: `@shahadathhs:registry=https://npm.pkg.github.com`):
 
 ```bash
-pnpm add @shahadathhs/password @shahadathhs/passphrase @shahadathhs/token
-pnpm add -D @shahadathhs/eslint @shahadathhs/typescript
+pnpm add @shahadathhs/env @shahadathhs/password @shahadathhs/passphrase @shahadathhs/token
+pnpm add -D @shahadathhs/eslint @shahadathhs/typescript @shahadathhs/runner
 ```
 
 > **Recommendation:** Use npm (`@systemix/*`) — no extra config.
