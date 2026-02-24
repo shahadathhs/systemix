@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 
 const docsSlugs = [
   '',
+  'env',
   'password',
   'passphrase',
   'token',
@@ -17,6 +18,11 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
     title: 'Documentation',
     description:
       'Systemix documentation. Cryptographically secure password and passphrase generators for JavaScript and TypeScript.',
+  },
+  env: {
+    title: '@systemix/env',
+    description:
+      'Typed environment variable loading and validation with .env file support.',
   },
   password: {
     title: '@systemix/password',
@@ -50,6 +56,7 @@ const docModules: Record<
   () => Promise<{ default: React.ComponentType }>
 > = {
   '': () => import('@/docs/index.mdx'),
+  env: () => import('@/docs/env.mdx'),
   password: () => import('@/docs/password.mdx'),
   passphrase: () => import('@/docs/passphrase.mdx'),
   token: () => import('@/docs/token.mdx'),

@@ -91,6 +91,9 @@ importers:
       '@next/mdx':
         specifier: ^16.1.6
         version: 16.1.6(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.2.14)(react@19.2.4))
+      '@systemix/env':
+        specifier: workspace:*
+        version: link:../packages/env
       '@systemix/passphrase':
         specifier: workspace:*
         version: link:../packages/passphrase

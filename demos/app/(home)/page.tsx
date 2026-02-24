@@ -5,6 +5,7 @@ import {
   Github,
   KeyRound,
   Lock,
+  Settings,
   Shield,
   ShieldCheck,
   Zap,
@@ -95,6 +96,13 @@ export default function Home() {
         {/* Package Sections */}
         <div className="mx-auto mt-32 max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <PackageCard
+              title="Env Loader"
+              description="Typed environment variable loading and validation with .env file support."
+              icon={Settings}
+              href="/env"
+              tag="@systemix/env"
+            />
             <PackageCard
               title="Password Generator"
               description="Cryptographically secure password generator with customizable complexity and entropy tools."

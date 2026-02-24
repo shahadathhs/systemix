@@ -11,6 +11,7 @@ import {
   Github,
   KeyRound,
   Lock,
+  Settings,
   Shield,
   User,
   X,
@@ -69,6 +70,7 @@ const mainNav = [
 ] as const;
 
 const docItems = [
+  { href: '/docs/env', icon: Settings, label: 'Env' },
   { href: '/docs/password', icon: Lock, label: 'Password' },
   { href: '/docs/passphrase', icon: KeyRound, label: 'Passphrase' },
   { href: '/docs/token', icon: Shield, label: 'Token' },
@@ -77,6 +79,7 @@ const docItems = [
 ] as const;
 
 const demoItems = [
+  { href: '/env', icon: Settings, label: 'Env' },
   { href: '/password', icon: Lock, label: 'Password' },
   { href: '/passphrase', icon: KeyRound, label: 'Passphrase' },
   { href: '/token', icon: Shield, label: 'Token' },
