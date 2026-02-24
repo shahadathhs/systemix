@@ -5,3 +5,6 @@ export const passphraseErrors = {
   invalidSeparator: 'Invalid separator. It must be a string.',
   invalidCapitalize: 'Invalid capitalize. It must be a boolean value.',
 };
+
+export const unwantedPropsError = (unwantedProps: string[]) =>
+  `Invalid prop(s): ${unwantedProps.join(', ')}. Only the following options are allowed: wordCount, separator, wordList, capitalize, useTitleCase, useUpperCase, includeNumber, randomSeparator.`;

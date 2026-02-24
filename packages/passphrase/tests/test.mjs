@@ -22,6 +22,17 @@ function assert(condition, message) {
   }
 }
 
+function assertThrows(fn, message) {
+  try {
+    fn();
+    failed++;
+    console.error(`  ✗ ${message} (expected throw)`);
+  } catch {
+    passed++;
+    console.log(`  ✓ ${message}`);
+  }
+}
+
 console.log('\n📦 @systemix/passphrase\n');
 
 // Basic
@@ -58,6 +69,12 @@ assert(ph3 === ph3.toUpperCase(), 'UPPERCASE works');
 // Entropy
 assert(calculatePassphraseEntropy(4, 7776) > 0, 'entropy > 0');
 assert(calculatePassphraseEntropy(0, 7776) === 0, 'entropy 0 for wordCount 0');
+
+// Validation errors
+assertThrows(
+  () => generatePassphrase({ foo: 'bar' }),
+  'throws on invalid prop',
+);
 
 // Custom word list
 const custom = generatePassphrase({ wordCount: 2, wordList: ['a', 'b'] });

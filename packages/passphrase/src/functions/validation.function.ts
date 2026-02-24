@@ -1,9 +1,20 @@
+import { GeneratePassphrasePropsEnum } from '../enum/props.enum';
 import { GeneratePassphraseFunctionProps } from '../types/props.types';
-import { passphraseErrors } from '../utils/error.message';
+import { passphraseErrors, unwantedPropsError } from '../utils/error.message';
+
+const allValidProps = Object.values(GeneratePassphrasePropsEnum) as string[];
 
 export function generatePassphrasePropValidation(
   props: GeneratePassphraseFunctionProps,
 ) {
+  const propsValue = Object.keys(props);
+  const unwantedProps = propsValue.filter(
+    (prop) => !allValidProps.includes(prop),
+  );
+  if (unwantedProps.length > 0) {
+    throw new Error(unwantedPropsError(unwantedProps));
+  }
+
   const {
     wordCount,
     separator,
@@ -36,7 +47,7 @@ export function generatePassphrasePropValidation(
     throw new Error(passphraseErrors.invalidCapitalize);
   }
 
-  const checkBool = (val: any, name: string) => {
+  const checkBool = (val: unknown, name: string) => {
     if (val !== undefined && typeof val !== 'boolean') {
       throw new Error(`${name} must be a boolean.`);
     }
