@@ -6,25 +6,29 @@ Systemix is a modular, high-performance toolkit for building secure and scalable
 
 The toolkit provides cryptographically secure utilities with zero external production dependencies:
 
+- **@systemix/env** — Typed environment variable loading and validation with .env file support
 - **@systemix/password** — Generate strong, customizable passwords with entropy calculation
 - **@systemix/passphrase** — Create memorable passphrases from high-entropy word lists
 - **@systemix/token** — Secure token generator with hex, base64, base64url, alphanumeric charsets
 - **@systemix/eslint** — Shareable ESLint v10 flat configs for JS/TS, React, Express, Next.js
 - **@systemix/typescript** — Shareable TypeScript configs for base, Express, and Next.js
+- **@systemix/runner** — Minimal test runner with assert, assertThrows, createRunner, runSuites
 
 All utilities use `globalThis.crypto` (Node.js `crypto` or Web Crypto API) for bias-free randomization.
 
 ## Quick Start
 
 ```bash
-pnpm add @systemix/password @systemix/passphrase @systemix/token
+pnpm add @systemix/env @systemix/password @systemix/passphrase @systemix/token
 ```
 
 ```typescript
+import { load } from '@systemix/env';
 import { generatePassword } from '@systemix/password';
 import { generatePassphrase } from '@systemix/passphrase';
 import { generateToken } from '@systemix/token';
 
+const env = load({ PORT: { type: 'number', default: 3000 } });
 const password = generatePassword({ length: 16, useSymbols: true });
 const passphrase = generatePassphrase({ wordCount: 4, useTitleCase: true });
 const token = generateToken({ byteLength: 32, charset: 'hex' });
@@ -32,9 +36,11 @@ const token = generateToken({ byteLength: 32, charset: 'hex' });
 
 ## Explore
 
+- [Env Loader](/docs/env) — Typed env vars, validation, .env files
 - [Password Generator](/docs/password) — API reference and usage
 - [Passphrase Generator](/docs/passphrase) — API reference and usage
 - [Token Generator](/docs/token) — API reference and usage
 - [ESLint](/docs/eslint) — Lint configs
 - [TypeScript](/docs/typescript) — TSConfig presets
+- [Runner](/docs/runner) — Test runner
 - [Live Demos](/password) — Interactive playgrounds

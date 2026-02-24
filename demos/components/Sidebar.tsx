@@ -11,6 +11,8 @@ import {
   Github,
   KeyRound,
   Lock,
+  Play,
+  Settings,
   Shield,
   User,
   X,
@@ -69,14 +71,17 @@ const mainNav = [
 ] as const;
 
 const docItems = [
+  { href: '/docs/env', icon: Settings, label: 'Env' },
   { href: '/docs/password', icon: Lock, label: 'Password' },
   { href: '/docs/passphrase', icon: KeyRound, label: 'Passphrase' },
   { href: '/docs/token', icon: Shield, label: 'Token' },
   { href: '/docs/eslint', icon: FileCode, label: 'ESLint' },
   { href: '/docs/typescript', icon: Braces, label: 'TypeScript' },
+  { href: '/docs/runner', icon: Play, label: 'Runner' },
 ] as const;
 
 const demoItems = [
+  { href: '/env', icon: Settings, label: 'Env' },
   { href: '/password', icon: Lock, label: 'Password' },
   { href: '/passphrase', icon: KeyRound, label: 'Passphrase' },
   { href: '/token', icon: Shield, label: 'Token' },

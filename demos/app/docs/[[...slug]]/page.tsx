@@ -3,11 +3,13 @@ import { notFound } from 'next/navigation';
 
 const docsSlugs = [
   '',
+  'env',
   'password',
   'passphrase',
   'token',
   'eslint',
   'typescript',
+  'runner',
 ] as const;
 
 type Slug = (typeof docsSlugs)[number];
@@ -17,6 +19,11 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
     title: 'Documentation',
     description:
       'Systemix documentation. Cryptographically secure password and passphrase generators for JavaScript and TypeScript.',
+  },
+  env: {
+    title: '@systemix/env',
+    description:
+      'Typed environment variable loading and validation with .env file support.',
   },
   password: {
     title: '@systemix/password',
@@ -43,6 +50,11 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
     description:
       'Shareable TypeScript configs for base, Express, and Next.js projects.',
   },
+  runner: {
+    title: '@systemix/runner',
+    description:
+      'Minimal test runner for Systemix packages. assert, assertThrows, createRunner, runSuites.',
+  },
 };
 
 const docModules: Record<
@@ -50,11 +62,13 @@ const docModules: Record<
   () => Promise<{ default: React.ComponentType }>
 > = {
   '': () => import('@/docs/index.mdx'),
+  env: () => import('@/docs/env.mdx'),
   password: () => import('@/docs/password.mdx'),
   passphrase: () => import('@/docs/passphrase.mdx'),
   token: () => import('@/docs/token.mdx'),
   eslint: () => import('@/docs/eslint.mdx'),
   typescript: () => import('@/docs/typescript.mdx'),
+  runner: () => import('@/docs/runner.mdx'),
 };
 
 export async function generateMetadata({

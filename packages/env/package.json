@@ -1,6 +1,6 @@
 {
-  "name": "@systemix/password",
-  "version": "0.3.0",
+  "name": "@systemix/env",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
@@ -19,9 +19,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shahadathhs/systemix.git",
-    "directory": "packages/password"
+    "directory": "packages/env"
   },
-  "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/password#readme",
+  "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/env#readme",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "pnpm build && node tests/run.mjs",
@@ -36,19 +36,18 @@
   },
   "keywords": [
     "systemix",
-    "password",
-    "generator",
-    "password-generator",
-    "secure-password",
-    "strong-passwords",
-    "crypto",
+    "env",
+    "environment",
+    "environment-variables",
+    "validation",
+    "typed-env",
     "typescript",
     "node",
     "utility"
   ],
   "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
   "license": "MIT",
-  "description": "A cryptographically secure password generator with customizable complexity. Part of the Systemix toolkit.",
+  "description": "Typed environment variable loading and validation. Part of the Systemix toolkit.",
   "devDependencies": {
     "@systemix/eslint": "workspace:*",
     "@systemix/runner": "workspace:*",
@@ -68,6 +67,7 @@
   "files": [
     "dist",
     "README.md",
+    "LICENSE",
     "package.json"
   ]
 }
