@@ -1,5 +1,11 @@
 # @systemix/passphrase
 
+## 0.4.0
+
+### Minor Changes
+
+- 224813c: Update Tests & Two New Packages
+
 ## 0.3.0
 
 ### Minor Changes
