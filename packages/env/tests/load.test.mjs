@@ -1,7 +1,7 @@
 /**
  * Tests for load() – parsing, defaults, required vars, and error handling.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { src } from './helpers.mjs';
 import { load } from '../dist/index.js';
 

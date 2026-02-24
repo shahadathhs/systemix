@@ -1,7 +1,7 @@
 /**
  * Tests for generatePassword() – count option (batch generation).
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { generatePassword } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert }) => {

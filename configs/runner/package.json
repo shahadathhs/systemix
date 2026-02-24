@@ -1,5 +1,5 @@
 {
-  "name": "@systemix/test",
+  "name": "@systemix/runner",
   "version": "0.1.0",
   "private": false,
   "publishConfig": {
@@ -19,9 +19,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shahadathhs/systemix.git",
-    "directory": "configs/test"
+    "directory": "configs/runner"
   },
-  "homepage": "https://github.com/shahadathhs/systemix/tree/main/configs/test#readme",
+  "homepage": "https://github.com/shahadathhs/systemix/tree/main/configs/runner#readme",
   "bugs": {
     "url": "https://github.com/shahadathhs/systemix/issues"
   },

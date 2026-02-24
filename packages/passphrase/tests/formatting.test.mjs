@@ -1,7 +1,7 @@
 /**
  * Tests for generatePassphrase() – TitleCase and UPPERCASE formatting.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { generatePassphrase } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert }) => {

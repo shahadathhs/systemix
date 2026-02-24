@@ -75,7 +75,7 @@
   "description": "A cryptographically secure token generator and signed-token module for API keys, session tokens, and auth. Zero dependencies, pure Node.js.",
   "devDependencies": {
     "@systemix/eslint": "workspace:*",
-    "@systemix/test": "workspace:*",
+    "@systemix/runner": "workspace:*",
     "@systemix/typescript": "workspace:*",
     "@types/node": "^25.3.0",
     "eslint": "^10.0.1",

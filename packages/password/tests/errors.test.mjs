@@ -1,7 +1,7 @@
 /**
  * Tests for generatePassword() – validation errors.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { generatePassword } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assertThrows }) => {

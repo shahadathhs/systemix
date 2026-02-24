@@ -1,7 +1,7 @@
 /**
  * Tests for @systemix/token/token subpath – bytesToHex, bytesToBase64.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import {
   generateToken as generateFromToken,
   bytesToHex,

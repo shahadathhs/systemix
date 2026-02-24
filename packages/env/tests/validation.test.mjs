@@ -1,7 +1,7 @@
 /**
  * Tests for load() validation – min/max, oneOf, regex, and batch errors.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { src } from './helpers.mjs';
 import { load } from '../dist/index.js';
 

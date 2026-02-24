@@ -11,6 +11,7 @@ import {
   Github,
   KeyRound,
   Lock,
+  Play,
   Settings,
   Shield,
   User,
@@ -76,6 +77,7 @@ const docItems = [
   { href: '/docs/token', icon: Shield, label: 'Token' },
   { href: '/docs/eslint', icon: FileCode, label: 'ESLint' },
   { href: '/docs/typescript', icon: Braces, label: 'TypeScript' },
+  { href: '/docs/runner', icon: Play, label: 'Runner' },
 ] as const;
 
 const demoItems = [

@@ -17,6 +17,7 @@ export const docsNav = [
     items: [
       { title: 'ESLint', href: '/docs/eslint' },
       { title: 'TypeScript', href: '/docs/typescript' },
+      { title: 'Runner', href: '/docs/runner' },
     ],
   },
   {

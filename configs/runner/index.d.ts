@@ -1,5 +1,5 @@
 /**
- * @systemix/test — Type declarations
+ * @systemix/runner — Type declarations
  */
 
 export interface AssertHelpers {

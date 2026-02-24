@@ -2,7 +2,7 @@
  * Tests for @systemix/token/signed (RS256) and @systemix/token/rsa.
  */
 import { generateKeyPairSync } from 'node:crypto';
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import {
   encodeSigned,
   decodeSigned,

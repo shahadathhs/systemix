@@ -4,7 +4,7 @@
  * Run: pnpm test (builds first, then runs tests)
  */
 
-import { runSuites } from '@systemix/test';
+import { runSuites } from '@systemix/runner';
 import * as loadSuite from './load.test.mjs';
 import * as validationSuite from './validation.test.mjs';
 import * as configSuite from './config.test.mjs';

@@ -1,7 +1,7 @@
 /**
  * Tests for fromFile, strict mode, and secret masking (toSafeLog).
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { src } from './helpers.mjs';
 import { load } from '../dist/index.js';
 import { writeFileSync, unlinkSync, existsSync } from 'node:fs';

@@ -51,7 +51,7 @@
   "description": "A cryptographically secure password generator with customizable complexity. Part of the Systemix toolkit.",
   "devDependencies": {
     "@systemix/eslint": "workspace:*",
-    "@systemix/test": "workspace:*",
+    "@systemix/runner": "workspace:*",
     "@systemix/typescript": "workspace:*",
     "@types/node": "^25.3.0",
     "eslint": "^10.0.1",

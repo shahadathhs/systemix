@@ -1,7 +1,7 @@
 /**
  * Tests for parseEnvFile() – key=value parsing, comments, quoted values.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { parseEnvFile } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert }) => {

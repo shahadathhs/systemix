@@ -4,7 +4,7 @@
  * Run: pnpm test (builds first, then runs tests)
  */
 
-import { runSuites } from '@systemix/test';
+import { runSuites } from '@systemix/runner';
 import * as basicSuite from './basic.test.mjs';
 import * as edgeSuite from './edge.test.mjs';
 import * as entropySuite from './entropy.test.mjs';

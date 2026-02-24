@@ -1,7 +1,7 @@
 /**
  * Tests for Config – fromEnv, get, getOrThrow, has, toSafeLog.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { src } from './helpers.mjs';
 import { Config } from '../dist/index.js';
 

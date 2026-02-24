@@ -9,6 +9,7 @@ const docsSlugs = [
   'token',
   'eslint',
   'typescript',
+  'runner',
 ] as const;
 
 type Slug = (typeof docsSlugs)[number];
@@ -49,6 +50,11 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
     description:
       'Shareable TypeScript configs for base, Express, and Next.js projects.',
   },
+  runner: {
+    title: '@systemix/runner',
+    description:
+      'Minimal test runner for Systemix packages. assert, assertThrows, createRunner, runSuites.',
+  },
 };
 
 const docModules: Record<
@@ -62,6 +68,7 @@ const docModules: Record<
   token: () => import('@/docs/token.mdx'),
   eslint: () => import('@/docs/eslint.mdx'),
   typescript: () => import('@/docs/typescript.mdx'),
+  runner: () => import('@/docs/runner.mdx'),
 };
 
 export async function generateMetadata({

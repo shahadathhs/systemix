@@ -78,7 +78,7 @@ importers:
         specifier: ^8.56.0
         version: 8.56.0(eslint@10.0.1(jiti@2.6.1))(typescript@5.9.3)
 
-  configs/test: {}
+  configs/runner: {}
 
   configs/typescript: {}
 
@@ -175,9 +175,9 @@ importers:
       '@systemix/eslint':
         specifier: workspace:*
         version: link:../../configs/eslint
-      '@systemix/test':
+      '@systemix/runner':
         specifier: workspace:*
-        version: link:../../configs/test
+        version: link:../../configs/runner
       '@systemix/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
@@ -199,9 +199,9 @@ importers:
       '@systemix/eslint':
         specifier: workspace:*
         version: link:../../configs/eslint
-      '@systemix/test':
+      '@systemix/runner':
         specifier: workspace:*
-        version: link:../../configs/test
+        version: link:../../configs/runner
       '@systemix/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
@@ -223,9 +223,9 @@ importers:
       '@systemix/eslint':
         specifier: workspace:*
         version: link:../../configs/eslint
-      '@systemix/test':
+      '@systemix/runner':
         specifier: workspace:*
-        version: link:../../configs/test
+        version: link:../../configs/runner
       '@systemix/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
@@ -247,9 +247,9 @@ importers:
       '@systemix/eslint':
         specifier: workspace:*
         version: link:../../configs/eslint
-      '@systemix/test':
+      '@systemix/runner':
         specifier: workspace:*
-        version: link:../../configs/test
+        version: link:../../configs/runner
       '@systemix/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript

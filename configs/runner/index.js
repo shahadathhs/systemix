@@ -1,9 +1,9 @@
 /**
- * @systemix/test — Minimal test runner for Systemix packages.
+ * @systemix/runner — Minimal test runner for Systemix packages.
  * Zero dependencies. Use with Node ESM.
  *
  * @example
- * import { createRunner, runSuites } from '@systemix/test';
+ * import { createRunner, runSuites } from '@systemix/runner';
  *
  * const { run, getCounts } = createRunner(({ assert, assertThrows }) => {
  *   assert(1 + 1 === 2, 'math works');

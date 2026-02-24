@@ -1,11 +1,11 @@
-# @systemix/test
+# @systemix/runner
 
 Minimal test runner for Systemix packages. Zero dependencies.
 
 ## Installation
 
 ```bash
-pnpm add -D @systemix/test
+pnpm add -D @systemix/runner
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ pnpm add -D @systemix/test
 ### createRunner + runSuites (multi-suite)
 
 ```javascript
-import { createRunner, runSuites } from '@systemix/test';
+import { createRunner, runSuites } from '@systemix/runner';
 
 const loadSuite = createRunner(({ assert, assertThrows }) => {
   assert(1 + 1 === 2, 'math works');
@@ -38,7 +38,7 @@ runSuites(
 ### Single suite (run)
 
 ```javascript
-import { createRunner, run } from '@systemix/test';
+import { createRunner, run } from '@systemix/runner';
 
 const suite = createRunner(({ assert, assertThrows }) => {
   assert(foo() === 'bar', 'foo returns bar');
@@ -51,7 +51,7 @@ await run(suite, { packageName: '@systemix/password' });
 Or with runSuites:
 
 ```javascript
-import { createRunner, runSuites } from '@systemix/test';
+import { createRunner, runSuites } from '@systemix/runner';
 
 const suite = createRunner(({ assert, assertThrows }) => {
   assert(foo() === 'bar', 'foo returns bar');

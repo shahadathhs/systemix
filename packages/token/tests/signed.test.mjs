@@ -1,7 +1,7 @@
 /**
  * Tests for @systemix/token/signed – HMAC encode/decode/verify.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import {
   encodeSigned,
   decodeSigned,

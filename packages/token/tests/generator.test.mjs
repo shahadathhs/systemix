@@ -1,7 +1,7 @@
 /**
  * Tests for generateToken() – charsets, count, defaults.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { generateToken } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert }) => {

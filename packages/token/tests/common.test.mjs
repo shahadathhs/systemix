@@ -1,7 +1,7 @@
 /**
  * Tests for @systemix/token/common – getRandomBytes, getRandomInt, bytesEqual, secureCompare.
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import {
   getRandomBytes,
   getRandomInt,

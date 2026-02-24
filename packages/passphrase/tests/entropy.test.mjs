@@ -1,7 +1,7 @@
 /**
  * Tests for calculatePassphraseEntropy().
  */
-import { createRunner } from '@systemix/test';
+import { createRunner } from '@systemix/runner';
 import { calculatePassphraseEntropy } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert }) => {
