@@ -11,9 +11,9 @@ pnpm add @systemix/env
 ## Usage
 
 ```typescript
-import { loadEnv } from '@systemix/env';
+import { load } from '@systemix/env';
 
-const env = loadEnv({
+const env = load({
   NODE_ENV: { type: 'string', default: 'development' },
   PORT: { type: 'number', default: 3000 },
   DATABASE_URL: { type: 'string', required: true, secret: true },
@@ -26,38 +26,38 @@ console.log(env.toSafeLog()); // { DATABASE_URL: '***', ... }
 
 ## Schema
 
-| Property   | Type                    | Description                          |
-| ---------- | ----------------------- | ------------------------------------ |
-| `type`     | `'string' \| 'number' \| 'boolean'` | How to parse the value        |
-| `required` | `boolean`               | If true, throws when missing          |
-| `default`  | `string \| number \| boolean` | Used when var is missing or empty |
-| `min`      | `number`                | Min value (number type)                |
-| `max`      | `number`                | Max value (number type)                |
-| `regex`    | `RegExp`                | Must match (string type)              |
-| `oneOf`    | `string[]`              | Allowed values (string type)           |
-| `transform`| `(raw) => value`        | Custom parser                         |
-| `secret`   | `boolean`               | Masked in `toSafeLog()`               |
+| Property    | Type                                | Description                       |
+| ----------- | ----------------------------------- | --------------------------------- |
+| `type`      | `'string' \| 'number' \| 'boolean'` | How to parse the value            |
+| `required`  | `boolean`                           | If true, throws when missing      |
+| `default`   | `string \| number \| boolean`       | Used when var is missing or empty |
+| `min`       | `number`                            | Min value (number type)           |
+| `max`       | `number`                            | Max value (number type)           |
+| `regex`     | `RegExp`                            | Must match (string type)          |
+| `oneOf`     | `string[]`                          | Allowed values (string type)      |
+| `transform` | `(raw) => value`                    | Custom parser                     |
+| `secret`    | `boolean`                           | Masked in `toSafeLog()`           |
 
 ## Options
 
 Pass options as second argument. For backward compat, a plain `Record` is treated as `{ source }`:
 
 ```typescript
-loadEnv(schema, { PORT: '4000' });  // legacy: treated as source
-loadEnv(schema, {
-  source: { PORT: '4000' },           // Custom env source
-  fromFile: '.env.local',             // Load from .env file(s)
-  fromFile: ['.env', '.env.local'],   // Multiple files, later overrides
-  strict: true,                       // Ignore vars not in schema
+load(schema, { PORT: '4000' }); // legacy: treated as source
+load(schema, {
+  source: { PORT: '4000' }, // Custom env source
+  fromFile: '.env.local', // Load from .env file(s)
+  fromFile: ['.env', '.env.local'], // Multiple files, later overrides
+  strict: true, // Ignore vars not in schema
 });
 ```
 
 ## .env File Loading
 
-Load from file without dotenv. Cross-platform (Windows, macOS, Linux).
+Load from file. Cross-platform (Windows, macOS, Linux).
 
 ```typescript
-const env = loadEnv(schema, { fromFile: '.env.local' });
+const env = load(schema, { fromFile: '.env.local' });
 ```
 
 Or parse content yourself:
@@ -73,10 +73,13 @@ const vars = parseEnvFile(readFileSync('.env', 'utf-8'));
 Mark sensitive vars with `secret: true`. Use `toSafeLog()` for logging:
 
 ```typescript
-const env = loadEnv({
-  API_KEY: { type: 'string', secret: true },
-  PORT: { type: 'number' },
-}, { source: { API_KEY: 'sk-123', PORT: '3000' } });
+const env = load(
+  {
+    API_KEY: { type: 'string', secret: true },
+    PORT: { type: 'number' },
+  },
+  { source: { API_KEY: 'sk-123', PORT: '3000' } },
+);
 
 console.log(env.toSafeLog());
 // { API_KEY: '***', PORT: 3000 }
@@ -91,6 +94,28 @@ Env validation failed:
   - Missing required env var: DATABASE_URL
   - PORT: must be >= 1
 ```
+
+## Config (OOP)
+
+Class-based usage with get, getOrThrow, has:
+
+```typescript
+import { Config } from '@systemix/env';
+
+const config = Config.fromEnv({
+  PORT: { type: 'number', default: 3000 },
+  DATABASE_URL: { type: 'string', required: true },
+});
+
+config.get('PORT'); // number | undefined
+config.get('PORT', 4000); // number (default when undefined)
+config.getOrThrow('DATABASE_URL'); // throws if not set
+config.has('PORT'); // boolean
+config.toSafeLog(); // masked for logging
+config.getRaw(); // raw env object
+```
+
+Create from existing env: `Config.from(load(schema))`.
 
 ## Boolean Parsing
 
