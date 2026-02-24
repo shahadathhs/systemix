@@ -24,7 +24,7 @@
   "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/password#readme",
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
-    "test": "pnpm build && node tests/test.mjs",
+    "test": "pnpm build && node tests/run.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -51,6 +51,7 @@
   "description": "A cryptographically secure password generator with customizable complexity. Part of the Systemix toolkit.",
   "devDependencies": {
     "@systemix/eslint": "workspace:*",
+    "@systemix/test": "workspace:*",
     "@systemix/typescript": "workspace:*",
     "@types/node": "^25.3.0",
     "eslint": "^10.0.1",

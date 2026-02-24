@@ -1,12 +1,11 @@
 /**
  * Tests for Config – fromEnv, get, getOrThrow, has, toSafeLog.
  */
-import { createRunner, src } from './_runner.mjs';
+import { createRunner } from '@systemix/test';
+import { src } from './helpers.mjs';
 import { Config } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert, assertThrows }) => {
-  console.log('\n  config');
-
   const config = Config.fromEnv(
     { PORT: { type: 'number', default: 3000 }, FOO: { type: 'string' } },
     src({ PORT: '8080' }),

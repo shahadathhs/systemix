@@ -1,14 +1,13 @@
 /**
  * Tests for fromFile, strict mode, and secret masking (toSafeLog).
  */
-import { createRunner, src } from './_runner.mjs';
+import { createRunner } from '@systemix/test';
+import { src } from './helpers.mjs';
 import { load } from '../dist/index.js';
 import { writeFileSync, unlinkSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 export const { run, getCounts } = createRunner(({ assert }) => {
-  console.log('\n  file');
-
   // fromFile: load vars from .env file
   const envPath = resolve(process.cwd(), '.env.test.systemix');
   try {

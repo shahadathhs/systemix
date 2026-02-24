@@ -1,12 +1,11 @@
 /**
  * Tests for load() – parsing, defaults, required vars, and error handling.
  */
-import { createRunner, src } from './_runner.mjs';
+import { createRunner } from '@systemix/test';
+import { src } from './helpers.mjs';
 import { load } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert, assertThrows }) => {
-  console.log('\n  load');
-
   // Legacy format: plain object as source
   assert(
     load({ FOO: { type: 'string' } }, { FOO: 'legacy' }).FOO === 'legacy',

@@ -50,6 +50,7 @@
   "description": "Typed environment variable loading and validation. Part of the Systemix toolkit.",
   "devDependencies": {
     "@systemix/eslint": "workspace:*",
+    "@systemix/test": "workspace:*",
     "@systemix/typescript": "workspace:*",
     "@types/node": "^25.3.0",
     "eslint": "^10.0.1",

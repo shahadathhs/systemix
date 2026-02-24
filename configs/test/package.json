@@ -1,0 +1,47 @@
+{
+  "name": "@systemix/test",
+  "version": "0.1.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "description": "Minimal test runner for Systemix packages. assert, assertThrows, createRunner, runSuites.",
+  "keywords": [
+    "systemix",
+    "test",
+    "testing",
+    "assert",
+    "runner"
+  ],
+  "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shahadathhs/systemix.git",
+    "directory": "configs/test"
+  },
+  "homepage": "https://github.com/shahadathhs/systemix/tree/main/configs/test#readme",
+  "bugs": {
+    "url": "https://github.com/shahadathhs/systemix/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "rimraf node_modules",
+    "clean:turbo": "rimraf .turbo node_modules"
+  }
+}

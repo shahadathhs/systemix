@@ -44,7 +44,7 @@
   "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/token#readme",
   "scripts": {
     "build": "tsup",
-    "test": "pnpm build && node tests/test.mjs",
+    "test": "pnpm build && node tests/run.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -75,6 +75,7 @@
   "description": "A cryptographically secure token generator and signed-token module for API keys, session tokens, and auth. Zero dependencies, pure Node.js.",
   "devDependencies": {
     "@systemix/eslint": "workspace:*",
+    "@systemix/test": "workspace:*",
     "@systemix/typescript": "workspace:*",
     "@types/node": "^25.3.0",
     "eslint": "^10.0.1",

@@ -78,6 +78,8 @@ importers:
         specifier: ^8.56.0
         version: 8.56.0(eslint@10.0.1(jiti@2.6.1))(typescript@5.9.3)
 
+  configs/test: {}
+
   configs/typescript: {}
 
   demos:
@@ -173,6 +175,9 @@ importers:
       '@systemix/eslint':
         specifier: workspace:*
         version: link:../../configs/eslint
+      '@systemix/test':
+        specifier: workspace:*
+        version: link:../../configs/test
       '@systemix/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
@@ -194,6 +199,9 @@ importers:
       '@systemix/eslint':
         specifier: workspace:*
         version: link:../../configs/eslint
+      '@systemix/test':
+        specifier: workspace:*
+        version: link:../../configs/test
       '@systemix/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
@@ -215,6 +223,9 @@ importers:
       '@systemix/eslint':
         specifier: workspace:*
         version: link:../../configs/eslint
+      '@systemix/test':
+        specifier: workspace:*
+        version: link:../../configs/test
       '@systemix/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
@@ -236,6 +247,9 @@ importers:
       '@systemix/eslint':
         specifier: workspace:*
         version: link:../../configs/eslint
+      '@systemix/test':
+        specifier: workspace:*
+        version: link:../../configs/test
       '@systemix/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
