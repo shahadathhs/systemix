@@ -1,0 +1,72 @@
+{
+  "name": "@systemix/env",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shahadathhs/systemix.git",
+    "directory": "packages/env"
+  },
+  "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/env#readme",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "pnpm build && node tests/test.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check . --ignore-path .prettierignore",
+    "format:fix": "prettier --write . --ignore-path .prettierignore",
+    "clean": "rimraf dist node_modules",
+    "clean:turbo": "rimraf .turbo dist node_modules",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "systemix",
+    "env",
+    "environment",
+    "environment-variables",
+    "validation",
+    "typed-env",
+    "typescript",
+    "node",
+    "utility"
+  ],
+  "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
+  "license": "MIT",
+  "description": "Typed environment variable loading and validation. Part of the Systemix toolkit.",
+  "devDependencies": {
+    "@systemix/eslint": "workspace:*",
+    "@systemix/typescript": "workspace:*",
+    "@types/node": "^25.3.0",
+    "eslint": "^10.0.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "sideEffects": false,
+  "bugs": {
+    "url": "https://github.com/shahadathhs/systemix/issues"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ]
+}
