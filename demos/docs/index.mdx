@@ -9,6 +9,8 @@ The toolkit provides cryptographically secure utilities with zero external produ
 - **@systemix/password** — Generate strong, customizable passwords with entropy calculation
 - **@systemix/passphrase** — Create memorable passphrases from high-entropy word lists
 - **@systemix/token** — Secure token generator with hex, base64, base64url, alphanumeric charsets
+- **@systemix/eslint** — Shareable ESLint v10 flat configs for JS/TS, React, Express, Next.js
+- **@systemix/typescript** — Shareable TypeScript configs for base, Express, and Next.js
 
 All utilities use `globalThis.crypto` (Node.js `crypto` or Web Crypto API) for bias-free randomization.
 
@@ -33,4 +35,6 @@ const token = generateToken({ byteLength: 32, charset: 'hex' });
 - [Password Generator](/docs/password) — API reference and usage
 - [Passphrase Generator](/docs/passphrase) — API reference and usage
 - [Token Generator](/docs/token) — API reference and usage
+- [ESLint](/docs/eslint) — Lint configs
+- [TypeScript](/docs/typescript) — TSConfig presets
 - [Live Demos](/password) — Interactive playgrounds

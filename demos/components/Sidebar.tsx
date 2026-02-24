@@ -2,9 +2,11 @@
 
 import {
   BookOpen,
+  Braces,
   ChevronDown,
   ChevronRight,
   ExternalLink,
+  FileCode,
   FileText,
   Github,
   KeyRound,
@@ -49,6 +51,37 @@ function CollapsibleSection({
 const cn = (...classes: (string | boolean | undefined)[]) =>
   classes.filter(Boolean).join(' ');
 
+const iconShortcuts = [
+  { href: '/', icon: FileText, title: 'Home' },
+  { href: '/docs', icon: BookOpen, title: 'Docs' },
+  { href: '/about', icon: User, title: 'About' },
+  {
+    href: 'https://github.com/shahadathhs/systemix',
+    icon: Github,
+    title: 'GitHub',
+  },
+] as const;
+
+const mainNav = [
+  { href: '/', icon: FileText, label: 'Home', exact: true },
+  { href: '/docs', icon: BookOpen, label: 'Overview', exact: true },
+  { href: '/about', icon: User, label: 'About', exact: true },
+] as const;
+
+const docItems = [
+  { href: '/docs/password', icon: Lock, label: 'Password' },
+  { href: '/docs/passphrase', icon: KeyRound, label: 'Passphrase' },
+  { href: '/docs/token', icon: Shield, label: 'Token' },
+  { href: '/docs/eslint', icon: FileCode, label: 'ESLint' },
+  { href: '/docs/typescript', icon: Braces, label: 'TypeScript' },
+] as const;
+
+const demoItems = [
+  { href: '/password', icon: Lock, label: 'Password' },
+  { href: '/passphrase', icon: KeyRound, label: 'Passphrase' },
+  { href: '/token', icon: Shield, label: 'Token' },
+] as const;
+
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
@@ -71,147 +104,87 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
     <>
       {/* Icon section - visible only on sm (mobile drawer) */}
       <div className="lg:hidden flex gap-2 pb-4 mb-4 border-b border-slate-700/80">
-        <Link
-          href="/"
-          className={cn(
-            'p-2.5 rounded-lg transition-colors',
-            pathname === '/'
+        {iconShortcuts.map(({ href, icon: Icon, title }) => {
+          const external = href.startsWith('http');
+          const isActive =
+            !external &&
+            (pathname === href || pathname?.startsWith(href + '/'));
+          const baseClass =
+            'p-2.5 rounded-lg transition-colors ' +
+            (isActive
               ? 'bg-cyan-500/10 text-cyan-400'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
-          )}
-          {...linkProps('/')}
-          title="Home"
-        >
-          <FileText className="w-5 h-5" />
-        </Link>
-        <Link
-          href="/docs"
-          className={cn(
-            'p-2.5 rounded-lg transition-colors',
-            pathname === '/docs' || pathname?.startsWith('/docs')
-              ? 'bg-cyan-500/10 text-cyan-400'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
-          )}
-          {...linkProps('/docs')}
-          title="Docs"
-        >
-          <BookOpen className="w-5 h-5" />
-        </Link>
-        <Link
-          href="/about"
-          className={cn(
-            'p-2.5 rounded-lg transition-colors',
-            pathname === '/about'
-              ? 'bg-cyan-500/10 text-cyan-400'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
-          )}
-          {...linkProps('/about')}
-          title="About"
-        >
-          <User className="w-5 h-5" />
-        </Link>
-        <a
-          href="https://github.com/shahadathhs/systemix"
-          target="_blank"
-          rel="noreferrer"
-          className="p-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors"
-          title="GitHub"
-        >
-          <Github className="w-5 h-5" />
-        </a>
+              : 'text-slate-400 hover:text-white hover:bg-slate-800/50');
+          return external ? (
+            <a
+              key={href}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              className={baseClass}
+              title={title}
+            >
+              <Icon className="w-5 h-5" />
+            </a>
+          ) : (
+            <Link
+              key={href}
+              href={href}
+              className={baseClass}
+              {...linkProps(href)}
+              title={title}
+            >
+              <Icon className="w-5 h-5" />
+            </Link>
+          );
+        })}
       </div>
 
       <div className="space-y-1 pb-4 border-b border-slate-700/80 mb-4">
-        <Link href="/" className={linkClass('/', true)} {...linkProps('/')}>
-          <FileText className="w-4 h-4 shrink-0 opacity-70" />
-          Home
-        </Link>
-        <Link
-          href="/docs"
-          className={linkClass('/docs', true)}
-          {...linkProps('/docs')}
-        >
-          <BookOpen className="w-4 h-4 shrink-0 opacity-70" />
-          Overview
-        </Link>
-        <Link
-          href="/about"
-          className={linkClass('/about', true)}
-          {...linkProps('/about')}
-        >
-          <User className="w-4 h-4 shrink-0 opacity-70" />
-          About
-        </Link>
+        {mainNav.map(({ href, icon: Icon, label, exact }) => (
+          <Link
+            key={href}
+            href={href}
+            className={linkClass(href, exact)}
+            {...linkProps(href)}
+          >
+            <Icon className="w-4 h-4 shrink-0 opacity-70" />
+            {label}
+          </Link>
+        ))}
       </div>
 
       <div className="space-y-2">
         <CollapsibleSection title="Documentation" defaultOpen>
           <ul className="space-y-0.5 pt-1">
-            <li>
-              <Link
-                href="/docs/password"
-                className={linkClass('/docs/password', true)}
-                {...linkProps('/docs/password')}
-              >
-                <Lock className="w-4 h-4 shrink-0 opacity-70" />
-                Password
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/docs/passphrase"
-                className={linkClass('/docs/passphrase', true)}
-                {...linkProps('/docs/passphrase')}
-              >
-                <KeyRound className="w-4 h-4 shrink-0 opacity-70" />
-                Passphrase
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/docs/token"
-                className={linkClass('/docs/token', true)}
-                {...linkProps('/docs/token')}
-              >
-                <Shield className="w-4 h-4 shrink-0 opacity-70" />
-                Token
-              </Link>
-            </li>
+            {docItems.map(({ href, icon: Icon, label }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className={linkClass(href, true)}
+                  {...linkProps(href)}
+                >
+                  <Icon className="w-4 h-4 shrink-0 opacity-70" />
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </CollapsibleSection>
 
         <CollapsibleSection title="Live Demos" defaultOpen>
           <ul className="space-y-0.5 pt-1">
-            <li>
-              <Link
-                href="/password"
-                className={linkClass('/password', true)}
-                {...linkProps('/password')}
-              >
-                <Lock className="w-4 h-4 shrink-0 opacity-70" />
-                Password
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/passphrase"
-                className={linkClass('/passphrase', true)}
-                {...linkProps('/passphrase')}
-              >
-                <KeyRound className="w-4 h-4 shrink-0 opacity-70" />
-                Passphrase
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/token"
-                className={linkClass('/token', true)}
-                {...linkProps('/token')}
-              >
-                <Shield className="w-4 h-4 shrink-0 opacity-70" />
-                Token
-              </Link>
-            </li>
+            {demoItems.map(({ href, icon: Icon, label }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className={linkClass(href, true)}
+                  {...linkProps(href)}
+                >
+                  <Icon className="w-4 h-4 shrink-0 opacity-70" />
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </CollapsibleSection>
 
