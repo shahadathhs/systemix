@@ -1,0 +1,44 @@
+# @systemix/eslint
+
+Shareable ESLint v10 flat configs for JavaScript, TypeScript, React, Express, and Next.js. Part of the Systemix toolkit.
+
+## Installation
+
+```bash
+pnpm add -D @systemix/eslint
+```
+
+## Usage
+
+In your `eslint.config.mjs`:
+
+```javascript
+import baseConfig from '@systemix/eslint/base';
+
+export default [
+  ...baseConfig,
+  // your custom rules
+];
+```
+
+## Included Configs
+
+| Config                          | Description                                    |
+| :------------------------------ | :--------------------------------------------- |
+| `@systemix/eslint/base`         | General JavaScript/TypeScript projects.        |
+| `@systemix/eslint/express`      | Node.js Express services.                      |
+| `@systemix/eslint/next`         | Full Next.js applications.                     |
+| `@systemix/eslint/next-minimal` | Minimal Next.js (no framework-specific rules). |
+
+## Example: Next.js (minimal)
+
+This demos app uses `next-minimal`:
+
+```javascript
+import { nextMinimalConfig } from '@systemix/eslint/next-minimal.js';
+
+export default [
+  { ignores: ['postcss.config.mjs', 'next-env.d.ts'] },
+  ...nextMinimalConfig,
+];
+```

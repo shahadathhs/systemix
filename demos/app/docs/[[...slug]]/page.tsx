@@ -1,7 +1,14 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-const docsSlugs = ['', 'password', 'passphrase', 'token'] as const;
+const docsSlugs = [
+  '',
+  'password',
+  'passphrase',
+  'token',
+  'eslint',
+  'typescript',
+] as const;
 
 type Slug = (typeof docsSlugs)[number];
 
@@ -26,6 +33,16 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
     description:
       'API reference for @systemix/token. Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities.',
   },
+  eslint: {
+    title: '@systemix/eslint',
+    description:
+      'Shareable ESLint v10 flat configs for JavaScript, TypeScript, React, Express, and Next.js.',
+  },
+  typescript: {
+    title: '@systemix/typescript',
+    description:
+      'Shareable TypeScript configs for base, Express, and Next.js projects.',
+  },
 };
 
 const docModules: Record<
@@ -36,6 +53,8 @@ const docModules: Record<
   password: () => import('@/docs/password.mdx'),
   passphrase: () => import('@/docs/passphrase.mdx'),
   token: () => import('@/docs/token.mdx'),
+  eslint: () => import('@/docs/eslint.mdx'),
+  typescript: () => import('@/docs/typescript.mdx'),
 };
 
 export async function generateMetadata({

@@ -1,0 +1,47 @@
+# @systemix/typescript
+
+Shareable TypeScript configs for base, Express, and Next.js projects. Part of the Systemix toolkit.
+
+## Installation
+
+```bash
+pnpm add -D @systemix/typescript
+```
+
+## Usage
+
+In your `tsconfig.json`:
+
+```json
+{
+  "extends": "@systemix/typescript/base.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  }
+}
+```
+
+## Included Configs
+
+| Config                              | Description                                        |
+| :---------------------------------- | :------------------------------------------------- |
+| `@systemix/typescript/base.json`    | Base configuration for modern TypeScript projects. |
+| `@systemix/typescript/express.json` | Optimized for Express.js services.                 |
+| `@systemix/typescript/nextjs.json`  | Optimized for Next.js applications.                |
+
+## Example: Next.js
+
+This demos app extends `nextjs.json`:
+
+```json
+{
+  "extends": "@systemix/typescript/nextjs.json",
+  "compilerOptions": {
+    "paths": { "@/*": ["./*"] },
+    "moduleResolution": "bundler",
+    "jsx": "preserve"
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}
+```

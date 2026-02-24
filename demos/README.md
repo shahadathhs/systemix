@@ -49,6 +49,15 @@ Open [http://localhost:3000](http://localhost:3000) to explore.
 | `pnpm lint`      | Run ESLint                   |
 | `pnpm typecheck` | Run TypeScript check         |
 
+## Tooling
+
+Demos use shared monorepo configs:
+
+- **ESLint** — `@systemix/eslint` (`next-minimal` preset) via `eslint.config.mjs`
+- **TypeScript** — `@systemix/typescript` (`nextjs.json`) via `tsconfig.json`
+
+These keep lint and type rules consistent across the Systemix monorepo.
+
 ## Author
 
 **Shahadath Hossen Sajib**
