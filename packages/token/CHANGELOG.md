@@ -1,5 +1,11 @@
 # @systemix/token
 
+## 1.4.0
+
+### Minor Changes
+
+- 4977f49: configure dependenices
+
 ## 1.3.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @systemix/password
 
+## 0.5.0
+
+### Minor Changes
+
+- 4977f49: configure dependenices
+
 ## 0.4.0
 
 ### Minor Changes
