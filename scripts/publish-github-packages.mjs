@@ -20,12 +20,15 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const TEMP_DIR = join(ROOT, '.tmp-gh-publish');
 
+/** All publishable packages: path -> GitHub Packages scope (@shahadathhs/name) */
 const PACKAGES = [
+  { path: 'packages/env', ghName: '@shahadathhs/env' },
   { path: 'packages/password', ghName: '@shahadathhs/password' },
   { path: 'packages/passphrase', ghName: '@shahadathhs/passphrase' },
   { path: 'packages/token', ghName: '@shahadathhs/token' },
   { path: 'configs/eslint', ghName: '@shahadathhs/eslint' },
   { path: 'configs/typescript', ghName: '@shahadathhs/typescript' },
+  { path: 'configs/runner', ghName: '@shahadathhs/runner' },
 ];
 
 /**

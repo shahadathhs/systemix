@@ -53,16 +53,16 @@
     "clean:turbo": "rimraf .turbo node_modules"
   },
   "dependencies": {
-    "@eslint/js": "^10.0.1",
-    "@next/eslint-plugin-next": "^16.1.6",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-only-warn": "^1.2.1",
-    "eslint-plugin-prettier": "^5.5.5",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-turbo": "^2.8.14",
-    "globals": "^17.4.0",
-    "typescript-eslint": "^8.56.1"
+    "@eslint/js": "catalog:",
+    "@next/eslint-plugin-next": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-only-warn": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-react": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-turbo": "catalog:",
+    "globals": "catalog:",
+    "typescript-eslint": "catalog:"
   }
 }

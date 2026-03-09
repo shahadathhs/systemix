@@ -77,10 +77,10 @@
     "@systemix/eslint": "workspace:*",
     "@systemix/runner": "workspace:*",
     "@systemix/typescript": "workspace:*",
-    "@types/node": "^25.3.5",
-    "eslint": "^10.0.3",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:"
   },
   "directories": {
     "test": "tests"
