@@ -7,7 +7,7 @@
 [![Turbo](https://img.shields.io/badge/built%20with-turbo-000000.svg)](https://turbo.build/)
 [![Docs](https://img.shields.io/badge/docs-systemix.vercel.app-blue)](https://systemix.vercel.app)
 
-![Alt](https://repobeats.axiom.co/api/embed/e9ce1767c7a4a8d26105f0ce511433f7f3c30885.svg "Repobeats analytics image")
+![Contribution Matrix](https://repobeats.axiom.co/api/embed/e9ce1767c7a4a8d26105f0ce511433f7f3c30885.svg 'Repobeats analytics image')
 
 ### Packages
 
