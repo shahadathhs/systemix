@@ -51,7 +51,7 @@ jobs:
 
       # Setup pnpm
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       # Install Dependencies
       - name: Install dependencies
