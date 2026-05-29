@@ -1,5 +1,5 @@
-import type { EnvSchema, EnvResult, LoadOptions } from './types/env';
-import { load } from './env/load';
+import type { EnvSchema, EnvResult, LoadOptions } from './types/index.js';
+import { load } from './env/load.js';
 
 /**
  * Typed configuration container built from env vars.

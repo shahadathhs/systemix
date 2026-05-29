@@ -154,5 +154,5 @@ export async function verifySigned<T = SignedPayload>(
     );
   }
 
-  return payload as T;
+  return payload;
 }

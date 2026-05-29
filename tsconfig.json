@@ -1,8 +1,5 @@
 {
   "extends": "@systemix/typescript/base.json",
-  "compilerOptions": {
-    "baseUrl": "./"
-  },
   "include": ["**/*.ts", "**/*.js", "**/*.mjs", "**/*.cjs"],
   "exclude": ["node_modules", "dist"]
 }

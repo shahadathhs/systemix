@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { parseEnvFile } from './parse';
+import { parseEnvFile } from './parse.js';
 
 /**
  * Load env vars from a .env file. Returns {} if file does not exist.
@@ -44,7 +44,7 @@ export function mergeEnv(
 export function getEnvSource(): Record<string, string | undefined> {
   const env = globalThis.process?.env;
   if (env && typeof env === 'object') {
-    return env as Record<string, string | undefined>;
+    return env;
   }
   return {};
 }

@@ -290,8 +290,24 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  packages/build-tool:
+    dependencies:
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+    devDependencies:
+      '@systemix/typescript':
+        specifier: workspace:*
+        version: link:../../configs/typescript
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.9.1
+
   packages/env:
     devDependencies:
+      '@systemix/build-tool':
+        specifier: workspace:*
+        version: link:../build-tool
       '@systemix/eslint':
         specifier: workspace:*
         version: link:../../configs/eslint
@@ -307,9 +323,6 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 10.4.0(jiti@2.6.1)
-      tsup:
-        specifier: 'catalog:'
-        version: 8.5.1(jiti@2.6.1)(postcss@8.5.15)(typescript@6.0.3)(yaml@2.8.2)
       typescript:
         specifier: 'catalog:'
         version: 6.0.3

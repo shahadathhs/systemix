@@ -13,7 +13,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/cjs/index.js"
     }
   },
   "repository": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/env#readme",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "systemix-build --entry src/index.ts --outDir dist --clean",
     "test": "pnpm build && node tests/run.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
@@ -49,12 +49,12 @@
   "license": "MIT",
   "description": "Typed environment variable loading and validation. Part of the Systemix toolkit.",
   "devDependencies": {
+    "@systemix/build-tool": "workspace:*",
     "@systemix/eslint": "workspace:*",
     "@systemix/runner": "workspace:*",
     "@systemix/typescript": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "tsup": "catalog:",
     "typescript": "catalog:"
   },
   "directories": {

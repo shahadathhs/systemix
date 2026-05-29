@@ -9,7 +9,7 @@ export type {
   EnvSchema,
   EnvResult,
   LoadOptions,
-} from './types';
+} from './types/index.js';
 
-export { parseEnvFile, load } from './env';
-export { Config } from './config';
+export { parseEnvFile, load } from './env/index.js';
+export { Config } from './config.js';

@@ -8,7 +8,6 @@ import {
   ExternalLink,
   FileCode,
   FileText,
-  Github,
   KeyRound,
   Lock,
   Play,
@@ -59,7 +58,7 @@ const iconShortcuts = [
   { href: '/about', icon: User, title: 'About' },
   {
     href: 'https://github.com/shahadathhs/systemix',
-    icon: Github,
+    icon: ExternalLink,
     title: 'GitHub',
   },
 ] as const;
@@ -199,7 +198,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
           rel="noreferrer"
           className="flex items-center gap-2 text-sm text-slate-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-slate-800/50 transition-colors"
         >
-          <Github className="w-4 h-4 shrink-0" />
+          <ExternalLink className="w-4 h-4 shrink-0" />
           GitHub
           <ExternalLink className="w-3 h-3 opacity-60" />
         </a>

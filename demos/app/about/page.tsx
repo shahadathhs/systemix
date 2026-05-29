@@ -3,8 +3,6 @@
 import {
   ArrowLeft,
   ExternalLink,
-  Github,
-  Linkedin,
   Mail,
   FileText,
   PenLine,
@@ -151,12 +149,12 @@ export default function AboutPage() {
                   {
                     href: 'https://github.com/shahadathhs',
                     label: 'GitHub',
-                    icon: Github,
+                    icon: ExternalLink,
                   },
                   {
                     href: 'https://linkedin.com/in/shahadathhs',
                     label: 'LinkedIn',
-                    icon: Linkedin,
+                    icon: ExternalLink,
                   },
                   {
                     href: 'https://leetcode.com/u/shahadathhs/',

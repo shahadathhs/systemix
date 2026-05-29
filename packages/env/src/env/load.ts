@@ -4,9 +4,9 @@ import type {
   EnvVarType,
   EnvResult,
   LoadOptions,
-} from '../types/env';
-import { parseBoolean, parseNumber } from './parse';
-import { loadEnvFile, getCwd, mergeEnv, getEnvSource } from './file';
+} from '../types/index.js';
+import { parseBoolean, parseNumber } from './parse.js';
+import { loadEnvFile, getCwd, mergeEnv, getEnvSource } from './file.js';
 
 const MASK = '***';
 

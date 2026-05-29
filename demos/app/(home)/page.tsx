@@ -2,7 +2,6 @@
 
 import {
   ArrowRight,
-  Github,
   KeyRound,
   Lock,
   Settings,
@@ -148,7 +147,7 @@ const features = [
     name: 'Zero Dependencies',
     description:
       'Lightweight core with zero external production dependencies to minimize supply chain risks.',
-    icon: Github,
+    icon: ArrowRight,
   },
 ];
 

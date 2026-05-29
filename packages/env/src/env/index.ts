@@ -4,6 +4,6 @@ export type {
   EnvSchema,
   EnvResult,
   LoadOptions,
-} from '../types/env';
-export { parseEnvFile } from './parse';
-export { load } from './load';
+} from '../types/index.js';
+export { parseEnvFile } from './parse.js';
+export { load } from './load.js';

@@ -5,7 +5,7 @@ export function base64UrlEncode(input: string | Uint8Array | Buffer): string {
       ? new TextEncoder().encode(input)
       : input instanceof Uint8Array
         ? input
-        : new Uint8Array(input as ArrayLike<number> & { length: number });
+        : new Uint8Array(input);
   const binary = String.fromCharCode(...bytes);
   const base64 = btoa(binary);
   return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');

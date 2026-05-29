@@ -3,7 +3,6 @@
 import {
   BookOpen,
   ExternalLink,
-  Github,
   Home,
   Menu,
   Shield,
@@ -75,7 +74,7 @@ export function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
             className="flex items-center gap-1.5 px-2 sm:px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors"
             title="GitHub"
           >
-            <Github className="w-4 h-4 shrink-0" />
+            <ExternalLink className="w-4 h-4 shrink-0" />
             <span className="hidden sm:inline">GitHub</span>
             <ExternalLink className="w-3 h-3 opacity-60 hidden sm:inline" />
           </a>

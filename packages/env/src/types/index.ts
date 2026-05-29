@@ -4,4 +4,4 @@ export type {
   EnvSchema,
   EnvResult,
   LoadOptions,
-} from './env';
+} from './env.js';
