@@ -1,5 +1,11 @@
 # @systemix/password
 
+## 0.5.2
+
+### Patch Changes
+
+- a7348f0: Validate npm Trusted Publishing (OIDC) configuration across all packages: each package publishes once through the trusted publisher so its configuration is validated before the npm deadline.
+
 ## 0.5.1
 
 ### Patch Changes
