@@ -10,11 +10,13 @@ jobs:
     name: Build, Version & Publish
     runs-on: ubuntu-latest
 
-    # Required permissions for Changesets
+    # contents/pull-requests: changesets Version PR flow
+    # id-token: npm Trusted Publishing (OIDC) — no NPM_TOKEN secret
     permissions:
       contents: write
       pull-requests: write
       packages: write
+      id-token: write
 
     if: github.event.repository.fork == false
 
@@ -26,18 +28,6 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      # Check if the token is present
-      - name: Check Token
-        run: |
-          if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "TOKEN IS EMPTY"
-            exit 1
-          else
-            echo "TOKEN IS PRESENT"
-          fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       # Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -45,13 +35,16 @@ jobs:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
           scope: '@systemix'
-          always-auth: true
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # Setup pnpm
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
+
+      # npm >= 11.5 is required for Trusted Publishing (OIDC)
+      - name: Check npm version
+        run: |
+          npm install -g npm@^11
+          npm -v
 
       # Install Dependencies
       - name: Install dependencies
@@ -61,10 +54,9 @@ jobs:
       - name: Build project
         run: pnpm build
 
-      # Version + Publish via Changesets
+      # Version + Publish via Changesets (publishing uses npm OIDC)
       - name: Version & Publish Packages
         uses: changesets/action@v1
         with:
-          publish: pnpm changeset publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          publish: node scripts/publish-npm.mjs
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
