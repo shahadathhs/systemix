@@ -93,33 +93,33 @@ const limiter = createRateLimiter({
 
 ### `createRateLimiter(options): RateLimiter`
 
-| Option      | Type               | Default         | Description                              |
-| :---------- | :----------------- | :-------------- | :--------------------------------------- |
-| `limit`     | `number`           | — (required)    | Max requests per window (bucket capacity). |
-| `windowMs`  | `number`           | — (required)    | Window size in milliseconds.             |
-| `algorithm` | `'fixed-window' \| 'sliding-window' \| 'token-bucket'` | `'fixed-window'` | Rate limiting algorithm. |
-| `store`     | `RateLimitStore`   | in-memory `Map` | Custom storage backend.                  |
+| Option      | Type                                                   | Default          | Description                                |
+| :---------- | :----------------------------------------------------- | :--------------- | :----------------------------------------- |
+| `limit`     | `number`                                               | — (required)     | Max requests per window (bucket capacity). |
+| `windowMs`  | `number`                                               | — (required)     | Window size in milliseconds.               |
+| `algorithm` | `'fixed-window' \| 'sliding-window' \| 'token-bucket'` | `'fixed-window'` | Rate limiting algorithm.                   |
+| `store`     | `RateLimitStore`                                       | in-memory `Map`  | Custom storage backend.                    |
 
 Returns a limiter with:
 
-| Method              | Description                                    |
-| :------------------ | :--------------------------------------------- |
-| `limit(key)`        | Records a hit and returns the verdict.         |
-| `peek(key)`         | Reads state without recording a hit.           |
-| `resetKey(key)`     | Clears the state for one key.                  |
-| `resetAll()`        | Clears all state.                              |
-| `sweep()`           | Removes expired entries from the store.        |
+| Method          | Description                             |
+| :-------------- | :-------------------------------------- |
+| `limit(key)`    | Records a hit and returns the verdict.  |
+| `peek(key)`     | Reads state without recording a hit.    |
+| `resetKey(key)` | Clears the state for one key.           |
+| `resetAll()`    | Clears all state.                       |
+| `sweep()`       | Removes expired entries from the store. |
 
 ### `expressRateLimit(options)`
 
 Express-compatible middleware. Extra options beyond the limiter's:
 
-| Option            | Type         | Default                    | Description                       |
-| :---------------- | :----------- | :------------------------- | :-------------------------------- |
-| `keyGenerator`    | `(req) => string` | request IP            | Extracts the rate limit key.      |
-| `message`         | `unknown`    | `{ message: 'Too many requests…' }` | Body for blocked requests. |
-| `statusCode`      | `number`     | `429`                      | HTTP status for blocked requests. |
-| `standardHeaders` | `boolean`    | `true`                     | Emits `RateLimit-*` / `Retry-After`. |
+| Option            | Type              | Default                             | Description                          |
+| :---------------- | :---------------- | :---------------------------------- | :----------------------------------- |
+| `keyGenerator`    | `(req) => string` | request IP                          | Extracts the rate limit key.         |
+| `message`         | `unknown`         | `{ message: 'Too many requests…' }` | Body for blocked requests.           |
+| `statusCode`      | `number`          | `429`                               | HTTP status for blocked requests.    |
+| `standardHeaders` | `boolean`         | `true`                              | Emits `RateLimit-*` / `Retry-After`. |
 
 ### `withRateLimit(handler, limiter, keyGenerator?)`
 
@@ -127,11 +127,11 @@ Wraps any function; blocked calls throw `RateLimitExceededError` (carries `retry
 
 ### Algorithms
 
-| Algorithm        | Behavior                                         | Best for                  |
-| :--------------- | :----------------------------------------------- | :------------------------ |
-| `fixed-window`   | Counter resets every window — lowest memory      | Simple request caps       |
-| `sliding-window` | Rolling log of timestamps — no boundary bursts   | Fair, smooth quotas       |
-| `token-bucket`   | Continuous refill — tolerates short bursts       | APIs with bursty traffic  |
+| Algorithm        | Behavior                                       | Best for                 |
+| :--------------- | :--------------------------------------------- | :----------------------- |
+| `fixed-window`   | Counter resets every window — lowest memory    | Simple request caps      |
+| `sliding-window` | Rolling log of timestamps — no boundary bursts | Fair, smooth quotas      |
+| `token-bucket`   | Continuous refill — tolerates short bursts     | APIs with bursty traffic |
 
 ## License
 
