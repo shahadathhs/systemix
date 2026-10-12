@@ -29,7 +29,6 @@ jobs:
           node-version: 24
           registry-url: 'https://npm.pkg.github.com'
           scope: '@shahadathhs'
-          always-auth: true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

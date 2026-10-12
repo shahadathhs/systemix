@@ -59,4 +59,5 @@ jobs:
         uses: changesets/action@v1
         with:
           publish: node scripts/publish-npm.mjs
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
