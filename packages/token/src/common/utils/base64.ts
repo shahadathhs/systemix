@@ -17,7 +17,11 @@ export function base64UrlDecode(input: string): Uint8Array {
   const pad = base64.length % 4;
   if (pad) base64 += '='.repeat(4 - pad);
   const binary = atob(base64);
-  return new Uint8Array([...binary].map((c) => c.charCodeAt(0)));
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
 }
 
 export function base64UrlDecodeToUtf8(input: string): string {

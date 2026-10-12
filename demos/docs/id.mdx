@@ -1,0 +1,63 @@
+# @systemix/id
+
+Unique, non-secret identifier generation: UUID v4, ULID, and nanoid-style IDs — all with bias-free, crypto-grade randomness. For secrets and tokens, use `@systemix/token` instead.
+
+## Installation
+
+```bash
+pnpm add @systemix/id
+```
+
+## Basic Usage
+
+```typescript
+import { generateId, generateUlid, generateUuid } from '@systemix/id';
+
+generateId(); // "V1StGXR8_Z5jdHi6B-myT"
+generateUlid(); // "01ARZ3NDEKTSV4RRFFQ69G5FAV" — sorts chronologically
+generateUuid(); // "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed"
+```
+
+## Which one?
+
+| Generator      | Use when you need                                     |
+| -------------- | ----------------------------------------------------- |
+| `generateId`   | Short, URL-safe random IDs (API keys visible in URLs) |
+| `generateUlid` | Lexicographically sortable IDs (DB index-friendly)    |
+| `generateUuid` | Standard, ecosystem-wide unique identifiers           |
+
+## Examples
+
+### Custom size and alphabet
+
+```typescript
+generateId({ size: 10 });
+generateId({ size: 16, alphabet: '0123456789abcdef' });
+```
+
+### Monotonic ULIDs
+
+When generating several IDs within the same millisecond (tight loops), the monotonic factory increments the random suffix instead of re-randomizing — output is strictly increasing:
+
+```typescript
+import { createMonotonicUlid } from '@systemix/id';
+
+const nextUlid = createMonotonicUlid();
+nextUlid(); // 01ARZ3NDEKTSV4RRFFQ69G5FAW
+nextUlid(); // 01ARZ3NDEKTSV4RRFFQ69G5FAX
+```
+
+### UUID validation
+
+```typescript
+import { isUuid } from '@systemix/id';
+
+isUuid(value); // validates format, version, and variant
+isUuid(value, 4); // must be version 4
+```
+
+Character selection uses rejection sampling on `crypto.getRandomValues`, so every character is equally likely — no modulo bias.
+
+## Try it
+
+[Open the ID Generator demo](/id) to generate and inspect IDs interactively.

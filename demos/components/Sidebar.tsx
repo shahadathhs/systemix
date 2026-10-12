@@ -8,15 +8,19 @@ import {
   ExternalLink,
   FileCode,
   FileText,
-  Github,
+  Fingerprint,
+  Gauge,
+  Hash,
   KeyRound,
   Lock,
+  LockKeyhole,
   Play,
   Settings,
   Shield,
   User,
   X,
 } from 'lucide-react';
+import { GithubIcon } from '@/components/brand-icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -59,7 +63,7 @@ const iconShortcuts = [
   { href: '/about', icon: User, title: 'About' },
   {
     href: 'https://github.com/shahadathhs/systemix',
-    icon: Github,
+    icon: GithubIcon,
     title: 'GitHub',
   },
 ] as const;
@@ -75,6 +79,10 @@ const docItems = [
   { href: '/docs/password', icon: Lock, label: 'Password' },
   { href: '/docs/passphrase', icon: KeyRound, label: 'Passphrase' },
   { href: '/docs/token', icon: Shield, label: 'Token' },
+  { href: '/docs/hash', icon: Hash, label: 'Hash' },
+  { href: '/docs/cipher', icon: LockKeyhole, label: 'Cipher' },
+  { href: '/docs/id', icon: Fingerprint, label: 'Id' },
+  { href: '/docs/rate-limit', icon: Gauge, label: 'Rate Limit' },
   { href: '/docs/eslint', icon: FileCode, label: 'ESLint' },
   { href: '/docs/typescript', icon: Braces, label: 'TypeScript' },
   { href: '/docs/runner', icon: Play, label: 'Runner' },
@@ -85,6 +93,10 @@ const demoItems = [
   { href: '/password', icon: Lock, label: 'Password' },
   { href: '/passphrase', icon: KeyRound, label: 'Passphrase' },
   { href: '/token', icon: Shield, label: 'Token' },
+  { href: '/hash', icon: Hash, label: 'Hash' },
+  { href: '/cipher', icon: LockKeyhole, label: 'Cipher' },
+  { href: '/id', icon: Fingerprint, label: 'Id' },
+  { href: '/rate-limit', icon: Gauge, label: 'Rate Limit' },
 ] as const;
 
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
@@ -199,7 +211,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
           rel="noreferrer"
           className="flex items-center gap-2 text-sm text-slate-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-slate-800/50 transition-colors"
         >
-          <Github className="w-4 h-4 shrink-0" />
+          <GithubIcon className="w-4 h-4 shrink-0" />
           GitHub
           <ExternalLink className="w-3 h-3 opacity-60" />
         </a>

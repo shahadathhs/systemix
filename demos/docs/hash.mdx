@@ -1,0 +1,64 @@
+# @systemix/hash
+
+Password hashing and verification with PBKDF2 and scrypt, built entirely on Web Crypto and Node.js built-ins. Completes the auth flow: generate → hash → store → verify.
+
+## Installation
+
+```bash
+pnpm add @systemix/hash
+```
+
+## Basic Usage
+
+```typescript
+import { hashPassword, verifyPassword } from '@systemix/hash';
+
+const encoded = await hashPassword('hunter2');
+// → "pbkdf2$SHA-256$210000$C5eX...$k9fT..."
+
+await verifyPassword('hunter2', encoded); // → true
+await verifyPassword('letmein', encoded); // → false
+```
+
+The encoded hash embeds the algorithm, parameters, salt, and hash — store it as a single database column.
+
+## Options
+
+| Option                  | Type                                  | Default     | Description                            |
+| ----------------------- | ------------------------------------- | ----------- | -------------------------------------- |
+| `algorithm`             | `'pbkdf2' \| 'scrypt'`                | `'pbkdf2'`  | Hashing algorithm                      |
+| `digest`                | `'SHA-256' \| 'SHA-384' \| 'SHA-512'` | `'SHA-256'` | PBKDF2 digest function                 |
+| `iterations`            | `number`                              | `210000`    | PBKDF2 iterations (OWASP minimum)      |
+| `keyLength`             | `number`                              | `32`        | Derived key length in bytes (max 1024) |
+| `salt`                  | `Uint8Array`                          | random 16B  | Custom salt (min 8 bytes)              |
+| `costFactor`            | `number`                              | `16384`     | scrypt cost factor N (power of 2)      |
+| `blockSizeFactor`       | `number`                              | `8`         | scrypt block size r                    |
+| `parallelizationFactor` | `number`                              | `1`         | scrypt parallelization p               |
+
+## Examples
+
+### scrypt (Node.js only)
+
+```typescript
+const encoded = await hashPassword('hunter2', {
+  algorithm: 'scrypt',
+  costFactor: 16384,
+});
+```
+
+### Low-level derivation
+
+```typescript
+import { pbkdf2DeriveBits, generateSalt } from '@systemix/hash';
+
+const key = await pbkdf2DeriveBits('password', generateSalt(16), {
+  iterations: 100_000,
+  keyLength: 32,
+});
+```
+
+Verification compares derived hashes in constant time, so timing attacks cannot reveal how close a guess was.
+
+## Try it
+
+[Open the Hash Playground demo](/hash) to hash and verify passwords interactively.

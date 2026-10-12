@@ -51,7 +51,7 @@ export default function PasswordPage() {
   }, [options, getCharsetSize]);
 
   useEffect(() => {
-    void handleGenerate();
+    handleGenerate();
   }, [handleGenerate]);
 
   const copyToClipboard = () => {

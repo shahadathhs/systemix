@@ -23,11 +23,11 @@
   },
   "homepage": "https://github.com/shahadathhs/systemix/tree/main/packages/passphrase#readme",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsdown",
     "test": "pnpm build && node tests/run.mjs",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "oxlint . --type-aware",
+    "lint:fix": "oxlint . --type-aware --fix",
     "format": "prettier --check . --ignore-path .prettierignore",
     "format:fix": "prettier --write . --ignore-path .prettierignore",
     "clean": "rimraf dist node_modules",
@@ -50,12 +50,13 @@
   "license": "MIT",
   "description": "A secure, memorable passphrase generator using cryptographically strong random values. Part of the Systemix toolkit.",
   "devDependencies": {
-    "@systemix/eslint": "workspace:*",
     "@systemix/runner": "workspace:*",
     "@systemix/typescript": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "tsup": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:"
   },
   "directories": {
@@ -69,5 +70,6 @@
     "dist",
     "README.md",
     "package.json"
-  ]
+  ],
+  "tsconfig": null
 }

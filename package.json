@@ -1,7 +1,7 @@
 {
   "name": "systemix",
   "private": true,
-  "description": "Systemix — A Modular Open-Source Toolkit for Secure and Scalable JavaScript Systems",
+  "description": "Systemix \u2014 A Modular Open-Source Toolkit for Secure and Scalable JavaScript Systems",
   "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
   "packageManager": "pnpm@10.26.0",
   "repository": {
@@ -35,12 +35,12 @@
   ],
   "devDependencies": {
     "@changesets/cli": "catalog:",
-    "@systemix/eslint": "workspace:*",
     "@systemix/typescript": "workspace:*",
     "commitizen": "catalog:",
     "cz-git": "catalog:",
-    "eslint": "catalog:",
     "husky": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
     "prettier": "catalog:",
     "rimraf": "catalog:",
     "turbo": "catalog:",

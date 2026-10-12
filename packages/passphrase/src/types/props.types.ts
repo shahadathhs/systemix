@@ -1,7 +1,9 @@
 import { GeneratePassphrasePropsEnum } from '../enum/props.enum';
 
 export type GeneratePassphraseFunctionProps = {
-  [key in GeneratePassphrasePropsEnum]?: key extends GeneratePassphrasePropsEnum.WORD_COUNT
+  [
+    key in GeneratePassphrasePropsEnum
+  ]?: key extends GeneratePassphrasePropsEnum.WORD_COUNT
     ? number
     : key extends GeneratePassphrasePropsEnum.SEPARATOR
       ? string

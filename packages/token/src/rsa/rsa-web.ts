@@ -14,7 +14,11 @@ function pemToBinary(pem: string, type: 'private' | 'public'): ArrayBuffer {
   }
   const base64 = match[1].replace(/\s/g, '');
   const binary = atob(base64);
-  return new Uint8Array([...binary].map((c) => c.charCodeAt(0))).buffer;
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes.buffer;
 }
 
 export async function signRsa(

@@ -1,0 +1,77 @@
+# @systemix/cipher
+
+Authenticated AES-256-GCM encryption and decryption built on Web Crypto. For encrypting sensitive data at rest — database fields, config secrets, tokens.
+
+## Installation
+
+```bash
+pnpm add @systemix/cipher
+```
+
+## Basic Usage
+
+```typescript
+import {
+  generateKeyBytes,
+  encryptString,
+  decryptString,
+} from '@systemix/cipher';
+
+const key = generateKeyBytes(); // 32 random bytes (AES-256)
+
+const payload = await encryptString('sensitive data', key);
+// → "k9fT2x..." (base64url of [IV][ciphertext + tag])
+
+await decryptString(payload, key); // → "sensitive data"
+```
+
+The 12-byte random IV is embedded in the payload — store one value, no extra columns.
+
+## Tamper Detection
+
+AES-GCM is authenticated: any modification to the ciphertext (or wrong key) throws `DecryptionError` instead of returning garbage.
+
+```typescript
+import { DecryptionError } from '@systemix/cipher';
+
+try {
+  await decryptString(payload, wrongKey);
+} catch (error) {
+  if (error instanceof DecryptionError) {
+    // wrong key, tampered data, or malformed payload
+  }
+}
+```
+
+## Examples
+
+### Additional authenticated data
+
+Bind ciphertext to a context (user ID, record type). Decryption fails unless the exact same AAD is supplied:
+
+```typescript
+const payload = await encrypt(recordBytes, key, {
+  additionalData: new TextEncoder().encode('user:42'),
+});
+```
+
+### Key derivation from a password
+
+```typescript
+import { deriveKeyFromPassword, generateSalt } from '@systemix/cipher';
+
+const salt = generateSalt(); // store alongside the ciphertext
+const key = await deriveKeyFromPassword('master password', salt);
+```
+
+## Key Management
+
+| Function                                             | Description                          |
+| ---------------------------------------------------- | ------------------------------------ |
+| `generateKeyBytes(length?)`                          | Random AES key — 16, 24, or 32 bytes |
+| `deriveKeyFromPassword(password, salt, iterations?)` | PBKDF2-SHA256 → 32-byte AES key      |
+| `generateSalt(length?)`                              | Random salt (min 8 bytes)            |
+
+## Try it
+
+[Open the Cipher demo](/cipher) to encrypt, decrypt, and tamper with ciphertexts interactively.

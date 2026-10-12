@@ -29,5 +29,11 @@
   // 🔧 Prettier Config Sync
   "prettier.useEditorConfig": true,
   "prettier.resolveGlobalModules": false,
+
+  // 🔧 TypeScript: always use the workspace version (7.x from node_modules),
+  // never a built-in/editor TypeScript
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": false,
+
   "cSpell.words": ["shahadathhs", "systemix"]
 }

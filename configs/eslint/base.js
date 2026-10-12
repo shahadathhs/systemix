@@ -52,8 +52,7 @@ export const baseConfig = defineConfig([
         ...globals.node,
       },
       parserOptions: {
-        project: true,
-        tsconfigRootDir: process.cwd(),
+        projectService: true,
       },
     },
     rules: {
