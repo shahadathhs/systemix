@@ -44,7 +44,7 @@ export default function PassphrasePage() {
   }, [options]);
 
   useEffect(() => {
-    void handleGenerate();
+    handleGenerate();
   }, [handleGenerate]);
 
   const copyToClipboard = () => {

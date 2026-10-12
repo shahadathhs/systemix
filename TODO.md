@@ -21,12 +21,12 @@ I want security features that use only Node.js built-ins and Web Crypto API. No 
 ### What I Can Do With Built-ins
 
 - Passwords, passphrases, tokens ✅ (done)
-- Hashing (scrypt, pbkdf2)
-- Encryption (AES-256-GCM, ChaCha20-Poly1305)
+- Hashing (scrypt, pbkdf2) ✅ (done — @systemix/hash)
+- Encryption (AES-256-GCM, ChaCha20-Poly1305) ✅ (done — @systemix/cipher, AES-GCM)
 - OTP (HOTP, TOTP)
-- Key pairs (EC, RSA, Ed25519)
-- Timing-safe comparison
-- Encoding (base64, hex, base64url)
+- Key pairs (EC, RSA, Ed25519) ✅ (partial — RSA in @systemix/token)
+- Timing-safe comparison ✅ (done — @systemix/hash, @systemix/token)
+- Encoding (base64, hex, base64url) ✅ (done — @systemix/token, @systemix/hash, @systemix/cipher)
 
 ### What I Can’t Do Without Native/External
 
@@ -43,11 +43,11 @@ I want security features that use only Node.js built-ins and Web Crypto API. No 
 
 Packages I want to add beyond password, passphrase, token, eslint, typescript:
 
-### 1. @systemix/hash
+### 1. @systemix/hash ✅ (done)
 
 Password hashing (PBKDF2, scrypt) via Web Crypto. Completes the auth flow: generate → hash → store → verify. Zero deps.
 
-### 2. @systemix/env
+### 2. @systemix/env ✅ (done)
 
 Typed env loading and validation. Parse, validate, type env vars at startup. Common need, low complexity.
 
@@ -55,15 +55,15 @@ Typed env loading and validation. Parse, validate, type env vars at startup. Com
 
 Input validation for API boundaries, config, user input. Schema validation, optional timing-safe checks.
 
-### 4. @systemix/cipher
+### 4. @systemix/cipher ✅ (done)
 
 AES-GCM encrypt/decrypt via Web Crypto. For encrypting sensitive data at rest (DB fields, config).
 
-### 5. @systemix/rate-limit
+### 5. @systemix/rate-limit ✅ (done)
 
 Rate limiting (in-memory or pluggable store). Express/Next middleware, API protection.
 
-### 6. @systemix/id
+### 6. @systemix/id ✅ (done)
 
 ID generation (UUID v4, ULID, nanoid-style). Non-secret identifiers for APIs, DBs.
 

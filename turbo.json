@@ -29,6 +29,14 @@
       "dependsOn": ["^lint"],
       "cache": false
     },
+    "demos#lint": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "demos#lint:fix": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
     "lint:fix": {
       "dependsOn": ["^lint:fix"],
       "cache": false

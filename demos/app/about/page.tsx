@@ -3,14 +3,13 @@
 import {
   ArrowLeft,
   ExternalLink,
-  Github,
-  Linkedin,
   Mail,
   FileText,
   PenLine,
   Shield,
   User,
 } from 'lucide-react';
+import { GithubIcon, LinkedinIcon } from '@/components/brand-icons';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 
@@ -151,12 +150,12 @@ export default function AboutPage() {
                   {
                     href: 'https://github.com/shahadathhs',
                     label: 'GitHub',
-                    icon: Github,
+                    icon: GithubIcon,
                   },
                   {
                     href: 'https://linkedin.com/in/shahadathhs',
                     label: 'LinkedIn',
-                    icon: Linkedin,
+                    icon: LinkedinIcon,
                   },
                   {
                     href: 'https://leetcode.com/u/shahadathhs/',

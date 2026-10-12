@@ -7,6 +7,10 @@ const docsSlugs = [
   'password',
   'passphrase',
   'token',
+  'hash',
+  'cipher',
+  'id',
+  'rate-limit',
   'eslint',
   'typescript',
   'runner',
@@ -40,6 +44,26 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
     description:
       'API reference for @systemix/token. Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities.',
   },
+  hash: {
+    title: '@systemix/hash',
+    description:
+      'API reference for @systemix/hash. Password hashing and verification with PBKDF2 and scrypt, built on Web Crypto and Node built-ins.',
+  },
+  cipher: {
+    title: '@systemix/cipher',
+    description:
+      'API reference for @systemix/cipher. Authenticated AES-256-GCM encryption and decryption for sensitive data at rest.',
+  },
+  id: {
+    title: '@systemix/id',
+    description:
+      'API reference for @systemix/id. UUID v4, ULID, and nanoid-style ID generation with crypto-grade randomness.',
+  },
+  'rate-limit': {
+    title: '@systemix/rate-limit',
+    description:
+      'API reference for @systemix/rate-limit. Fixed-window, sliding-window, and token-bucket rate limiting with Express middleware.',
+  },
   eslint: {
     title: '@systemix/eslint',
     description:
@@ -61,14 +85,18 @@ const docModules: Record<
   Slug,
   () => Promise<{ default: React.ComponentType }>
 > = {
-  '': () => import('@/docs/index.mdx'),
-  env: () => import('@/docs/env.mdx'),
-  password: () => import('@/docs/password.mdx'),
-  passphrase: () => import('@/docs/passphrase.mdx'),
-  token: () => import('@/docs/token.mdx'),
-  eslint: () => import('@/docs/eslint.mdx'),
-  typescript: () => import('@/docs/typescript.mdx'),
-  runner: () => import('@/docs/runner.mdx'),
+  '': () => import('../../../docs/index.mdx'),
+  env: () => import('../../../docs/env.mdx'),
+  password: () => import('../../../docs/password.mdx'),
+  passphrase: () => import('../../../docs/passphrase.mdx'),
+  token: () => import('../../../docs/token.mdx'),
+  hash: () => import('../../../docs/hash.mdx'),
+  cipher: () => import('../../../docs/cipher.mdx'),
+  id: () => import('../../../docs/id.mdx'),
+  'rate-limit': () => import('../../../docs/rate-limit.mdx'),
+  eslint: () => import('../../../docs/eslint.mdx'),
+  typescript: () => import('../../../docs/typescript.mdx'),
+  runner: () => import('../../../docs/runner.mdx'),
 };
 
 export async function generateMetadata({

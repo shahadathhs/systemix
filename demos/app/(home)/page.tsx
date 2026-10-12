@@ -2,15 +2,19 @@
 
 import {
   ArrowRight,
-  Github,
+  Fingerprint,
+  Gauge,
+  Hash,
   KeyRound,
   Lock,
+  LockKeyhole,
   Settings,
   Shield,
   ShieldCheck,
   Zap,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { GithubIcon } from '@/components/brand-icons';
 import Link from 'next/link';
 
 export default function Home() {
@@ -124,6 +128,34 @@ export default function Home() {
               href="/token"
               tag="@systemix/token"
             />
+            <PackageCard
+              title="Hash Playground"
+              description="Password hashing and verification with PBKDF2 and scrypt, built on Web Crypto and Node built-ins."
+              icon={Hash}
+              href="/hash"
+              tag="@systemix/hash"
+            />
+            <PackageCard
+              title="Cipher Demo"
+              description="Authenticated AES-256-GCM encryption and decryption for sensitive data at rest."
+              icon={LockKeyhole}
+              href="/cipher"
+              tag="@systemix/cipher"
+            />
+            <PackageCard
+              title="ID Generator"
+              description="UUID v4, ULID, and nanoid-style ID generation with crypto-grade randomness."
+              icon={Fingerprint}
+              href="/id"
+              tag="@systemix/id"
+            />
+            <PackageCard
+              title="Rate Limiter"
+              description="Fixed-window, sliding-window, and token-bucket rate limiting with Express middleware."
+              icon={Gauge}
+              href="/rate-limit"
+              tag="@systemix/rate-limit"
+            />
           </div>
         </div>
       </div>
@@ -148,7 +180,7 @@ const features = [
     name: 'Zero Dependencies',
     description:
       'Lightweight core with zero external production dependencies to minimize supply chain risks.',
-    icon: Github,
+    icon: GithubIcon,
   },
 ];
 

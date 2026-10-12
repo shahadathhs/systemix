@@ -1,0 +1,10 @@
+{
+  "extends": "@systemix/typescript/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "types": ["node"],
+    "rootDir": "."
+  },
+  "include": ["src/**/*.ts", "tsdown.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

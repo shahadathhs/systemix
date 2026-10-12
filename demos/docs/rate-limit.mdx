@@ -1,0 +1,82 @@
+# @systemix/rate-limit
+
+Rate limiting with fixed-window, sliding-window, and token-bucket algorithms, a pluggable store, and Express-compatible middleware. Zero dependencies.
+
+## Installation
+
+```bash
+pnpm add @systemix/rate-limit
+```
+
+## Basic Usage
+
+```typescript
+import { createRateLimiter } from '@systemix/rate-limit';
+
+const limiter = createRateLimiter({ limit: 5, windowMs: 60_000 });
+
+const result = limiter.limit('user:42');
+// → { success: true, limit: 5, remaining: 4, reset: 1700000000000, retryAfter: 0 }
+
+if (!result.success) {
+  console.log(`Retry in ${result.retryAfter}ms`);
+}
+```
+
+## Algorithms
+
+| Algorithm        | Behavior                                             | Best for                 |
+| ---------------- | ---------------------------------------------------- | ------------------------ |
+| `fixed-window`   | Counter resets every window — default, lowest memory | Simple request caps      |
+| `sliding-window` | Rolling log of timestamps — no boundary bursts       | Fair, smooth quotas      |
+| `token-bucket`   | Continuous refill — tolerates short bursts           | APIs with bursty traffic |
+
+## Express Middleware
+
+Dependency-free: works with Express, Next.js route handlers, and plain `http` via structural types. Emits standard `RateLimit-*` and `Retry-After` headers.
+
+```typescript
+import { expressRateLimit } from '@systemix/rate-limit';
+
+app.use(
+  '/api',
+  expressRateLimit({
+    limit: 100,
+    windowMs: 60_000,
+    statusCode: 429,
+    message: { error: 'Slow down!' },
+    keyGenerator: (req) => req.ip ?? 'unknown',
+  }),
+);
+```
+
+## Examples
+
+### Generic function wrapper
+
+```typescript
+import { createRateLimiter, withRateLimit } from '@systemix/rate-limit';
+
+const limiter = createRateLimiter({ limit: 10, windowMs: 60_000 });
+
+const getUser = withRateLimit(fetchUser, limiter, (userId) => userId);
+// throws RateLimitExceededError when the limit is hit
+```
+
+### Pluggable store
+
+Implement `RateLimitStore` (`get` / `set` / `delete` / `entries`) to back the limiter with Redis or a database:
+
+```typescript
+const limiter = createRateLimiter({
+  limit: 100,
+  windowMs: 60_000,
+  store: new RedisStore(),
+});
+```
+
+Other limiter methods: `peek(key)` (no hit recorded), `resetKey(key)`, `resetAll()`, and `sweep()` for expired-entry cleanup.
+
+## Try it
+
+[Open the Rate Limiter demo](/rate-limit) to send requests until you get blocked — then watch it recover.

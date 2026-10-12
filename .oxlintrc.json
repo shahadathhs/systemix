@@ -1,0 +1,57 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "typescript",
+    "unicorn",
+    "oxc",
+    "react",
+    "react-perf",
+    "nextjs",
+    "import",
+    "node",
+    "promise"
+  ],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "no-unused-vars": "off",
+    "typescript/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
+    "typescript/no-explicit-any": "off",
+    "typescript/no-namespace": "warn",
+    "typescript/no-empty-object-type": "warn",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": ["error", { "checksVoidReturn": false }],
+    "typescript/no-unsafe-call": "off",
+    "typescript/no-unsafe-member-access": "off",
+    "typescript/no-unsafe-assignment": "off",
+    "typescript/no-unsafe-argument": "off",
+    "typescript/no-unsafe-return": "off",
+    "typescript/consistent-generic-constructors": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/set-state-in-effect": "warn",
+    "react/purity": "warn",
+    "nextjs/no-html-link-for-pages": "off"
+  },
+  "overrides": [
+    {
+      "files": ["tests/**/*.mjs", "**/*.test.mjs"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.next/**",
+    "**/.turbo/**",
+    "**/coverage/**",
+    "**/tests/**",
+    ".husky/**",
+    "pnpm-lock.yaml"
+  ]
+}

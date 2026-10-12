@@ -17,6 +17,10 @@ Published to **npm** and **GitHub Packages**:
 [![@systemix/password](https://img.shields.io/npm/v/@systemix/password.svg)](https://www.npmjs.com/package/@systemix/password)
 [![@systemix/passphrase](https://img.shields.io/npm/v/@systemix/passphrase.svg)](https://www.npmjs.com/package/@systemix/passphrase)
 [![@systemix/token](https://img.shields.io/npm/v/@systemix/token.svg)](https://www.npmjs.com/package/@systemix/token)
+[![@systemix/hash](https://img.shields.io/npm/v/@systemix/hash.svg)](https://www.npmjs.com/package/@systemix/hash)
+[![@systemix/cipher](https://img.shields.io/npm/v/@systemix/cipher.svg)](https://www.npmjs.com/package/@systemix/cipher)
+[![@systemix/id](https://img.shields.io/npm/v/@systemix/id.svg)](https://www.npmjs.com/package/@systemix/id)
+[![@systemix/rate-limit](https://img.shields.io/npm/v/@systemix/rate-limit.svg)](https://www.npmjs.com/package/@systemix/rate-limit)
 [![@systemix/eslint](https://img.shields.io/npm/v/@systemix/eslint.svg)](https://www.npmjs.com/package/@systemix/eslint)
 [![@systemix/typescript](https://img.shields.io/npm/v/@systemix/typescript.svg)](https://www.npmjs.com/package/@systemix/typescript)
 [![@systemix/runner](https://img.shields.io/npm/v/@systemix/runner.svg)](https://www.npmjs.com/package/@systemix/runner)
@@ -28,7 +32,7 @@ Published to **npm** and **GitHub Packages**:
 ## ⚡ Quick Start
 
 ```bash
-pnpm add @systemix/env @systemix/password @systemix/passphrase @systemix/token
+pnpm add @systemix/env @systemix/password @systemix/passphrase @systemix/token @systemix/hash @systemix/cipher @systemix/id @systemix/rate-limit
 ```
 
 ```typescript
@@ -36,6 +40,14 @@ import { load } from '@systemix/env';
 import { generatePassword } from '@systemix/password';
 import { generatePassphrase } from '@systemix/passphrase';
 import { generateToken } from '@systemix/token';
+import { hashPassword, verifyPassword } from '@systemix/hash';
+import {
+  encryptString,
+  decryptString,
+  generateKeyBytes,
+} from '@systemix/cipher';
+import { generateId } from '@systemix/id';
+import { createRateLimiter } from '@systemix/rate-limit';
 
 // Typed env vars
 const env = load({ PORT: { type: 'number', default: 3000 } });
@@ -51,6 +63,22 @@ console.log(generatePassphrase({ wordCount: 4 }));
 // API key / session token
 console.log(generateToken({ byteLength: 32, charset: 'hex' }));
 // → "a1b2c3d4e5f6..."
+
+// Hash and verify a password
+const encoded = await hashPassword('hunter2');
+await verifyPassword('hunter2', encoded); // → true
+
+// Authenticated encryption
+const key = generateKeyBytes();
+const ciphertext = await encryptString('sensitive data', key);
+await decryptString(ciphertext, key); // → "sensitive data"
+
+// Non-secret IDs
+console.log(generateId()); // → "V1StGXR8_Z5jdHi6B-myT"
+
+// Rate limiting
+const limiter = createRateLimiter({ limit: 100, windowMs: 60_000 });
+limiter.limit('user:42'); // → { success: true, remaining: 99, ... }
 ```
 
 [**Live demos** →](https://systemix.vercel.app)
@@ -65,6 +93,10 @@ console.log(generateToken({ byteLength: 32, charset: 'hex' }));
 | [`@systemix/password`](packages/password) · [npm](https://www.npmjs.com/package/@systemix/password)       | Cryptographically secure password generator with character guarantees and entropy tools. |
 | [`@systemix/passphrase`](packages/passphrase) · [npm](https://www.npmjs.com/package/@systemix/passphrase) | Human-readable passphrase generator with formatting and entropy tools.                   |
 | [`@systemix/token`](packages/token) · [npm](https://www.npmjs.com/package/@systemix/token)                | Secure token generator (hex, base64, base64url) and signed-token module.                 |
+| [`@systemix/hash`](packages/hash) · [npm](https://www.npmjs.com/package/@systemix/hash)                   | Password hashing and verification with PBKDF2 and scrypt.                                |
+| [`@systemix/cipher`](packages/cipher) · [npm](https://www.npmjs.com/package/@systemix/cipher)             | Authenticated AES-256-GCM encryption and decryption for data at rest.                    |
+| [`@systemix/id`](packages/id) · [npm](https://www.npmjs.com/package/@systemix/id)                         | UUID v4, ULID, and nanoid-style ID generation with crypto-grade randomness.              |
+| [`@systemix/rate-limit`](packages/rate-limit) · [npm](https://www.npmjs.com/package/@systemix/rate-limit) | Fixed-window, sliding-window, and token-bucket rate limiting with Express middleware.    |
 | [`@systemix/eslint`](configs/eslint) · [npm](https://www.npmjs.com/package/@systemix/eslint)              | ESLint v10 flat configs for JS, TS, React, Express, and Next.js.                         |
 | [`@systemix/typescript`](configs/typescript) · [npm](https://www.npmjs.com/package/@systemix/typescript)  | Base TypeScript configs for various environments.                                        |
 | [`@systemix/runner`](configs/runner) · [npm](https://www.npmjs.com/package/@systemix/runner)              | Minimal test runner with assert, assertThrows, createRunner, runSuites.                  |
@@ -72,8 +104,8 @@ console.log(generateToken({ byteLength: 32, charset: 'hex' }));
 ### Installation
 
 ```bash
-# Utilities (env, password, passphrase, token generators)
-pnpm add @systemix/env @systemix/password @systemix/passphrase @systemix/token
+# Utilities (env, password, passphrase, token, hash, cipher, id, rate-limit)
+pnpm add @systemix/env @systemix/password @systemix/passphrase @systemix/token @systemix/hash @systemix/cipher @systemix/id @systemix/rate-limit
 
 # Configs (ESLint flat config, TypeScript tsconfig, test runner)
 pnpm add -D @systemix/eslint @systemix/typescript @systemix/runner
@@ -82,14 +114,14 @@ pnpm add -D @systemix/eslint @systemix/typescript @systemix/runner
 With npm:
 
 ```bash
-npm install @systemix/env @systemix/password @systemix/passphrase @systemix/token
+npm install @systemix/env @systemix/password @systemix/passphrase @systemix/token @systemix/hash @systemix/cipher @systemix/id @systemix/rate-limit
 npm install -D @systemix/eslint @systemix/typescript @systemix/runner
 ```
 
 From GitHub Packages (add to `.npmrc`: `@shahadathhs:registry=https://npm.pkg.github.com`):
 
 ```bash
-pnpm add @shahadathhs/env @shahadathhs/password @shahadathhs/passphrase @shahadathhs/token
+pnpm add @shahadathhs/env @shahadathhs/password @shahadathhs/passphrase @shahadathhs/token @shahadathhs/hash @shahadathhs/cipher @shahadathhs/id @shahadathhs/rate-limit
 pnpm add -D @shahadathhs/eslint @shahadathhs/typescript @shahadathhs/runner
 ```
 

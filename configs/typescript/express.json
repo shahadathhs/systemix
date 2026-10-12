@@ -3,7 +3,8 @@
   "display": "Express",
   "extends": "./base.json",
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "ES2023"
   }
 }
