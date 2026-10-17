@@ -46,10 +46,10 @@ export default function IdPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
           ID Generator
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
+        <p className="mt-2 text-sm text-muted leading-relaxed">
           Unique, non-secret identifiers with bias-free crypto-grade randomness.
           ULIDs sort chronologically; UUIDs follow RFC 9562.
         </p>
@@ -66,21 +66,19 @@ export default function IdPage() {
               className={cn(
                 'p-3 border text-left transition-colors cursor-pointer',
                 kind === k.id
-                  ? 'border-zinc-900 bg-zinc-50'
-                  : 'border-zinc-200 hover:bg-zinc-50',
+                  ? 'border-accent bg-sunken'
+                  : 'border-line hover:bg-sunken',
               )}
             >
               <div
                 className={cn(
                   'font-mono text-sm font-medium',
-                  kind === k.id ? 'text-zinc-950' : 'text-zinc-700',
+                  kind === k.id ? 'text-ink' : 'text-muted',
                 )}
               >
                 {k.label}
               </div>
-              <div className="text-xs text-zinc-500 mt-0.5">
-                {k.description}
-              </div>
+              <div className="text-xs text-faint mt-0.5">{k.description}</div>
             </button>
           ))}
         </div>
@@ -89,7 +87,7 @@ export default function IdPage() {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="label">Size</span>
-              <span className="text-sm font-mono text-zinc-950">{size}</span>
+              <span className="text-sm font-mono text-ink">{size}</span>
             </div>
             <input
               type="range"
@@ -97,7 +95,7 @@ export default function IdPage() {
               max="64"
               value={size}
               onChange={(e) => setSize(parseInt(e.target.value))}
-              className="w-full accent-zinc-900 cursor-pointer"
+              className="w-full accent-ink cursor-pointer"
             />
           </div>
         )}
@@ -126,13 +124,13 @@ export default function IdPage() {
 
       {/* Results */}
       {ids.length > 0 && (
-        <div className="panel mt-4 divide-y divide-zinc-100">
+        <div className="panel mt-4 divide-y divide-line">
           {ids.map((item, index) => (
             <div
               key={`${item.id}-${index}`}
-              className="group flex items-center justify-between gap-4 px-4 py-3 hover:bg-zinc-50 transition-colors"
+              className="group flex items-center justify-between gap-4 px-4 py-3 hover:bg-sunken transition-colors"
             >
-              <code className="text-[13px] font-mono text-zinc-900 truncate">
+              <code className="text-[13px] font-mono text-ink truncate">
                 {item.id}
               </code>
               <div className="flex items-center gap-2 shrink-0">
@@ -140,9 +138,7 @@ export default function IdPage() {
                   <span
                     className={cn(
                       'text-[10px] font-mono px-1.5 py-0.5 rounded border',
-                      item.valid
-                        ? 'text-emerald-700 border-emerald-200 bg-emerald-50'
-                        : 'text-red-700 border-red-200 bg-red-50',
+                      item.valid ? 'chip-ok' : 'chip-err',
                     )}
                   >
                     {item.valid ? 'valid v4' : 'invalid'}
@@ -151,7 +147,7 @@ export default function IdPage() {
                 <button
                   type="button"
                   onClick={() => copyAt(index)}
-                  className="text-zinc-400 hover:text-zinc-950 transition-colors"
+                  className="text-faint hover:text-ink transition-colors"
                 >
                   {copiedIndex === index ? (
                     <Check className="size-3.5 text-emerald-600" />

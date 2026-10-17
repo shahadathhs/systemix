@@ -56,10 +56,10 @@ export default function PasswordPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
           Password Generator
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
+        <p className="mt-2 text-sm text-muted leading-relaxed">
           Cryptographically secure passwords with per-class guarantees.
         </p>
       </div>
@@ -67,7 +67,7 @@ export default function PasswordPage() {
       {/* Output */}
       <div className="panel p-6">
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-          <code className="text-lg font-mono font-medium text-zinc-950 break-all tracking-wide selection:bg-zinc-200 min-w-0">
+          <code className="text-lg font-mono font-medium text-ink break-all tracking-wide selection:bg-[var(--bg-sunken)] min-w-0">
             {password}
           </code>
           <div className="flex gap-2 shrink-0">
@@ -93,10 +93,9 @@ export default function PasswordPage() {
             </button>
           </div>
         </div>
-        <div className="mt-5 pt-4 border-t border-zinc-100 flex items-center gap-2 text-sm text-zinc-600">
+        <div className="mt-5 pt-4 border-t border-line flex items-center gap-2 text-sm text-muted">
           Entropy:{' '}
-          <span className="font-mono text-zinc-950">{entropy.toFixed(1)}</span>{' '}
-          bits
+          <span className="font-mono text-ink">{entropy.toFixed(1)}</span> bits
         </div>
       </div>
 
@@ -105,9 +104,7 @@ export default function PasswordPage() {
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <span className="label">Length</span>
-            <span className="text-sm font-mono text-zinc-950">
-              {options.length}
-            </span>
+            <span className="text-sm font-mono text-ink">{options.length}</span>
           </div>
           <input
             type="range"
@@ -117,7 +114,7 @@ export default function PasswordPage() {
             onChange={(e) =>
               setOptions({ ...options, length: parseInt(e.target.value) })
             }
-            className="w-full accent-zinc-900 cursor-pointer"
+            className="w-full accent-ink cursor-pointer"
           />
         </div>
       </div>
@@ -146,9 +143,9 @@ export default function PasswordPage() {
                   onChange={(e) =>
                     setOptions({ ...options, [key]: e.target.checked })
                   }
-                  className="size-4 rounded border-zinc-300 text-zinc-900 accent-zinc-900 cursor-pointer"
+                  className="size-4 rounded border-line-strong text-ink accent-ink cursor-pointer"
                 />
-                <span className="text-sm text-zinc-700 group-hover:text-zinc-950 transition-colors">
+                <span className="text-sm text-muted group-hover:text-ink transition-colors">
                   {label}
                 </span>
               </label>
@@ -174,7 +171,7 @@ export default function PasswordPage() {
                   !enabled && 'opacity-40 pointer-events-none',
                 )}
               >
-                <span className="text-sm text-zinc-700">{label}</span>
+                <span className="text-sm text-muted">{label}</span>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
@@ -188,7 +185,7 @@ export default function PasswordPage() {
                   >
                     −
                   </button>
-                  <span className="w-6 text-center text-sm font-mono text-zinc-950">
+                  <span className="w-6 text-center text-sm font-mono text-ink">
                     {options[key]}
                   </span>
                   <button

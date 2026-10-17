@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Logo } from '@/components/Logo';
 
 const columns = [
   {
@@ -50,6 +51,10 @@ export function SiteFooter() {
   return (
     <footer className="border-t" style={{ borderColor: 'var(--line)' }}>
       <div className="max-w-[1280px] mx-auto border-x px-6 sm:px-10 py-14">
+        <div className="flex items-center gap-2.5 mb-10">
+          <Logo size={20} />
+          <span className="font-display text-sm text-ink">Systemix</span>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {columns.map((col) => (
             <div key={col.title}>
@@ -60,7 +65,7 @@ export function SiteFooter() {
                     {link.href.startsWith('/') ? (
                       <Link
                         href={link.href}
-                        className="text-sm text-zinc-600 hover:text-zinc-950 transition-colors"
+                        className="text-sm text-muted hover:text-ink transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -69,7 +74,7 @@ export function SiteFooter() {
                         href={link.href}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-sm text-zinc-600 hover:text-zinc-950 transition-colors"
+                        className="text-sm text-muted hover:text-ink transition-colors"
                       >
                         {link.label}
                       </a>
@@ -85,7 +90,7 @@ export function SiteFooter() {
           className="mt-14 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3"
           style={{ borderColor: 'var(--line)' }}
         >
-          <span className="text-xs text-zinc-500">
+          <span className="text-xs text-faint">
             © {new Date().getFullYear()} Shahadath Hossen Sajib. MIT License.
           </span>
           <span className="hud">made for builders · zero deps</span>

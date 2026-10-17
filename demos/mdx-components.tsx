@@ -5,8 +5,7 @@ import { CodeBlock } from '@/components/CodeBlock';
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     a: ({ href, children, ...props }) => {
-      const cls =
-        'text-zinc-950 underline underline-offset-2 hover:no-underline';
+      const cls = 'text-ink underline underline-offset-2 hover:no-underline';
       if (href?.startsWith('/')) {
         return (
           <Link href={href} className={cls} {...props}>
@@ -28,41 +27,43 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     h1: (props) => (
       <h1
-        className="font-display text-4xl text-zinc-950 mb-5 scroll-mt-20"
+        className="font-display text-4xl text-ink mb-5 scroll-mt-20"
         {...props}
       />
     ),
     h2: (props) => (
       <h2
-        className="font-display text-2xl text-zinc-950 mt-12 mb-4 scroll-mt-20 pt-6 border-t"
-        style={{ borderColor: 'var(--line)' }}
+        className="font-display text-2xl text-ink mt-12 mb-4 scroll-mt-20 pt-6 border-t border-line"
         {...props}
       />
     ),
     h3: (props) => (
       <h3
-        className="font-display text-lg text-zinc-950 mt-8 mb-2 scroll-mt-20"
+        className="font-display text-lg text-ink mt-8 mb-2 scroll-mt-20"
         {...props}
       />
     ),
     p: ({ children }) => (
-      <p className="text-zinc-600 leading-7 mb-4">{children}</p>
+      <p className="text-muted leading-7 mb-4">{children}</p>
     ),
     ul: ({ children }) => (
-      <ul className="list-disc pl-5 text-zinc-600 space-y-1.5 mb-4 leading-7">
+      <ul className="list-disc pl-5 text-muted space-y-1.5 mb-4 leading-7">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal pl-5 text-zinc-600 space-y-1.5 mb-4 leading-7">
+      <ol className="list-decimal pl-5 text-muted space-y-1.5 mb-4 leading-7">
         {children}
       </ol>
     ),
     li: ({ children }) => <li className="pl-1">{children}</li>,
     code: ({ children }) => (
       <code
-        className="px-1.5 py-0.5 border font-mono text-[0.8125rem] text-zinc-900"
-        style={{ borderColor: 'var(--line)', background: 'var(--bg-sunken)' }}
+        className="px-1.5 py-0.5 border font-mono text-[0.8125rem] text-ink"
+        style={{
+          borderColor: 'var(--line-strong)',
+          background: 'var(--bg-sunken)',
+        }}
       >
         {children}
       </code>
@@ -70,7 +71,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     pre: (props) => <CodeBlock {...props} />,
     table: ({ children }) => (
       <div
-        className="overflow-x-auto mb-6 border"
+        className="overflow-x-auto mb-6 border border-line"
         style={{ borderColor: 'var(--line)' }}
       >
         <table className="min-w-full text-sm">{children}</table>
@@ -78,8 +79,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     thead: ({ children }) => (
       <thead
-        className="border-b bg-white/60"
-        style={{ borderColor: 'var(--line)' }}
+        className="border-b border-line bg-sunken/60"
+        style={{ borderColor: 'var(--line-strong)' }}
       >
         {children}
       </thead>
@@ -89,24 +90,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </tbody>
     ),
-    tr: ({ children }) => <tr>{children}</tr>,
     th: ({ children }) => (
-      <th className="hud px-4 py-2.5 text-left normal-case">{children}</th>
+      <th className="hud px-4 py-2.5 text-left">{children}</th>
     ),
     td: ({ children }) => (
-      <td className="px-4 py-2.5 text-zinc-700 align-top">{children}</td>
+      <td className="px-4 py-2.5 text-muted align-top">{children}</td>
     ),
     blockquote: ({ children }) => (
       <blockquote
-        className="border-l-2 pl-4 my-5 text-zinc-600"
+        className="border-l-2 pl-4 my-5 text-muted"
         style={{ borderColor: 'var(--accent)' }}
       >
         {children}
       </blockquote>
     ),
-    hr: () => (
-      <hr className="my-8 border-t" style={{ borderColor: 'var(--line)' }} />
-    ),
+    hr: () => <hr className="my-8 border-t border-line" />,
     ...components,
   };
 }

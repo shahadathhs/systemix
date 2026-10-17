@@ -57,18 +57,19 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
           <div className="hud mb-2.5 px-2">{section.title}</div>
           <ul>
             {section.items.map(({ href, label }) => {
-              const active =
-                pathname === href || pathname?.startsWith(href + '/');
+              // Sidebar items map 1:1 to pages — exact match only, so
+              // /docs/cipher never highlights the /docs introduction too
+              const active = pathname === href;
               return (
                 <li key={href}>
                   <Link
                     href={href}
                     onClick={onNavigate}
                     className={cn(
-                      'block py-1.5 px-2 text-sm transition-colors border-l-2 -ml-px',
+                      'block py-1.5 px-2 text-sm transition-colors border-l-2 -ml-px hover:bg-sunken',
                       active
-                        ? 'text-zinc-950 font-medium'
-                        : 'text-zinc-500 hover:text-zinc-950',
+                        ? 'text-ink font-medium'
+                        : 'text-faint hover:text-ink',
                     )}
                     style={
                       active
@@ -88,7 +89,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
         href="https://github.com/shahadathhs/systemix"
         target="_blank"
         rel="noreferrer"
-        className="flex items-center gap-2 py-1.5 px-2 text-sm text-zinc-500 hover:text-zinc-950 transition-colors"
+        className="flex items-center gap-2 py-1.5 px-2 text-sm text-faint hover:text-ink transition-colors"
       >
         <GithubIcon className="size-3.5" />
         GitHub
@@ -135,11 +136,11 @@ export function Sidebar({
         style={{ background: 'var(--bg)', borderColor: 'var(--line)' }}
       >
         <div className="flex items-center justify-between mb-5 lg:hidden">
-          <span className="font-display text-sm text-zinc-950">Systemix</span>
+          <span className="font-display text-sm text-ink">Systemix</span>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="p-2 text-zinc-500 hover:text-zinc-950 hover:bg-zinc-950/5"
+            className="p-2 text-faint hover:text-ink hover:bg-sunken"
             aria-label="Close menu"
           >
             <X className="size-5" />

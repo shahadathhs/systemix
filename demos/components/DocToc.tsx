@@ -107,17 +107,15 @@ export function DocToc({ scrollContainerRef }: DocTocProps) {
           {items.map((item) => (
             <li
               key={item.id}
-              className={
-                item.level === 3 ? 'pl-3 border-l border-zinc-200' : ''
-              }
+              className={item.level === 3 ? 'pl-3 border-l border-line' : ''}
             >
               <button
                 type="button"
                 onClick={(e) => handleClick(e, item.id)}
                 className={`block w-full text-left py-0.5 transition-colors cursor-pointer ${
                   activeId === item.id
-                    ? 'text-zinc-950 font-medium'
-                    : 'text-zinc-500 hover:text-zinc-950'
+                    ? 'text-ink font-medium'
+                    : 'text-faint hover:text-ink'
                 }`}
               >
                 {item.text}

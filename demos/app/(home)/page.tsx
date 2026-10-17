@@ -60,10 +60,8 @@ function SectionHeader({
   return (
     <div className="flex items-baseline gap-4 mb-6">
       <span className="hud-accent hud">{index}</span>
-      <h2 className="font-display text-3xl text-zinc-950">{title}</h2>
-      {sub && (
-        <span className="hidden sm:block text-sm text-zinc-500">{sub}</span>
-      )}
+      <h2 className="font-display text-3xl text-ink">{title}</h2>
+      {sub && <span className="hidden sm:block text-sm text-faint">{sub}</span>}
     </div>
   );
 }
@@ -82,17 +80,17 @@ export default function Home() {
             style={{ borderColor: 'var(--line-strong)' }}
           >
             <span className="hud hud-accent">01</span>
-            <span className="font-display text-sm text-zinc-950">Systemix</span>
+            <span className="font-display text-sm text-ink">Systemix</span>
           </div>
 
-          <h1 className="font-display mt-7 text-5xl sm:text-6xl leading-[1.02] text-zinc-950">
+          <h1 className="font-display mt-7 text-5xl sm:text-6xl leading-[1.02] text-ink">
             Security primitives,
             <br />
             <span style={{ color: 'var(--accent)' }}>engineered</span> for
             modern JS.
           </h1>
 
-          <p className="mt-6 text-lg leading-relaxed text-zinc-600 max-w-xl mx-auto">
+          <p className="mt-6 text-lg leading-relaxed text-muted max-w-xl mx-auto">
             Typed env loading, crypto-grade randomness, password hashing,
             authenticated encryption, IDs and rate limiting. Eleven packages,
             zero runtime dependencies.
@@ -166,10 +164,10 @@ await verifyPassword(password, encoded); // true`}
                     docs →
                   </span>
                 </div>
-                <div className="font-mono text-[13px] font-medium text-zinc-950 mt-3">
+                <div className="font-mono text-[13px] font-medium text-ink mt-3">
                   {pkg.name.replace('@systemix/', '')}
                 </div>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-zinc-600">
+                <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
                   {pkg.description}
                 </p>
               </Link>
@@ -197,10 +195,10 @@ await verifyPassword(password, encoded); // true`}
                 className="ruled-cell block group"
               >
                 <span className="hud">{String(i + 1).padStart(2, '0')}</span>
-                <div className="font-mono text-[13px] font-medium text-zinc-950 mt-3">
+                <div className="font-mono text-[13px] font-medium text-ink mt-3">
                   {tool.name}
                 </div>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-zinc-600">
+                <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
                   {tool.description}
                 </p>
               </Link>
@@ -233,9 +231,7 @@ await verifyPassword(password, encoded); // true`}
                 href={href}
                 className="ruled-cell group flex items-center justify-between"
               >
-                <span className="text-sm font-medium text-zinc-900">
-                  {label}
-                </span>
+                <span className="text-sm font-medium text-ink">{label}</span>
                 <span className="hud hud-accent opacity-0 group-hover:opacity-100 transition-opacity">
                   →
                 </span>

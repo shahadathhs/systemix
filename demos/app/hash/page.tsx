@@ -57,10 +57,10 @@ export default function HashPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
           Hash Playground
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
+        <p className="mt-2 text-sm text-muted leading-relaxed">
           Hash and verify passwords with PBKDF2. The encoded hash embeds the
           algorithm, parameters, and salt — store it as a single string.
           Verification compares in constant time.
@@ -71,9 +71,9 @@ export default function HashPage() {
       <div className="panel p-6">
         <div className="flex items-center justify-between mb-3">
           <span className="label">Encoded hash</span>
-          {busy && <Loader2 className="size-4 text-zinc-400 animate-spin" />}
+          {busy && <Loader2 className="size-4 text-faint animate-spin" />}
         </div>
-        <code className="block text-[13px] font-mono text-zinc-800 break-all min-h-[2.5rem]">
+        <code className="block text-[13px] font-mono text-ink break-all min-h-[2.5rem]">
           {encoded || '…'}
         </code>
         <div className="mt-4 flex justify-end">
@@ -113,7 +113,7 @@ export default function HashPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-zinc-500 hover:text-zinc-950 px-2 py-1"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-faint hover:text-ink px-2 py-1"
               >
                 {showPassword ? 'Hide' : 'Show'}
               </button>
@@ -123,7 +123,7 @@ export default function HashPage() {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="label">Iterations</span>
-              <span className="text-sm font-mono text-zinc-950">
+              <span className="text-sm font-mono text-ink">
                 {iterations.toLocaleString()}
               </span>
             </div>
@@ -134,7 +134,7 @@ export default function HashPage() {
               step="10000"
               value={iterations}
               onChange={(e) => setIterations(parseInt(e.target.value))}
-              className="w-full accent-zinc-900 cursor-pointer"
+              className="w-full accent-ink cursor-pointer"
             />
           </div>
 
@@ -202,19 +202,19 @@ export default function HashPage() {
           </button>
 
           {verifyState === 'match' && (
-            <div className="flex items-center gap-2 text-sm text-emerald-700 border border-emerald-200 bg-emerald-50 px-3 py-2.5">
+            <div className="flex items-center gap-2 text-sm status-ok border px-3 py-2.5">
               <Check className="size-4" />
               Password matches
             </div>
           )}
           {verifyState === 'mismatch' && (
-            <div className="flex items-center gap-2 text-sm text-red-700 border border-red-200 bg-red-50 px-3 py-2.5">
+            <div className="flex items-center gap-2 text-sm status-err border px-3 py-2.5">
               <X className="size-4" />
               Password does not match
             </div>
           )}
 
-          <p className="text-xs text-zinc-500 leading-relaxed pt-1">
+          <p className="text-xs text-faint leading-relaxed pt-1">
             scrypt is supported in Node.js only — this browser demo uses PBKDF2.
           </p>
         </div>

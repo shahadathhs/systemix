@@ -2,18 +2,21 @@
 
 import { Check, Copy } from 'lucide-react';
 import { useCallback, useState } from 'react';
+import { highlight } from '@/lib/highlight';
 
 /**
- * Terminal-window code block: sharp dark body with HUD chrome.
- * The visual anchor for the hero and all code on the site.
+ * Terminal-window code block — HUD chrome, theme-aware surfaces,
+ * syntax highlighting, hover-reveal copy.
  */
 export function CodeWindow({
   code,
   filename,
+  lang = 'ts',
   className = '',
 }: {
   code: string;
   filename?: string;
+  lang?: string;
   className?: string;
 }) {
   const [copied, setCopied] = useState(false);
@@ -27,21 +30,42 @@ export function CodeWindow({
 
   return (
     <div
-      className={`border border-zinc-800 bg-zinc-950 overflow-hidden ${className}`}
+      className={`group border overflow-hidden ${className}`}
+      style={{
+        background: 'var(--code-bg)',
+        borderColor: 'var(--code-border)',
+      }}
     >
-      <div className="flex items-center gap-2 px-4 h-9 border-b border-zinc-800/80 bg-zinc-900/60">
-        <span className="size-2 bg-zinc-700" />
-        <span className="size-2 bg-zinc-700" />
-        <span className="size-2 bg-zinc-700" />
+      {/* Title bar */}
+      <div
+        className="flex items-center gap-2 px-4 h-9 border-b"
+        style={{
+          background: 'var(--code-chrome)',
+          borderColor: 'var(--code-border)',
+        }}
+      >
+        <span className="size-2 rounded-full bg-zinc-500" />
+        <span className="size-2 rounded-full bg-zinc-500" />
+        <span className="size-2 rounded-full bg-zinc-500" />
         {filename && (
-          <span className="ml-2 font-mono text-[11px] text-zinc-500">
+          <span
+            className="ml-2 font-mono text-[11px]"
+            style={{ color: 'var(--code-fg)', opacity: 0.65 }}
+          >
             {filename}
           </span>
         )}
+        <span
+          className="ml-auto font-mono text-[10px] uppercase tracking-[0.15em] select-none"
+          style={{ color: 'var(--code-fg)', opacity: 0.45 }}
+        >
+          {lang}
+        </span>
         <button
           type="button"
           onClick={copy}
-          className="ml-auto p-1.5 text-zinc-500 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
+          className="p-1.5 transition-opacity hover:bg-white/10 opacity-0 group-hover:opacity-60 focus-visible:opacity-60"
+          style={{ color: 'var(--code-fg)' }}
           title="Copy code"
         >
           {copied ? (
@@ -52,8 +76,12 @@ export function CodeWindow({
         </button>
       </div>
 
-      <pre className="p-5 overflow-x-auto text-[13px] leading-relaxed text-zinc-100">
-        <code>{code}</code>
+      {/* Body */}
+      <pre
+        className="p-5 overflow-x-auto text-[13px] leading-relaxed"
+        style={{ color: 'var(--code-fg)' }}
+      >
+        <code>{highlight(code, lang)}</code>
       </pre>
     </div>
   );

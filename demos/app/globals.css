@@ -1,27 +1,65 @@
 @import 'tailwindcss';
 
 :root {
-  /* Warm paper + ink — technical-drawing palette */
-  --bg: #f2f1ee;
-  --bg-raised: #faf9f7;
-  --bg-sunken: #e9e8e4;
-  --ink: #101014;
-  --ink-strong: #000000;
-  --muted: rgba(16, 16, 20, 0.62);
-  --faint: rgba(16, 16, 20, 0.42);
-  --line: rgba(16, 16, 20, 0.16);
-  --line-strong: rgba(16, 16, 20, 0.4);
-  --accent: #0e7a4e;
-  --accent-ink: #0a5e3c;
-  --invert-bg: #101014;
-  --invert-fg: #f2f1ee;
+  /*
+   * Neutral tiers: shadcn/ui "zinc" theme — the default, cool and crisp.
+   * Brand accent (secure green) layered on top, used sparingly.
+   */
+  --bg: #fafafa; /* zinc-50 */
+  --bg-raised: #ffffff;
+  --bg-sunken: #f4f4f5; /* zinc-100 */
+  --ink: #18181b; /* zinc-950 */
+  --muted: #52525b; /* zinc-600 */
+  --faint: #71717a; /* zinc-500 */
+  --line: #e4e4e7; /* zinc-200 */
+  --line-strong: #d4d4d8; /* zinc-300 */
+  --accent: #15803d; /* green-700 */
+  --accent-ink: #166534; /* green-800 */
+  --invert-bg: #18181b; /* primary */
+  --invert-fg: #fafafa; /* primary-fg */
 
   --font-sans:
-    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
+    var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, sans-serif;
   --font-mono:
-    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas,
-    'Liberation Mono', 'Courier New', monospace;
+    var(--font-fragment), ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* shadcn zinc dark — cool near-black, proper lift tiers */
+[data-theme='dark'] {
+  --bg: #09090b; /* zinc-950 */
+  --bg-raised: #131316;
+  --bg-sunken: #050506;
+  --ink: #f4f4f5; /* zinc-100 */
+  --muted: #a1a1aa; /* zinc-400 */
+  --faint: #71717a; /* zinc-500 */
+  --line: #27272a; /* zinc-800 */
+  --line-strong: #3f3f46; /* zinc-700 */
+  --accent: #4ade80; /* green-400 */
+  --accent-ink: #86efac; /* green-300 */
+  --invert-bg: #f4f4f5; /* primary */
+  --invert-fg: #09090b; /* primary-fg */
+}
+
+:root {
+  color-scheme: light;
+}
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* Code surfaces — dark block on light page; raised surface on dark page */
+:root {
+  --code-bg: #0a0a0c;
+  --code-chrome: #131316;
+  --code-border: #26262b;
+  --code-fg: #e9e9ec;
+}
+[data-theme='dark'] {
+  --code-bg: #101013;
+  --code-chrome: #17171b;
+  --code-border: var(--line-strong);
+  --code-fg: #ececef;
 }
 
 body {
@@ -29,12 +67,28 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
 code,
 pre,
 kbd {
   font-family: var(--font-mono);
+}
+
+input[type='range'] {
+  accent-color: var(--accent);
+}
+
+/* Code inside pre renders plain — never inherit the inline-code chip style */
+pre code {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: inherit;
+  font-size: inherit;
 }
 
 a:not([class]) {
@@ -49,7 +103,17 @@ a:not([class]):hover {
 
 ::selection {
   background: var(--accent);
-  color: var(--invert-fg);
+  color: #ffffff;
+}
+
+/* Everything clickable gets a pointer — Tailwind v4 preflight doesn't */
+a,
+button:not(:disabled),
+[role='button'],
+summary,
+label:has(> input),
+select {
+  cursor: pointer;
 }
 
 @theme inline {
@@ -66,12 +130,11 @@ a:not([class]):hover {
 }
 
 @layer components {
-  /* Display face — expanded, tight, medium weight */
+  /* Display face — tight and heavy */
   .font-display {
     font-family: var(--font-sans);
-    font-stretch: 118%;
-    font-weight: 620;
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    letter-spacing: -0.035em;
   }
 
   /* HUD micro-label — mono, uppercase, wide tracking */
@@ -80,20 +143,20 @@ a:not([class]):hover {
     color: var(--faint);
   }
   .hud-accent {
-    color: var(--accent);
+    color: var(--accent-ink);
   }
 
   /* Sharp hairline panel */
   .panel {
-    @apply border bg-white;
+    @apply border bg-raised;
     border-color: var(--line);
   }
 
   /* Form controls — sharp, hairline */
   .field {
     @apply w-full px-3 py-2 text-sm transition-colors focus:outline-none disabled:opacity-50;
-    @apply border bg-white;
-    border-color: var(--line);
+    @apply border bg-raised;
+    border-color: var(--line-strong);
     color: var(--ink);
   }
   .field::placeholder {
@@ -113,7 +176,7 @@ a:not([class]):hover {
     color: var(--invert-fg);
   }
   .btn-primary:hover {
-    background: #2a2a30;
+    opacity: 0.85;
   }
   .btn-ghost {
     @apply border;
@@ -138,9 +201,8 @@ a:not([class]):hover {
   .section-title {
     @apply text-2xl;
     font-family: var(--font-sans);
-    font-stretch: 118%;
-    font-weight: 620;
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    letter-spacing: -0.035em;
     color: var(--ink);
   }
   .section-title::after {
@@ -189,16 +251,6 @@ a:not([class]):hover {
     background: var(--bg-raised);
   }
 
-  /* Section rule + eyebrow */
-  .rule-top {
-    position: relative;
-  }
-  .rule-top::before {
-    content: '';
-    @apply absolute inset-x-0 top-0 h-px;
-    background: var(--line-strong);
-  }
-
   /* Status chips */
   .chip-ok {
     @apply px-1.5 py-0.5 border font-mono text-[10px];
@@ -208,9 +260,22 @@ a:not([class]):hover {
   }
   .chip-err {
     @apply px-1.5 py-0.5 border font-mono text-[10px];
-    color: #b3261e;
-    border-color: #b3261e;
+    color: #dc2626;
+    border-color: #dc2626;
     background: transparent;
+  }
+  [data-theme='dark'] .chip-err {
+    color: #f87171;
+    border-color: #f87171;
+  }
+  .status-ok {
+    color: var(--accent-ink);
+  }
+  .status-err {
+    color: #dc2626;
+  }
+  [data-theme='dark'] .status-err {
+    color: #f87171;
   }
 }
 

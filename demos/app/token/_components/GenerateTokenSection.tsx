@@ -47,13 +47,13 @@ export function GenerateTokenSection() {
 
   return (
     <section className="space-y-6">
-      <h2 className="text-sm font-semibold text-zinc-950">
-        <Shield className="w-5 h-5 text-zinc-400" />
+      <h2 className="text-sm font-semibold text-ink">
+        <Shield className="w-5 h-5 text-faint" />
         Generate Token
       </h2>
       <div className="panel relative p-8">
         <div className="flex flex-col sm:flex-row gap-4 items-start justify-between relative z-10">
-          <div className="font-mono text-lg sm:text-xl text-zinc-950 break-all tracking-wider min-w-0 flex-1 selection:bg-zinc-200">
+          <div className="font-mono text-lg sm:text-xl text-ink break-all tracking-wider min-w-0 flex-1 selection:bg-[var(--bg-sunken)]">
             {typeof token === 'string' ? (
               token
             ) : (
@@ -67,7 +67,7 @@ export function GenerateTokenSection() {
           <div className="flex gap-2 shrink-0">
             <button
               onClick={handleGenerate}
-              className="inline-flex items-center justify-center w-10 h-10 border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
+              className="inline-flex items-center justify-center w-10 h-10 border border-line-strong text-muted hover:bg-sunken hover:text-ink transition-colors"
               title="Regenerate"
               aria-label="Regenerate token"
             >
@@ -75,7 +75,7 @@ export function GenerateTokenSection() {
             </button>
             <button
               onClick={copyToClipboard}
-              className="inline-flex items-center justify-center gap-2 h-10 px-4 bg-zinc-900 hover:bg-zinc-700 text-zinc-950 text-sm font-medium transition-colors"
+              className="inline-flex items-center justify-center gap-2 h-10 px-4 bg-ink hover:bg-zinc-700 text-ink text-sm font-medium transition-colors"
             >
               {copied ? (
                 <Check className="w-5 h-5" />
@@ -87,19 +87,18 @@ export function GenerateTokenSection() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-6 items-center border-t border-zinc-100 pt-6">
+        <div className="mt-8 flex flex-wrap gap-6 items-center border-t border-line pt-6">
           <div className="flex items-center gap-2">
-            <Info className="w-4 h-4 text-zinc-400" />
-            <span className="text-sm text-zinc-600">
-              <span className="text-zinc-950 font-mono">{tokenLength}</span>{' '}
-              chars
+            <Info className="w-4 h-4 text-faint" />
+            <span className="text-sm text-muted">
+              <span className="text-ink font-mono">{tokenLength}</span> chars
             </span>
           </div>
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-emerald-600" />
-            <span className="text-sm text-zinc-600">
-              <span className="text-zinc-950 font-mono">{entropyBits}</span>{' '}
-              bits entropy
+            <span className="text-sm text-muted">
+              <span className="text-ink font-mono">{entropyBits}</span> bits
+              entropy
             </span>
           </div>
         </div>
@@ -108,10 +107,10 @@ export function GenerateTokenSection() {
           <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex justify-between">
-                <label className="text-sm font-medium text-zinc-600">
+                <label className="text-sm font-medium text-muted">
                   Byte Length
                 </label>
-                <span className="text-sm font-mono text-zinc-400">
+                <span className="text-sm font-mono text-faint">
                   {options.byteLength}
                 </span>
               </div>
@@ -126,14 +125,12 @@ export function GenerateTokenSection() {
                     byteLength: parseInt(e.target.value),
                   })
                 }
-                className="w-full h-2 accent-zinc-900 cursor-pointer"
+                className="w-full h-2 accent-ink cursor-pointer"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-600">
-                Charset
-              </label>
+              <label className="text-sm font-medium text-muted">Charset</label>
               <div className="flex flex-wrap gap-2">
                 {CHARSETS.map((c) => (
                   <button
@@ -142,8 +139,8 @@ export function GenerateTokenSection() {
                     className={cn(
                       'px-4 h-9 text-sm font-medium transition-colors',
                       options.charset === c
-                        ? 'bg-zinc-900 text-zinc-950'
-                        : 'bg-white border border-zinc-300 text-zinc-500 hover:bg-zinc-50',
+                        ? 'bg-ink text-ink'
+                        : 'bg-raised border border-line-strong text-faint hover:bg-sunken',
                     )}
                   >
                     {c}
@@ -153,7 +150,7 @@ export function GenerateTokenSection() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-600">Count</label>
+              <label className="text-sm font-medium text-muted">Count</label>
               <div className="flex gap-2">
                 {[1, 3, 5].map((n) => (
                   <button
@@ -162,8 +159,8 @@ export function GenerateTokenSection() {
                     className={cn(
                       'px-4 h-9 text-sm font-medium transition-colors',
                       options.count === n
-                        ? 'bg-zinc-900 text-zinc-950'
-                        : 'bg-white border border-zinc-300 text-zinc-500 hover:bg-zinc-50',
+                        ? 'bg-ink text-ink'
+                        : 'bg-raised border border-line-strong text-faint hover:bg-sunken',
                     )}
                   >
                     {n}
@@ -174,18 +171,18 @@ export function GenerateTokenSection() {
           </div>
 
           <div className="flex flex-col justify-center gap-4">
-            <div className="flex flex-col gap-1.5 text-sm text-zinc-600">
+            <div className="flex flex-col gap-1.5 text-sm text-muted">
               <p>
-                <strong className="text-zinc-950">hex</strong> — 2 chars/byte
-                (API keys)
+                <strong className="text-ink">hex</strong> — 2 chars/byte (API
+                keys)
               </p>
               <p>
-                <strong className="text-zinc-950">base64url</strong> — URL-safe
+                <strong className="text-ink">base64url</strong> — URL-safe
                 (sessions, cookies)
               </p>
               <p>
-                <strong className="text-zinc-950">alphanumeric</strong> — A–Z,
-                a–z, 0–9 only
+                <strong className="text-ink">alphanumeric</strong> — A–Z, a–z,
+                0–9 only
               </p>
             </div>
           </div>

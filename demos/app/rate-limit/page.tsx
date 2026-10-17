@@ -76,10 +76,10 @@ export default function RateLimitPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
           Rate Limiter
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
+        <p className="mt-2 text-sm text-muted leading-relaxed">
           Send requests until the limiter blocks you, then watch it recover.
           This is exactly what the middleware does to API traffic.
         </p>
@@ -98,19 +98,19 @@ export default function RateLimitPage() {
                 className={cn(
                   'p-3 border text-left transition-colors cursor-pointer',
                   algorithm === a.id
-                    ? 'border-zinc-900 bg-zinc-50'
-                    : 'border-zinc-200 hover:bg-zinc-50',
+                    ? 'border-accent bg-sunken'
+                    : 'border-line hover:bg-sunken',
                 )}
               >
                 <div
                   className={cn(
                     'text-sm font-medium',
-                    algorithm === a.id ? 'text-zinc-950' : 'text-zinc-700',
+                    algorithm === a.id ? 'text-ink' : 'text-muted',
                   )}
                 >
                   {a.label}
                 </div>
-                <div className="text-xs text-zinc-500 mt-0.5 leading-snug">
+                <div className="text-xs text-faint mt-0.5 leading-snug">
                   {a.hint}
                 </div>
               </button>
@@ -122,7 +122,7 @@ export default function RateLimitPage() {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="label">Limit</span>
-              <span className="text-sm font-mono text-zinc-950">{limit}</span>
+              <span className="text-sm font-mono text-ink">{limit}</span>
             </div>
             <input
               type="range"
@@ -130,7 +130,7 @@ export default function RateLimitPage() {
               max="20"
               value={limit}
               onChange={(e) => setLimit(parseInt(e.target.value))}
-              className="w-full accent-zinc-900 cursor-pointer"
+              className="w-full accent-ink cursor-pointer"
             />
           </div>
           <div className="space-y-2">
@@ -161,9 +161,9 @@ export default function RateLimitPage() {
             <div className="label">
               key: <span className="font-mono normal-case">{KEY}</span>
             </div>
-            <div className="text-3xl font-semibold tracking-tight text-zinc-950">
+            <div className="text-3xl font-semibold tracking-tight text-ink">
               {Math.max(0, state.remaining)}
-              <span className="text-base font-normal text-zinc-500">
+              <span className="text-base font-normal text-faint">
                 {' '}
                 / {limit} left
               </span>
@@ -171,13 +171,13 @@ export default function RateLimitPage() {
             <div
               className={cn(
                 'text-sm',
-                state.success ? 'text-zinc-600' : 'text-red-700',
+                state.success ? 'text-muted' : 'text-red-700',
               )}
             >
               {state.success ? (
                 <>
                   resets in{' '}
-                  <span className="font-mono text-zinc-950">
+                  <span className="font-mono text-ink">
                     {(resetIn / 1000).toFixed(1)}s
                   </span>
                 </>
@@ -208,7 +208,7 @@ export default function RateLimitPage() {
                 'btn',
                 state.success
                   ? 'btn-primary'
-                  : 'bg-red-600 text-white hover:bg-red-500',
+                  : 'bg-red-600 text-white hover:bg-red-500 border border-red-600',
               )}
             >
               <Send className="size-4" />
@@ -217,9 +217,9 @@ export default function RateLimitPage() {
           </div>
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 h-0.5 bg-zinc-100">
+        <div className="absolute inset-x-0 bottom-0 h-0.5 bg-sunken">
           <div
-            className="h-full bg-zinc-900 transition-all duration-300"
+            className="h-full bg-ink transition-all duration-300"
             style={{ width: `${usedPct}%` }}
           />
         </div>
@@ -230,9 +230,7 @@ export default function RateLimitPage() {
         <div
           className={cn(
             'panel p-5 mt-4 text-[13px] font-mono break-all',
-            result.success
-              ? 'border-emerald-200 bg-emerald-50/50 text-emerald-900'
-              : 'border-red-200 bg-red-50/50 text-red-900',
+            result.success ? 'status-ok' : 'status-err',
           )}
         >
           {JSON.stringify(result)}
@@ -255,7 +253,7 @@ export default function RateLimitPage() {
               />
             ))}
           </div>
-          <p className="text-xs text-zinc-500 mt-3">
+          <p className="text-xs text-faint mt-3">
             Newest first — green allowed, red blocked.
           </p>
         </div>

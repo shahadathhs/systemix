@@ -81,10 +81,10 @@ export default function CipherPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
           Cipher
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
+        <p className="mt-2 text-sm text-muted leading-relaxed">
           Authenticated AES-256-GCM. The random IV is embedded in the payload,
           and any tampering is detected — not decrypted.
         </p>
@@ -98,7 +98,7 @@ export default function CipherPage() {
               <KeyRound className="size-3.5" />
               AES-256 key
             </div>
-            <code className="block text-xs font-mono text-zinc-800 break-all">
+            <code className="block text-xs font-mono text-ink break-all">
               {key ? toHex(key) : '…'}
             </code>
           </div>
@@ -134,7 +134,7 @@ export default function CipherPage() {
             type="button"
             onClick={handleTamper}
             disabled={!payload}
-            className="text-xs text-zinc-500 hover:text-zinc-950 disabled:opacity-40 underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-950"
+            className="text-xs text-faint hover:text-ink disabled:opacity-40 underline underline-offset-2 decoration-line-strong hover:decoration-ink"
             title="Flip a character in the payload to simulate tampering"
           >
             Tamper with payload
@@ -163,13 +163,13 @@ export default function CipherPage() {
         </div>
 
         {payload && (
-          <div className="space-y-2 border-t border-zinc-100 pt-4">
+          <div className="space-y-2 border-t border-line pt-4">
             <div className="flex items-center justify-between">
               <span className="label">Payload — IV + ciphertext + tag</span>
               <button
                 type="button"
                 onClick={() => copy('payload')}
-                className="text-zinc-500 hover:text-zinc-950"
+                className="text-faint hover:text-ink"
               >
                 {copied === 'payload' ? (
                   <Check className="size-3.5 text-emerald-600" />
@@ -178,9 +178,7 @@ export default function CipherPage() {
                 )}
               </button>
             </div>
-            <div className="mono-box text-emerald-800 bg-emerald-50/50 border-emerald-100">
-              {payload}
-            </div>
+            <div className="mono-box status-ok">{payload}</div>
           </div>
         )}
       </div>
@@ -205,19 +203,17 @@ export default function CipherPage() {
         </div>
 
         {decrypted && (
-          <div className="border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-mono text-emerald-900 break-all">
+          <div className="border px-3 py-2.5 text-sm font-mono status-ok break-all">
             {decrypted}
           </div>
         )}
 
         {error && (
-          <div className="border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-800">
-            {error}
-          </div>
+          <div className="border px-3 py-2.5 text-sm status-err">{error}</div>
         )}
 
         {!decrypted && !error && (
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-faint">
             {payload
               ? 'Decrypt to recover the plaintext. Try “Tamper with payload” first to see authentication reject modified data.'
               : 'Encrypt something first.'}

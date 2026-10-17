@@ -21,12 +21,12 @@ export default function EnvPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
           Env Loader
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
+        <p className="mt-2 text-sm text-muted leading-relaxed">
           Typed environment variable loading and validation. This example runs{' '}
-          <code className="font-mono text-[0.8125rem] bg-zinc-100 border border-zinc-200 rounded px-1 py-0.5">
+          <code className="font-mono text-[0.8125rem] bg-sunken border border-line rounded px-1 py-0.5">
             load(schema, source)
           </code>{' '}
           at build time with a fixed source.

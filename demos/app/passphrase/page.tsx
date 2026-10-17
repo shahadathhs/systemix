@@ -47,10 +47,10 @@ export default function PassphrasePage() {
   return (
     <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
           Passphrase Generator
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
+        <p className="mt-2 text-sm text-muted leading-relaxed">
           Memorable passphrases built from a 7,776-word list with crypto-grade
           randomness.
         </p>
@@ -59,7 +59,7 @@ export default function PassphrasePage() {
       {/* Output */}
       <div className="panel p-6">
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-          <code className="text-lg font-mono font-medium text-zinc-950 break-all selection:bg-zinc-200 min-w-0">
+          <code className="text-lg font-mono font-medium text-ink break-all selection:bg-[var(--bg-sunken)] min-w-0">
             {passphrase}
           </code>
           <div className="flex gap-2 shrink-0">
@@ -85,10 +85,9 @@ export default function PassphrasePage() {
             </button>
           </div>
         </div>
-        <div className="mt-5 pt-4 border-t border-zinc-100 flex items-center gap-2 text-sm text-zinc-600">
+        <div className="mt-5 pt-4 border-t border-line flex items-center gap-2 text-sm text-muted">
           Estimated entropy:{' '}
-          <span className="font-mono text-zinc-950">{entropy.toFixed(1)}</span>{' '}
-          bits
+          <span className="font-mono text-ink">{entropy.toFixed(1)}</span> bits
         </div>
       </div>
 
@@ -97,7 +96,7 @@ export default function PassphrasePage() {
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <span className="label">Word count</span>
-            <span className="text-sm font-mono text-zinc-950">
+            <span className="text-sm font-mono text-ink">
               {options.wordCount}
             </span>
           </div>
@@ -112,7 +111,7 @@ export default function PassphrasePage() {
                 wordCount: parseInt(e.target.value),
               })
             }
-            className="w-full accent-zinc-900 cursor-pointer"
+            className="w-full accent-ink cursor-pointer"
           />
         </div>
       </div>
@@ -175,13 +174,13 @@ export default function PassphrasePage() {
                 onChange={(e) =>
                   setOptions({ ...options, [key]: e.target.checked })
                 }
-                className="mt-0.5 size-4 rounded border-zinc-300 accent-zinc-900 cursor-pointer"
+                className="mt-0.5 size-4 rounded border-line-strong accent-ink cursor-pointer"
               />
               <span>
-                <span className="block text-sm text-zinc-800 group-hover:text-zinc-950 transition-colors">
+                <span className="block text-sm text-ink group-hover:text-ink transition-colors">
                   {label}
                 </span>
-                <span className="block text-xs text-zinc-500 mt-0.5">
+                <span className="block text-xs text-faint mt-0.5">
                   {description}
                 </span>
               </span>

@@ -32,15 +32,15 @@ export function ByteEncodingSection() {
 
   return (
     <section className="space-y-6">
-      <h2 className="text-sm font-semibold text-zinc-950">
-        <Info className="w-5 h-5 text-zinc-400" />
+      <h2 className="text-sm font-semibold text-ink">
+        <Info className="w-5 h-5 text-faint" />
         Byte Encoding
       </h2>
       <div className="panel p-6 space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="space-y-1">
-              <label className="text-sm font-medium text-zinc-600">
+              <label className="text-sm font-medium text-muted">
                 Byte length
               </label>
               <div className="flex items-center gap-2">
@@ -50,16 +50,16 @@ export function ByteEncodingSection() {
                   max="64"
                   value={byteLength}
                   onChange={(e) => setByteLength(parseInt(e.target.value, 10))}
-                  className="w-24 h-2 bg-zinc-200 accent-zinc-900"
+                  className="w-24 h-2 bg-sunken accent-ink"
                 />
-                <span className="text-sm font-mono text-zinc-400 w-8">
+                <span className="text-sm font-mono text-faint w-8">
                   {byteLength}
                 </span>
               </div>
             </div>
             <button
               onClick={regenerate}
-              className="inline-flex items-center justify-center w-9 h-9 border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
+              className="inline-flex items-center justify-center w-9 h-9 border border-line-strong text-muted hover:bg-sunken hover:text-ink transition-colors"
               title="Regenerate bytes"
             >
               <RefreshCw className="w-4 h-4" />
@@ -71,12 +71,12 @@ export function ByteEncodingSection() {
             (format) => (
               <div key={format} className="space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-zinc-600 uppercase tracking-wider">
+                  <span className="text-xs font-medium text-muted uppercase tracking-wider">
                     {format}
                   </span>
                   <CopyButton text={encodings[format]} />
                 </div>
-                <pre className="font-mono text-sm text-zinc-950 break-all bg-zinc-50 border border-zinc-200 px-3 py-2">
+                <pre className="font-mono text-sm text-ink break-all bg-sunken border border-line px-3 py-2">
                   {encodings[format]}
                 </pre>
               </div>

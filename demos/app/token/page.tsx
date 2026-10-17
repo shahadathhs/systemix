@@ -11,14 +11,14 @@ export default function TokenPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
           Token Playground
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
+        <p className="mt-2 text-sm text-muted leading-relaxed">
           Generate tokens, encode bytes, and create/verify signed tokens. See{' '}
           <Link
             href="/docs/token"
-            className="text-zinc-950 underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-950"
+            className="text-ink underline underline-offset-2 decoration-line-strong hover:decoration-ink"
           >
             full documentation
           </Link>
