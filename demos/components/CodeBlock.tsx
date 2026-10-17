@@ -21,14 +21,14 @@ export function CodeBlock({ children, ...props }: React.ComponentProps<'pre'>) {
     const text = getCode();
     void navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 1500);
     });
   }, [getCode]);
 
   return (
-    <div className="group relative">
+    <div className="group relative my-4">
       <pre
-        className="p-4 pr-12 rounded-xl bg-slate-800/50 border border-slate-700/80 overflow-x-auto mb-4 text-sm"
+        className="p-4 pr-11 rounded-lg border border-zinc-200 bg-zinc-50 overflow-x-auto text-[13px] leading-relaxed text-zinc-800"
         {...props}
       >
         {children}
@@ -36,13 +36,13 @@ export function CodeBlock({ children, ...props }: React.ComponentProps<'pre'>) {
       <button
         type="button"
         onClick={copy}
-        className="absolute top-2 right-2 p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 text-slate-400 hover:text-white transition-colors"
+        className="absolute top-2 right-2 p-1.5 rounded-md text-zinc-400 hover:text-zinc-900 hover:bg-zinc-200/60 transition-colors"
         title="Copy code"
       >
         {copied ? (
-          <Check className="w-4 h-4 text-emerald-400" />
+          <Check className="size-3.5 text-zinc-900" />
         ) : (
-          <Copy className="w-4 h-4" />
+          <Copy className="size-3.5" />
         )}
       </button>
     </div>

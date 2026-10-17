@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'motion/react';
 import Link from 'next/link';
 import {
   ByteEncodingSection,
@@ -10,29 +9,28 @@ import {
 
 export default function TokenPage() {
   return (
-    <div className="max-w-4xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="space-y-8"
-      >
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">
-            Token Playground
-          </h1>
-          <p className="text-muted-foreground">
-            Generate tokens, encode bytes, and create/verify signed tokens. See{' '}
-            <Link href="/docs/token" className="text-cyan-400 hover:underline">
-              full documentation
-            </Link>
-            .
-          </p>
-        </div>
+    <div className="max-w-3xl">
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
+          Token Playground
+        </h1>
+        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
+          Generate tokens, encode bytes, and create/verify signed tokens. See{' '}
+          <Link
+            href="/docs/token"
+            className="text-zinc-950 underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-950"
+          >
+            full documentation
+          </Link>
+          .
+        </p>
+      </div>
 
+      <div className="space-y-4">
         <GenerateTokenSection />
         <ByteEncodingSection />
         <SignedTokenSection />
-      </motion.div>
+      </div>
     </div>
   );
 }

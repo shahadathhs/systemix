@@ -1,70 +1,81 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #0a0c10;
-  --foreground: #e6edf3;
-  --primary: #22d3ee;
-  --primary-foreground: #0a0c10;
-  --secondary: #1a1f2e;
-  --secondary-foreground: #e6edf3;
-  --muted: #1a1f2e;
-  --muted-foreground: #8b949e;
-  --accent: #1a1f2e;
-  --accent-foreground: #e6edf3;
-  --destructive: #f87171;
-  --destructive-foreground: #0a0c10;
-  --border: #21262d;
-  --input: #21262d;
-  --ring: #22d3ee;
-  --card-bg: rgba(22, 27, 34, 0.7);
-  --card-border: rgba(48, 54, 61, 0.8);
-  --card-accent: #22d3ee;
-  --glass-bg: rgba(22, 27, 34, 0.8);
-  --glass-border: rgba(48, 54, 61, 0.8);
+  --background: #ffffff;
+  --foreground: #18181b;
+  --muted: #71717a;
+  --border: #e4e4e7;
+  --surface: #fafafa;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
+  font-feature-settings: 'cv11', 'ss01';
 }
 
-/* Links - ensure they look clickable across the project */
 a:not([class]) {
-  color: #0891b2;
+  color: var(--foreground);
   text-decoration: underline;
   text-underline-offset: 2px;
+  text-decoration-color: #d4d4d8;
 }
 a:not([class]):hover {
-  color: #0e7490;
-}
-.root a:not([class]) {
-  color: #22d3ee;
-}
-.root a:not([class]):hover {
-  color: #67e8f9;
+  text-decoration-color: var(--foreground);
 }
 
-@layer utilities {
-  /* Distinctive card: dark base, left accent, subtle border - not generic shadcn */
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-left: 3px solid var(--card-accent);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+::selection {
+  background: #e4e4e7;
+}
+
+@layer components {
+  /* Bordered surface — the only card style in the system */
+  .panel {
+    @apply border border-zinc-200 rounded-xl bg-white;
   }
-  .card:hover {
-    border-color: rgba(34, 211, 238, 0.3);
-    box-shadow: 0 4px 12px rgba(34, 211, 238, 0.08);
+
+  /* Form controls */
+  .field {
+    @apply w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10 disabled:opacity-50;
   }
-  /* Demo panels - slightly different from cards */
-  .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-md text-sm font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none cursor-pointer;
+  }
+  .btn-primary {
+    @apply bg-zinc-900 text-white hover:bg-zinc-700;
+  }
+  .btn-ghost {
+    @apply border border-zinc-300 bg-white text-zinc-900 hover:bg-zinc-50;
+  }
+  .btn-icon {
+    @apply inline-flex items-center justify-center w-10 h-10 rounded-md border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors cursor-pointer;
+  }
+
+  /* Typography helpers */
+  .label {
+    @apply text-xs font-medium uppercase tracking-wider text-zinc-500;
+  }
+  .section-title {
+    @apply text-sm font-semibold text-zinc-900;
+  }
+
+  /* Monospace output boxes */
+  .mono-box {
+    @apply rounded-md border border-zinc-200 bg-zinc-50 p-3 font-mono text-xs text-zinc-800 break-all whitespace-pre-wrap;
+  }
+
+  /* Segmented option buttons */
+  .segment {
+    @apply flex-1 h-9 rounded-md border border-zinc-300 bg-white text-sm text-zinc-600 hover:bg-zinc-50 transition-colors cursor-pointer;
+  }
+  .segment-active {
+    @apply border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-900;
   }
 }
 
-/* Hide scrollbars while keeping scroll functionality - use @utility for Tailwind v4 */
+/* Hide scrollbars while keeping scroll functionality */
 @utility scrollbar-hide {
   scrollbar-width: none;
   -ms-overflow-style: none;
