@@ -3,21 +3,22 @@
 import { useState } from 'react';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
+import { SiteFooter } from './SiteFooter';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <Navbar onMenuClick={() => setSidebarOpen(true)} />
-      <div className="flex flex-1">
+
+      {/* Full-height bordered frame — the structural container */}
+      <div className="flex-1 w-full max-w-[1400px] mx-auto border-x border-zinc-200 flex">
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-        <main className="flex-1 min-w-0">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 lg:py-10">
-            {children}
-          </div>
-        </main>
+        <main className="flex-1 min-w-0 flex flex-col">{children}</main>
       </div>
+
+      <SiteFooter />
     </div>
   );
 }

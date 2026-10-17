@@ -122,7 +122,7 @@ export function Sidebar({
         className={cn(
           'fixed lg:sticky top-0 lg:top-14 left-0 z-[60] lg:z-30 w-64 shrink-0',
           'h-screen lg:h-[calc(100vh-3.5rem)]',
-          'bg-white border-r border-zinc-200',
+          'bg-zinc-50/60 lg:bg-zinc-50/60 border-r border-zinc-200',
           'flex flex-col p-4 overflow-y-auto scrollbar-hide',
           'transition-transform duration-200',
           'lg:translate-x-0',

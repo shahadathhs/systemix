@@ -19,7 +19,7 @@ export default function EnvPage() {
   const safe = env.toSafeLog();
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-950">
           Env Loader
