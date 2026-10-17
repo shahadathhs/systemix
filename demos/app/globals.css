@@ -287,3 +287,11 @@ select {
     display: none;
   }
 }
+
+/* Respect reduced-motion: reveals appear without transforms */
+@media (prefers-reduced-motion: reduce) {
+  .transition-all {
+    transition: none !important;
+    transform: none !important;
+  }
+}
