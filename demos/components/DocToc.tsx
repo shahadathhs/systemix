@@ -9,19 +9,16 @@ interface TocItem {
   level: number;
 }
 
-interface DocTocProps {
-  scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
-}
+const OFFSET = 96;
 
-export function DocToc({ scrollContainerRef }: DocTocProps) {
+export function DocToc() {
   const pathname = usePathname();
   const [items, setItems] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const containerSelector = '[data-docs-article]';
 
+  // Collect headings from the rendered article
   useEffect(() => {
-    const el =
-      scrollContainerRef?.current ?? document.querySelector(containerSelector);
+    const el = document.querySelector('[data-docs-article]');
     if (!el) return;
 
     const headings = el.querySelectorAll('h2, h3');
@@ -44,57 +41,36 @@ export function DocToc({ scrollContainerRef }: DocTocProps) {
       }
     });
     setItems(toc);
-  }, [scrollContainerRef, pathname]);
+  }, [pathname]);
 
+  // Scroll spy — the page scrolls on window (no inner scroll container)
   useEffect(() => {
     if (items.length === 0) return;
 
-    const el =
-      scrollContainerRef?.current ?? document.querySelector(containerSelector);
-    if (!el) return;
-
-    const headings = items
-      .map(({ id }) => el.querySelector(`#${id}`))
-      .filter(Boolean) as HTMLElement[];
-
-    const scrollContainer =
-      scrollContainerRef?.current ??
-      document.querySelector(containerSelector) ??
-      document.documentElement;
-
     const onScroll = () => {
-      const offset = 140;
       let active: string | null = null;
-      for (let i = headings.length - 1; i >= 0; i--) {
-        const h = headings[i];
-        if (h && h.getBoundingClientRect().top <= offset) {
-          active = h.id;
+      for (let i = items.length - 1; i >= 0; i--) {
+        const el = document.getElementById(items[i].id);
+        if (el && el.getBoundingClientRect().top <= OFFSET) {
+          active = el.id;
           break;
         }
       }
-      if (!active && headings[0]) active = headings[0].id;
-      setActiveId(active);
+      setActiveId(active ?? items[0].id);
     };
 
-    scrollContainer.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-
-    return () => scrollContainer.removeEventListener('scroll', onScroll);
-  }, [items, scrollContainerRef, pathname]);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [items]);
 
   const handleClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    const container =
-      scrollContainerRef?.current ?? document.querySelector(containerSelector);
-    const target = container?.querySelector(`#${id}`) as HTMLElement | null;
-    if (target && container) {
-      const containerRect = container.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      const scrollTop =
-        container.scrollTop + (targetRect.top - containerRect.top) - 24;
-      container.scrollTo({ top: scrollTop, behavior: 'smooth' });
-      window.history.replaceState(null, '', `#${id}`);
-    }
+    const target = document.getElementById(id);
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY - OFFSET;
+    window.scrollTo({ top, behavior: 'smooth' });
+    window.history.replaceState(null, '', `#${id}`);
   };
 
   if (items.length === 0) return null;
