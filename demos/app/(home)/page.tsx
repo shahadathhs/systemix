@@ -1,219 +1,349 @@
 'use client';
 
-import {
-  ArrowRight,
-  Fingerprint,
-  Gauge,
-  Hash,
-  KeyRound,
-  Lock,
-  LockKeyhole,
-  Settings,
-  Shield,
-  ShieldCheck,
-  Zap,
-} from 'lucide-react';
-import { motion } from 'motion/react';
+import { CodeWindow } from '@/components/CodeWindow';
 import { GithubIcon } from '@/components/brand-icons';
+import { Reveal } from '@/components/Reveal';
 import Link from 'next/link';
 
-export default function Home() {
-  return (
-    <div className="relative isolate overflow-hidden">
-      {/* Background - cyan/teal gradient blob */}
-      <div
-        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-        aria-hidden="true"
-      >
-        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-cyan-500 to-teal-600 opacity-15 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
-      </div>
-
-      <div className="container mx-auto px-4 pt-24 pb-16 sm:pt-32">
-        <div className="mx-auto max-w-4xl text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl bg-clip-text text-transparent bg-gradient-to-b from-white via-cyan-100/90 to-slate-400">
-              Secure, Scalable, and Minimalist.
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-400">
-              Systemix is a collections of high-performance toolkit designed for
-              building secure and scalable JavaScript and TypeScript systems.
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="mt-10 flex items-center justify-center gap-x-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-          >
-            <Link
-              href="/docs"
-              className="rounded-lg bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/20 hover:bg-cyan-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 transition-all hover:scale-105 active:scale-95"
-            >
-              Documentation
-            </Link>
-            <Link
-              href="/password"
-              className="rounded-lg border border-slate-500/40 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-all"
-            >
-              Demos
-            </Link>
-            <Link
-              href="https://github.com/shahadathhs/systemix"
-              className="group flex items-center gap-2 text-sm font-semibold leading-6 text-white"
-            >
-              View GitHub{' '}
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </motion.div>
-        </div>
-
-        <div className="mx-auto mt-24 max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 sm:mt-20 lg:grid-cols-3">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.name}
-                className="card flex flex-col rounded-xl p-8 transition-all"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index + 0.3 }}
-              >
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-white">
-                  <feature.icon
-                    className="h-5 w-5 flex-none text-cyan-400"
-                    aria-hidden="true"
-                  />
-                  {feature.name}
-                </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-400">
-                  <p className="flex-auto">{feature.description}</p>
-                </dd>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Package Sections */}
-        <div className="mx-auto mt-32 max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <PackageCard
-              title="Env Loader"
-              description="Typed environment variable loading and validation with .env file support."
-              icon={Settings}
-              href="/env"
-              tag="@systemix/env"
-            />
-            <PackageCard
-              title="Password Generator"
-              description="Cryptographically secure password generator with customizable complexity and entropy tools."
-              icon={Lock}
-              href="/password"
-              tag="@systemix/password"
-            />
-            <PackageCard
-              title="Passphrase Generator"
-              description="Secure, memorable passphrase generator using high-entropy words and random injectors."
-              icon={KeyRound}
-              href="/passphrase"
-              tag="@systemix/passphrase"
-            />
-            <PackageCard
-              title="Token Generator"
-              description="Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities."
-              icon={Shield}
-              href="/token"
-              tag="@systemix/token"
-            />
-            <PackageCard
-              title="Hash Playground"
-              description="Password hashing and verification with PBKDF2 and scrypt, built on Web Crypto and Node built-ins."
-              icon={Hash}
-              href="/hash"
-              tag="@systemix/hash"
-            />
-            <PackageCard
-              title="Cipher Demo"
-              description="Authenticated AES-256-GCM encryption and decryption for sensitive data at rest."
-              icon={LockKeyhole}
-              href="/cipher"
-              tag="@systemix/cipher"
-            />
-            <PackageCard
-              title="ID Generator"
-              description="UUID v4, ULID, and nanoid-style ID generation with crypto-grade randomness."
-              icon={Fingerprint}
-              href="/id"
-              tag="@systemix/id"
-            />
-            <PackageCard
-              title="Rate Limiter"
-              description="Fixed-window, sliding-window, and token-bucket rate limiting with Express middleware."
-              icon={Gauge}
-              href="/rate-limit"
-              tag="@systemix/rate-limit"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+const stats = [
+  { value: '11', label: 'packages' },
+  { value: '0', label: 'runtime dependencies' },
+  { value: '285', label: 'tests passing' },
+  { value: '100%', label: 'TypeScript, strict' },
+];
 
 const features = [
   {
-    name: 'Cryptographic Security',
-    description:
-      'All utilities utilize Node.js built-in crypto for bias-free, high-entropy randomization.',
-    icon: ShieldCheck,
+    title: 'Zero supply-chain surface',
+    body: 'Every package runs on Node built-ins and the Web Crypto API. No transitive dependencies to audit, no Friday-night CVEs — your dependency tree ends at @systemix.',
   },
   {
-    name: 'Turbo Powered',
-    description:
-      'Optimized build and test pipelines ensures maximum developer productivity and performance.',
-    icon: Zap,
+    title: 'Crypto done correctly',
+    body: 'Bias-free rejection sampling, constant-time comparisons, authenticated encryption with OWASP-aligned defaults. The secure option is the default option.',
   },
   {
-    name: 'Zero Dependencies',
-    description:
-      'Lightweight core with zero external production dependencies to minimize supply chain risks.',
-    icon: GithubIcon,
+    title: 'Tree-shakeable to the byte',
+    body: 'Dual ESM + CJS builds with isolated entries. Import one function, ship one function — dead code never reaches your bundle.',
+  },
+  {
+    title: 'Engineered on TypeScript 7',
+    body: 'Strict mode end to end, bundled and nodenext resolution presets, declarations generated by the native compiler. Built with the toolchain it recommends.',
   },
 ];
 
-function PackageCard({
+const packages = [
+  { name: '@systemix/env', description: 'Typed env loading and validation.' },
+  {
+    name: '@systemix/password',
+    description: 'Crypto-secure password generator.',
+  },
+  {
+    name: '@systemix/passphrase',
+    description: 'Memorable passphrases, 7,776-word list.',
+  },
+  {
+    name: '@systemix/token',
+    description: 'Tokens and HMAC/RSA signed tokens.',
+  },
+  {
+    name: '@systemix/hash',
+    description: 'PBKDF2 and scrypt password hashing.',
+  },
+  {
+    name: '@systemix/cipher',
+    description: 'Authenticated AES-256-GCM encryption.',
+  },
+  { name: '@systemix/id', description: 'UUID v4, ULID, nanoid-style IDs.' },
+  {
+    name: '@systemix/rate-limit',
+    description: 'Window and bucket rate limiting.',
+  },
+];
+
+const tooling = [
+  {
+    name: '@systemix/eslint',
+    description: 'ESLint v10 flat configs for JS, TS, Express and Next.js.',
+  },
+  {
+    name: '@systemix/typescript',
+    description: 'Base tsconfig presets — bundler and nodenext resolution.',
+  },
+  {
+    name: '@systemix/runner',
+    description: 'The zero-dep test runner every package ships with.',
+  },
+];
+
+const demos = [
+  ['Env Loader', '/env'],
+  ['Password', '/password'],
+  ['Passphrase', '/passphrase'],
+  ['Token', '/token'],
+  ['Hash', '/hash'],
+  ['Cipher', '/cipher'],
+  ['ID', '/id'],
+  ['Rate Limit', '/rate-limit'],
+] as const;
+
+function SectionHeader({
+  index,
   title,
-  description,
-  icon: Icon,
-  href,
-  tag,
+  sub,
 }: {
+  index: string;
   title: string;
-  description: string;
-  icon: React.ComponentType<{ className?: string; size?: number }>;
-  href: string;
-  tag: string;
+  sub?: string;
 }) {
   return (
-    <Link
-      href={href}
-      className="card group overflow-hidden relative rounded-xl p-8 transition-all"
-    >
-      <div className="absolute -right-4 -top-4 text-slate-700 group-hover:text-cyan-500/20 transition-colors">
-        <Icon size={120} />
+    <Reveal>
+      <div className="flex items-baseline gap-4 mb-8">
+        <span className="hud hud-accent">{index}</span>
+        <h2 className="font-display text-3xl sm:text-4xl text-ink">{title}</h2>
+        {sub && (
+          <span className="hidden sm:block text-sm text-muted">{sub}</span>
+        )}
       </div>
-      <div className="relative z-10">
-        <span className="text-xs font-mono text-cyan-400">{tag}</span>
-        <h2 className="mt-4 text-2xl font-bold text-white">{title}</h2>
-        <p className="mt-2 text-slate-400 line-clamp-2">{description}</p>
-        <div className="mt-6 flex items-center text-cyan-400 font-medium text-sm">
-          Try Live Demo{' '}
-          <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+    </Reveal>
+  );
+}
+
+export default function Home() {
+  return (
+    <div className="flex-1">
+      {/* Hero */}
+      <section className="px-6 sm:px-10 pt-24 sm:pt-32 pb-20 text-center border-b border-line">
+        <div className="max-w-3xl mx-auto">
+          <Reveal>
+            <div className="inline-flex items-center gap-2.5 px-3 py-1.5 border border-line-strong">
+              <span className="hud hud-accent">01</span>
+              <span className="font-display text-sm text-ink">Systemix</span>
+            </div>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <h1 className="font-display mt-8 text-5xl sm:text-7xl leading-[1.02] text-ink">
+              Security primitives,
+              <br />
+              <span className="text-accent">engineered</span> for modern JS.
+            </h1>
+          </Reveal>
+
+          <Reveal delay={160}>
+            <p className="mt-7 text-lg sm:text-xl text-muted leading-relaxed max-w-xl mx-auto">
+              Typed env loading, crypto-grade randomness, password hashing,
+              authenticated encryption, IDs and rate limiting. Eleven packages,
+              zero runtime dependencies.
+            </p>
+          </Reveal>
+
+          <Reveal delay={240}>
+            <div className="mt-10 flex items-center justify-center gap-3">
+              <Link href="/docs" className="btn btn-primary">
+                Get started
+              </Link>
+              <a
+                href="https://github.com/shahadathhs/systemix"
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-ghost"
+              >
+                <GithubIcon className="size-3.5" />
+                GitHub
+              </a>
+            </div>
+          </Reveal>
+
+          <Reveal delay={320}>
+            <div className="mt-6 font-mono text-[11px] tracking-[0.12em] uppercase text-faint">
+              npm install @systemix/env — Node 18+ · Browsers · MIT
+            </div>
+          </Reveal>
+
+          <Reveal delay={400} y={32}>
+            <div className="mt-14 text-left">
+              <CodeWindow
+                filename="quickstart.ts"
+                code={`import { load } from '@systemix/env';
+import { generatePassword } from '@systemix/password';
+import { hashPassword, verifyPassword } from '@systemix/hash';
+
+const env = load({ PORT: { type: 'number', default: 3000 } });
+
+const password = generatePassword({ length: 16 });
+const encoded = await hashPassword(password);
+
+await verifyPassword(password, encoded); // true`}
+              />
+              <div className="flex justify-between mt-2 px-1">
+                <span className="hud">quickstart.ts</span>
+                <span className="hud">38 chars · 128 bits</span>
+              </div>
+            </div>
+          </Reveal>
         </div>
-      </div>
-    </Link>
+      </section>
+
+      {/* Stats */}
+      <section className="border-b border-line">
+        <div className="ruled-grid grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat, i) => (
+            <Reveal key={stat.label} delay={i * 90} className="h-full">
+              <div className="ruled-cell text-center py-10 !bg-raised">
+                <div className="font-display text-4xl sm:text-5xl text-ink">
+                  {stat.value}
+                </div>
+                <div className="hud mt-2.5">{stat.label}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* Why Systemix */}
+      <section className="px-6 sm:px-10 py-20 sm:py-24 border-b border-line">
+        <div className="max-w-5xl mx-auto">
+          <SectionHeader index="02" title="Why Systemix" />
+          <div className="ruled-grid grid-cols-1 md:grid-cols-2">
+            {features.map((feature, i) => (
+              <Reveal key={feature.title} delay={i * 90} className="h-full">
+                <div className="ruled-cell h-full">
+                  <span className="hud">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className="font-display text-lg text-ink mt-3">
+                    {feature.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-muted leading-relaxed">
+                    {feature.body}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Packages */}
+      <section className="px-6 sm:px-10 py-20 sm:py-24 border-b border-line">
+        <div className="max-w-5xl mx-auto">
+          <SectionHeader
+            index="03"
+            title="Packages"
+            sub="npm install, one at a time."
+          />
+          <div className="ruled-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {packages.map((pkg, i) => (
+              <Reveal key={pkg.name} delay={(i % 4) * 80} className="h-full">
+                <Link
+                  href={`/docs/${pkg.name.replace('@systemix/', '')}`}
+                  className="ruled-cell block group h-full"
+                >
+                  <div className="flex items-baseline justify-between">
+                    <span className="hud">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className="hud hud-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                      docs →
+                    </span>
+                  </div>
+                  <div className="font-mono text-[13px] font-medium text-ink mt-3">
+                    {pkg.name.replace('@systemix/', '')}
+                  </div>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
+                    {pkg.description}
+                  </p>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Tooling */}
+      <section className="px-6 sm:px-10 py-20 sm:py-24 border-b border-line">
+        <div className="max-w-5xl mx-auto">
+          <SectionHeader
+            index="04"
+            title="Tooling"
+            sub="The configs this repo runs on."
+          />
+          <div className="ruled-grid grid-cols-1 md:grid-cols-3">
+            {tooling.map((tool, i) => (
+              <Reveal key={tool.name} delay={i * 90} className="h-full">
+                <Link
+                  href={`/docs/${tool.name.replace('@systemix/', '')}`}
+                  className="ruled-cell block group h-full"
+                >
+                  <span className="hud">{String(i + 1).padStart(2, '0')}</span>
+                  <div className="font-mono text-[13px] font-medium text-ink mt-3">
+                    {tool.name}
+                  </div>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
+                    {tool.description}
+                  </p>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Demos */}
+      <section className="px-6 sm:px-10 py-20 sm:py-24 border-b border-line">
+        <div className="max-w-5xl mx-auto">
+          <SectionHeader
+            index="05"
+            title="Live demos"
+            sub="Run every API in your browser."
+          />
+          <div className="ruled-grid grid-cols-2 md:grid-cols-4">
+            {demos.map(([label, href], i) => (
+              <Reveal key={href} delay={(i % 4) * 70} className="h-full">
+                <Link
+                  href={href}
+                  className="ruled-cell group flex items-center justify-between h-full"
+                >
+                  <span className="text-sm font-medium text-ink">{label}</span>
+                  <span className="hud hud-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                    →
+                  </span>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="px-6 sm:px-10 py-28 text-center">
+        <Reveal>
+          <div className="max-w-2xl mx-auto">
+            <h2 className="font-display text-4xl sm:text-5xl text-ink">
+              Start building<span className="text-accent">.</span>
+            </h2>
+            <p className="mt-5 text-muted leading-relaxed">
+              One install, one import. Your first secure primitive is thirty
+              seconds away.
+            </p>
+            <div className="mt-9 flex items-center justify-center gap-3">
+              <Link href="/docs" className="btn btn-primary">
+                Read the docs
+              </Link>
+              <a
+                href="https://github.com/shahadathhs/systemix"
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-ghost"
+              >
+                <GithubIcon className="size-3.5" />
+                Star on GitHub
+              </a>
+            </div>
+            <div className="mt-6 font-mono text-[11px] uppercase tracking-[0.12em] text-faint">
+              npm install @systemix/env
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    </div>
   );
 }

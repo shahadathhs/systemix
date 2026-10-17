@@ -100,26 +100,22 @@ export function DocToc({ scrollContainerRef }: DocTocProps) {
   if (items.length === 0) return null;
 
   return (
-    <aside className="hidden xl:block w-56 shrink-0 pl-8">
-      <nav className="space-y-2">
-        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-          On this page
-        </div>
-        <ul className="space-y-1.5 text-sm">
+    <aside className="hidden xl:block w-52 shrink-0 pl-8">
+      <nav className="sticky top-20">
+        <div className="hud mb-3">On this page</div>
+        <ul className="space-y-1.5 text-[13px]">
           {items.map((item) => (
             <li
               key={item.id}
-              className={
-                item.level === 3 ? 'pl-4 border-l border-slate-700/80' : ''
-              }
+              className={item.level === 3 ? 'pl-3 border-l border-line' : ''}
             >
               <button
                 type="button"
                 onClick={(e) => handleClick(e, item.id)}
                 className={`block w-full text-left py-0.5 transition-colors cursor-pointer ${
                   activeId === item.id
-                    ? 'text-cyan-400 font-medium'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'text-ink font-medium'
+                    : 'text-faint hover:text-ink'
                 }`}
               >
                 {item.text}

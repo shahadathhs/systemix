@@ -5,11 +5,10 @@ import { CodeBlock } from '@/components/CodeBlock';
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     a: ({ href, children, ...props }) => {
-      const linkClass =
-        'text-cyan-400 hover:text-cyan-300 underline underline-offset-2 decoration-cyan-400/60 hover:decoration-cyan-300';
+      const cls = 'text-ink underline underline-offset-2 hover:no-underline';
       if (href?.startsWith('/')) {
         return (
-          <Link href={href} className={linkClass} {...props}>
+          <Link href={href} className={cls} {...props}>
             {children}
           </Link>
         );
@@ -19,7 +18,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           href={href}
           target={href?.startsWith('http') ? '_blank' : undefined}
           rel={href?.startsWith('http') ? 'noreferrer' : undefined}
-          className={linkClass}
+          className={cls}
           {...props}
         >
           {children}
@@ -28,71 +27,84 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     h1: (props) => (
       <h1
-        className="text-3xl font-bold tracking-tight text-white mt-8 mb-4 scroll-mt-20"
+        className="font-display text-4xl text-ink mb-5 scroll-mt-20"
         {...props}
       />
     ),
     h2: (props) => (
       <h2
-        className="text-2xl font-semibold text-white mt-10 mb-3 scroll-mt-20 border-b border-slate-700/80 pb-2"
+        className="font-display text-2xl text-ink mt-12 mb-4 scroll-mt-20 pt-6 border-t border-line"
         {...props}
       />
     ),
     h3: (props) => (
       <h3
-        className="text-xl font-semibold text-white mt-8 mb-2 scroll-mt-20"
+        className="font-display text-lg text-ink mt-8 mb-2 scroll-mt-20"
         {...props}
       />
     ),
     p: ({ children }) => (
-      <p className="text-gray-400 leading-7 mb-4">{children}</p>
+      <p className="text-muted leading-7 mb-4">{children}</p>
     ),
     ul: ({ children }) => (
-      <ul className="list-disc list-inside text-gray-400 space-y-2 mb-4 pl-4">
+      <ul className="list-disc pl-5 text-muted space-y-1.5 mb-4 leading-7">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal list-inside text-gray-400 space-y-2 mb-4 pl-4">
+      <ol className="list-decimal pl-5 text-muted space-y-1.5 mb-4 leading-7">
         {children}
       </ol>
     ),
-    li: ({ children }) => <li className="leading-7">{children}</li>,
+    li: ({ children }) => <li className="pl-1">{children}</li>,
     code: ({ children }) => (
-      <code className="px-1.5 py-0.5 rounded bg-slate-800/60 text-cyan-300 font-mono text-sm">
+      <code
+        className="px-1.5 py-0.5 border font-mono text-[0.8125rem] text-ink"
+        style={{
+          borderColor: 'var(--line-strong)',
+          background: 'var(--bg-sunken)',
+        }}
+      >
         {children}
       </code>
     ),
     pre: (props) => <CodeBlock {...props} />,
     table: ({ children }) => (
-      <div className="overflow-x-auto mb-6 rounded-xl border border-slate-700/80">
-        <table className="min-w-full divide-y divide-slate-700/80">
-          {children}
-        </table>
+      <div
+        className="overflow-x-auto mb-6 border border-line"
+        style={{ borderColor: 'var(--line)' }}
+      >
+        <table className="min-w-full text-sm">{children}</table>
       </div>
     ),
     thead: ({ children }) => (
-      <thead className="bg-slate-800/50">{children}</thead>
+      <thead
+        className="border-b border-line bg-sunken/60"
+        style={{ borderColor: 'var(--line-strong)' }}
+      >
+        {children}
+      </thead>
     ),
     tbody: ({ children }) => (
-      <tbody className="divide-y divide-slate-700/50">{children}</tbody>
-    ),
-    tr: ({ children }) => (
-      <tr className="hover:bg-slate-800/50 transition-colors">{children}</tr>
+      <tbody className="divide-y" style={{ borderColor: 'var(--line)' }}>
+        {children}
+      </tbody>
     ),
     th: ({ children }) => (
-      <th className="px-4 py-3 text-left text-sm font-semibold text-white">
-        {children}
-      </th>
+      <th className="hud px-4 py-2.5 text-left">{children}</th>
     ),
     td: ({ children }) => (
-      <td className="px-4 py-3 text-sm text-gray-400">{children}</td>
+      <td className="px-4 py-2.5 text-muted align-top">{children}</td>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-cyan-500 pl-4 py-2 my-4 text-slate-400 italic">
+      <blockquote
+        className="border-l-2 pl-4 my-5 text-muted"
+        style={{ borderColor: 'var(--accent)' }}
+      >
         {children}
       </blockquote>
     ),
+    hr: () => <hr className="my-8 border-t border-line" />,
     ...components,
   };
 }

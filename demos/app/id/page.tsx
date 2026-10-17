@@ -2,17 +2,16 @@
 
 import { cn } from '@/lib/utils';
 import { generateId, generateUlid, generateUuid, isUuid } from '@systemix/id';
-import { Check, Copy, Fingerprint, RefreshCw, Trash2 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Check, Copy, RefreshCw, Trash2 } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
 type IdKind = 'nanoid' | 'ulid' | 'uuid';
 
-const KINDS: { id: IdKind; label: string; description: string }[] = [
+const KINDS = [
   { id: 'nanoid', label: 'nanoid', description: 'URL-safe random ID' },
   { id: 'ulid', label: 'ULID', description: 'Sortable, timestamped' },
   { id: 'uuid', label: 'UUID v4', description: 'RFC 9562 random UUID' },
-];
+] as const;
 
 interface GeneratedId {
   id: string;
@@ -40,149 +39,127 @@ export default function IdPage() {
   const copyAt = (index: number) => {
     void navigator.clipboard.writeText(ids[index].id).then(() => {
       setCopiedIndex(index);
-      setTimeout(() => setCopiedIndex(null), 2000);
+      setTimeout(() => setCopiedIndex(null), 1500);
     });
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="space-y-8"
-      >
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">
-            ID Generator
-          </h1>
-          <p className="text-muted-foreground">
-            Unique, non-secret identifiers with bias-free, crypto-grade
-            randomness. ULIDs sort chronologically; UUIDs follow RFC 9562.
-          </p>
-        </div>
+    <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
+          ID Generator
+        </h1>
+        <p className="mt-2 text-sm text-muted leading-relaxed">
+          Unique, non-secret identifiers with bias-free crypto-grade randomness.
+          ULIDs sort chronologically; UUIDs follow RFC 9562.
+        </p>
+      </div>
 
-        {/* Controls */}
-        <div className="glass rounded-2xl p-6 space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {KINDS.map((k) => (
-              <button
-                key={k.id}
-                type="button"
-                onClick={() => setKind(k.id)}
+      {/* Controls */}
+      <div className="panel p-6 space-y-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {KINDS.map((k) => (
+            <button
+              key={k.id}
+              type="button"
+              onClick={() => setKind(k.id)}
+              className={cn(
+                'p-3 border text-left transition-colors cursor-pointer',
+                kind === k.id
+                  ? 'border-accent bg-sunken'
+                  : 'border-line hover:bg-sunken',
+              )}
+            >
+              <div
                 className={cn(
-                  'p-4 rounded-xl text-left transition-colors border',
-                  kind === k.id
-                    ? 'bg-cyan-500/10 border-cyan-500/50'
-                    : 'bg-slate-800/50 border-transparent hover:bg-slate-700/50',
+                  'font-mono text-sm font-medium',
+                  kind === k.id ? 'text-ink' : 'text-muted',
                 )}
               >
-                <div
-                  className={cn(
-                    'font-mono text-sm font-medium',
-                    kind === k.id ? 'text-cyan-400' : 'text-white',
-                  )}
-                >
-                  {k.label}
-                </div>
-                <div className="text-xs text-muted-foreground mt-1">
-                  {k.description}
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {kind === 'nanoid' && (
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <label className="text-sm font-medium text-slate-300">
-                  Size
-                </label>
-                <span className="text-sm font-mono text-cyan-400">{size}</span>
+                {k.label}
               </div>
-              <input
-                type="range"
-                min="6"
-                max="64"
-                value={size}
-                onChange={(e) => setSize(parseInt(e.target.value))}
-                className="w-full h-2 bg-slate-700/80 rounded-lg appearance-none cursor-pointer accent-cyan-500"
-              />
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            <button
-              onClick={generateBatch}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium transition-all active:scale-95"
-            >
-              <RefreshCw className="w-5 h-5" />
-              Generate 5 IDs
+              <div className="text-xs text-faint mt-0.5">{k.description}</div>
             </button>
-            {ids.length > 0 && (
-              <button
-                onClick={() => setIds([])}
-                className="px-4 rounded-xl border border-slate-500/40 hover:bg-slate-800/50 text-slate-300 transition-all active:scale-95"
-                title="Clear list"
-              >
-                <Trash2 className="w-5 h-5" />
-              </button>
-            )}
-          </div>
+          ))}
         </div>
 
-        {/* Results */}
-        {ids.length > 0 && (
-          <div className="glass rounded-2xl p-6 space-y-2">
-            {ids.map((item, index) => (
-              <motion.div
-                key={`${item.id}-${index}`}
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index < 5 ? index * 0.05 : 0 }}
-                className="group flex items-center justify-between gap-4 p-3 rounded-xl hover:bg-slate-800/50 transition-colors"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <Fingerprint className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <code className="text-sm font-mono text-white truncate selection:bg-cyan-500/30">
-                    {item.id}
-                  </code>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  {item.kind === 'uuid' && (
-                    <span
-                      className={cn(
-                        'text-[10px] font-mono px-2 py-0.5 rounded-full',
-                        item.valid
-                          ? 'bg-emerald-500/10 text-emerald-400'
-                          : 'bg-red-500/10 text-red-400',
-                      )}
-                    >
-                      {item.valid ? 'valid v4' : 'invalid'}
-                    </span>
-                  )}
-                  {item.kind === 'ulid' && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">
-                      {new Date(
-                        parseInt(item.id.slice(0, 10), 32),
-                      ).toLocaleTimeString()}
-                    </span>
-                  )}
-                  <button
-                    onClick={() => copyAt(index)}
-                    className="text-slate-400 hover:text-white transition-colors"
-                  >
-                    {copiedIndex === index ? (
-                      <Check className="w-4 h-4 text-emerald-400" />
-                    ) : (
-                      <Copy className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+        {kind === 'nanoid' && (
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="label">Size</span>
+              <span className="text-sm font-mono text-ink">{size}</span>
+            </div>
+            <input
+              type="range"
+              min="6"
+              max="64"
+              value={size}
+              onChange={(e) => setSize(parseInt(e.target.value))}
+              className="w-full accent-ink cursor-pointer"
+            />
           </div>
         )}
-      </motion.div>
+
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={generateBatch}
+            className="btn btn-primary flex-1"
+          >
+            <RefreshCw className="size-4" />
+            Generate 5 IDs
+          </button>
+          {ids.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setIds([])}
+              className="btn-icon"
+              title="Clear list"
+            >
+              <Trash2 className="size-4" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Results */}
+      {ids.length > 0 && (
+        <div className="panel mt-4 divide-y divide-line">
+          {ids.map((item, index) => (
+            <div
+              key={`${item.id}-${index}`}
+              className="group flex items-center justify-between gap-4 px-4 py-3 hover:bg-sunken transition-colors"
+            >
+              <code className="text-[13px] font-mono text-ink truncate">
+                {item.id}
+              </code>
+              <div className="flex items-center gap-2 shrink-0">
+                {item.kind === 'uuid' && (
+                  <span
+                    className={cn(
+                      'text-[10px] font-mono px-1.5 py-0.5 rounded border',
+                      item.valid ? 'chip-ok' : 'chip-err',
+                    )}
+                  >
+                    {item.valid ? 'valid v4' : 'invalid'}
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => copyAt(index)}
+                  className="text-faint hover:text-ink transition-colors"
+                >
+                  {copiedIndex === index ? (
+                    <Check className="size-3.5 text-emerald-600" />
+                  ) : (
+                    <Copy className="size-3.5" />
+                  )}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

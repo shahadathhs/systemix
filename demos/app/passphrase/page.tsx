@@ -5,17 +5,7 @@ import {
   calculatePassphraseEntropy,
   generatePassphrase,
 } from '@systemix/passphrase';
-import {
-  Binary,
-  Check,
-  Copy,
-  Hash,
-  Info,
-  RefreshCw,
-  Shield,
-  Type,
-} from 'lucide-react';
-import { motion } from 'motion/react';
+import { Check, Copy, RefreshCw } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function PassphrasePage() {
@@ -36,7 +26,7 @@ export default function PassphrasePage() {
     try {
       const pass = generatePassphrase(options);
       setPassphrase(pass);
-      // Default wordlist is approx 7776 words (eff_large)
+      // Default wordlist is approximately 7,776 words (EFF large list)
       setEntropy(calculatePassphraseEntropy(options.wordCount, 7776));
     } catch (e: unknown) {
       console.error(e instanceof Error ? e.message : e);
@@ -50,226 +40,154 @@ export default function PassphrasePage() {
   const copyToClipboard = () => {
     void navigator.clipboard.writeText(passphrase).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 1500);
     });
   };
 
-  const strength =
-    entropy > 80
-      ? { label: 'Excellent', color: 'text-emerald-400' }
-      : { label: 'Good', color: 'text-cyan-400' };
-
   return (
-    <div className="max-w-4xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="space-y-8"
-      >
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">
-            Passphrase Generator
-          </h1>
-          <p className="text-muted-foreground">
-            Create memorable but cryptographically secure passphrases.
-          </p>
-        </div>
+    <div className="max-w-3xl mx-auto px-6 sm:px-10 py-10 w-full">
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink">
+          Passphrase Generator
+        </h1>
+        <p className="mt-2 text-sm text-muted leading-relaxed">
+          Memorable passphrases built from a 7,776-word list with crypto-grade
+          randomness.
+        </p>
+      </div>
 
-        {/* Display */}
-        <div className="glass rounded-2xl p-8 group relative overflow-hidden">
-          <div className="flex flex-col sm:flex-row gap-6 items-center justify-between relative z-10">
-            <div className="text-xl sm:text-2xl font-medium text-white break-all tracking-tight leading-relaxed selection:bg-cyan-500/30">
-              {passphrase}
-            </div>
-            <div className="flex gap-2 shrink-0">
-              <button
-                onClick={handleGenerate}
-                className="p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 text-white transition-colors"
-              >
-                <RefreshCw className="w-5 h-5" />
-              </button>
-              <button
-                onClick={copyToClipboard}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-medium transition-all active:scale-95"
-              >
-                {copied ? (
-                  <Check className="w-5 h-5" />
-                ) : (
-                  <Copy className="w-5 h-5" />
-                )}
-                {copied ? 'Copied' : 'Copy'}
-              </button>
-            </div>
+      {/* Output */}
+      <div className="panel p-6">
+        <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <code className="text-lg font-mono font-medium text-ink break-all selection:bg-[var(--bg-sunken)] min-w-0">
+            {passphrase}
+          </code>
+          <div className="flex gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={handleGenerate}
+              className="btn-icon"
+              title="Regenerate"
+            >
+              <RefreshCw className="size-4" />
+            </button>
+            <button
+              type="button"
+              onClick={copyToClipboard}
+              className="btn btn-primary"
+            >
+              {copied ? (
+                <Check className="size-4" />
+              ) : (
+                <Copy className="size-4" />
+              )}
+              {copied ? 'Copied' : 'Copy'}
+            </button>
           </div>
+        </div>
+        <div className="mt-5 pt-4 border-t border-line flex items-center gap-2 text-sm text-muted">
+          Estimated entropy:{' '}
+          <span className="font-mono text-ink">{entropy.toFixed(1)}</span> bits
+        </div>
+      </div>
 
-          <div className="mt-8 flex flex-wrap gap-6 items-center border-t border-slate-700/50 pt-6">
-            <div className="flex items-center gap-2">
-              <Shield className={cn('w-4 h-4', strength.color)} />
-              <span className="text-sm font-medium text-white">
-                {strength.label}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Info className="w-4 h-4" />
+      {/* Word count */}
+      <div className="panel p-6 mt-4">
+        <div className="space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="label">Word count</span>
+            <span className="text-sm font-mono text-ink">
+              {options.wordCount}
+            </span>
+          </div>
+          <input
+            type="range"
+            min="2"
+            max="12"
+            value={options.wordCount}
+            onChange={(e) =>
+              setOptions({
+                ...options,
+                wordCount: parseInt(e.target.value),
+              })
+            }
+            className="w-full accent-ink cursor-pointer"
+          />
+        </div>
+      </div>
+
+      {/* Separator */}
+      <div className="panel p-6 mt-4">
+        <div className="label mb-3">Separator</div>
+        <div className="flex gap-2">
+          {[' ', '-', '_', '.'].map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() =>
+                setOptions({
+                  ...options,
+                  separator: s,
+                  randomSeparator: false,
+                })
+              }
+              className={cn(
+                'segment',
+                options.separator === s && !options.randomSeparator
+                  ? 'segment-active'
+                  : '',
+              )}
+            >
+              {s === ' ' ? 'Space' : s}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Formatting */}
+      <div className="panel p-6 mt-4">
+        <h2 className="section-title mb-4">Formatting</h2>
+        <div className="space-y-3">
+          {(
+            [
+              ['useTitleCase', 'Title Case', 'Capitalizes each word.'],
+              ['useUpperCase', 'UPPERCASE', 'Uppercases everything.'],
+              [
+                'includeNumber',
+                'Include number',
+                'Appends a random digit to each word.',
+              ],
+              [
+                'randomSeparator',
+                'Mixed separators',
+                'Random separator between each word pair.',
+              ],
+            ] as const
+          ).map(([key, label, description]) => (
+            <label
+              key={key}
+              className="flex items-start gap-3 cursor-pointer group"
+            >
+              <input
+                type="checkbox"
+                checked={options[key]}
+                onChange={(e) =>
+                  setOptions({ ...options, [key]: e.target.checked })
+                }
+                className="mt-0.5 size-4 rounded border-line-strong accent-ink cursor-pointer"
+              />
               <span>
-                Estimated Entropy:{' '}
-                <span className="text-white font-mono">
-                  {entropy.toFixed(1)}
-                </span>{' '}
-                bits
+                <span className="block text-sm text-ink group-hover:text-ink transition-colors">
+                  {label}
+                </span>
+                <span className="block text-xs text-faint mt-0.5">
+                  {description}
+                </span>
               </span>
-            </div>
-          </div>
+            </label>
+          ))}
         </div>
-
-        {/* Controls */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="glass rounded-2xl p-6 space-y-6">
-            <h3 className="text-lg font-semibold text-white">Core Options</h3>
-
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <label className="text-sm font-medium text-slate-300">
-                    Word Count
-                  </label>
-                  <span className="text-sm font-mono text-cyan-400">
-                    {options.wordCount}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="2"
-                  max="20"
-                  value={options.wordCount}
-                  onChange={(e) =>
-                    setOptions({
-                      ...options,
-                      wordCount: parseInt(e.target.value),
-                    })
-                  }
-                  className="w-full h-2 bg-slate-700/80 rounded-lg appearance-none cursor-pointer accent-cyan-500"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">
-                  Separator
-                </label>
-                <div className="flex gap-2">
-                  {[' ', '-', '_', '.'].map((s) => (
-                    <button
-                      key={s}
-                      onClick={() =>
-                        setOptions({
-                          ...options,
-                          separator: s,
-                          randomSeparator: false,
-                        })
-                      }
-                      className={cn(
-                        'flex-1 py-2 rounded-lg border text-sm transition-all',
-                        options.separator === s && !options.randomSeparator
-                          ? 'bg-cyan-500 border-cyan-500 text-slate-950'
-                          : 'bg-slate-800/50 border-slate-700/80 text-slate-400 hover:bg-slate-700/50',
-                      )}
-                    >
-                      {s === ' ' ? 'Space' : s}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="glass rounded-2xl p-6 space-y-6">
-            <h3 className="text-lg font-semibold text-white">
-              Advanced Formatting
-            </h3>
-
-            <div className="grid grid-cols-1 gap-4">
-              <ToggleCard
-                icon={Type}
-                title="Title Case"
-                description="Capitalizes the first letter of each word."
-                active={options.useTitleCase}
-                onClick={() =>
-                  setOptions({
-                    ...options,
-                    useTitleCase: !options.useTitleCase,
-                    useUpperCase: false,
-                  })
-                }
-              />
-              <ToggleCard
-                icon={Binary}
-                title="Random Numbers"
-                description="Injects a random digit into each word."
-                active={options.includeNumber}
-                onClick={() =>
-                  setOptions({
-                    ...options,
-                    includeNumber: !options.includeNumber,
-                  })
-                }
-              />
-              <ToggleCard
-                icon={Hash}
-                title="Mix Separators"
-                description="Uses a random separator between each word pair."
-                active={options.randomSeparator}
-                onClick={() =>
-                  setOptions({
-                    ...options,
-                    randomSeparator: !options.randomSeparator,
-                  })
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </motion.div>
+      </div>
     </div>
-  );
-}
-
-function ToggleCard({
-  icon: Icon,
-  title,
-  description,
-  active,
-  onClick,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        'flex items-start gap-4 p-4 rounded-xl border transition-all text-left',
-        active
-          ? 'bg-cyan-500/10 border-cyan-500/50 ring-1 ring-cyan-500/20'
-          : 'bg-slate-800/50 border-slate-700/80 hover:bg-slate-700/50',
-      )}
-    >
-      <div
-        className={cn(
-          'p-2 rounded-lg shrink-0',
-          active
-            ? 'bg-cyan-500 text-slate-950'
-            : 'bg-slate-800/50 text-slate-400',
-        )}
-      >
-        <Icon className="w-5 h-5" />
-      </div>
-      <div>
-        <div className="text-sm font-semibold text-white">{title}</div>
-        <div className="text-xs text-slate-400 mt-1">{description}</div>
-      </div>
-    </button>
   );
 }

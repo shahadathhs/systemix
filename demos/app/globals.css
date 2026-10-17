@@ -1,74 +1,297 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #0a0c10;
-  --foreground: #e6edf3;
-  --primary: #22d3ee;
-  --primary-foreground: #0a0c10;
-  --secondary: #1a1f2e;
-  --secondary-foreground: #e6edf3;
-  --muted: #1a1f2e;
-  --muted-foreground: #8b949e;
-  --accent: #1a1f2e;
-  --accent-foreground: #e6edf3;
-  --destructive: #f87171;
-  --destructive-foreground: #0a0c10;
-  --border: #21262d;
-  --input: #21262d;
-  --ring: #22d3ee;
-  --card-bg: rgba(22, 27, 34, 0.7);
-  --card-border: rgba(48, 54, 61, 0.8);
-  --card-accent: #22d3ee;
-  --glass-bg: rgba(22, 27, 34, 0.8);
-  --glass-border: rgba(48, 54, 61, 0.8);
+  /*
+   * Neutral tiers: shadcn/ui "zinc" theme — the default, cool and crisp.
+   * Brand accent (secure green) layered on top, used sparingly.
+   */
+  --bg: #fafafa; /* zinc-50 */
+  --bg-raised: #ffffff;
+  --bg-sunken: #f4f4f5; /* zinc-100 */
+  --ink: #18181b; /* zinc-950 */
+  --muted: #52525b; /* zinc-600 */
+  --faint: #71717a; /* zinc-500 */
+  --line: #e4e4e7; /* zinc-200 */
+  --line-strong: #d4d4d8; /* zinc-300 */
+  --accent: #15803d; /* green-700 */
+  --accent-ink: #166534; /* green-800 */
+  --invert-bg: #18181b; /* primary */
+  --invert-fg: #fafafa; /* primary-fg */
+
+  --font-sans:
+    var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, sans-serif;
+  --font-mono:
+    var(--font-fragment), ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* shadcn zinc dark — cool near-black, proper lift tiers */
+[data-theme='dark'] {
+  --bg: #09090b; /* zinc-950 */
+  --bg-raised: #131316;
+  --bg-sunken: #050506;
+  --ink: #f4f4f5; /* zinc-100 */
+  --muted: #a1a1aa; /* zinc-400 */
+  --faint: #71717a; /* zinc-500 */
+  --line: #27272a; /* zinc-800 */
+  --line-strong: #3f3f46; /* zinc-700 */
+  --accent: #4ade80; /* green-400 */
+  --accent-ink: #86efac; /* green-300 */
+  --invert-bg: #f4f4f5; /* primary */
+  --invert-fg: #09090b; /* primary-fg */
+}
+
+:root {
+  color-scheme: light;
+}
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* Code surfaces — dark block on light page; raised surface on dark page */
+:root {
+  --code-bg: #0a0a0c;
+  --code-chrome: #131316;
+  --code-border: #26262b;
+  --code-fg: #e9e9ec;
+}
+[data-theme='dark'] {
+  --code-bg: #101013;
+  --code-chrome: #17171b;
+  --code-border: var(--line-strong);
+  --code-fg: #ececef;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
-/* Links - ensure they look clickable across the project */
+code,
+pre,
+kbd {
+  font-family: var(--font-mono);
+}
+
+input[type='range'] {
+  accent-color: var(--accent);
+}
+
+/* Code inside pre renders plain — never inherit the inline-code chip style */
+pre code {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: inherit;
+  font-size: inherit;
+}
+
 a:not([class]) {
-  color: #0891b2;
+  color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 2px;
+  text-decoration-color: var(--line-strong);
 }
 a:not([class]):hover {
-  color: #0e7490;
-}
-.root a:not([class]) {
-  color: #22d3ee;
-}
-.root a:not([class]):hover {
-  color: #67e8f9;
+  text-decoration-color: var(--ink);
 }
 
-@layer utilities {
-  /* Distinctive card: dark base, left accent, subtle border - not generic shadcn */
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-left: 3px solid var(--card-accent);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* Everything clickable gets a pointer — Tailwind v4 preflight doesn't */
+a,
+button:not(:disabled),
+[role='button'],
+summary,
+label:has(> input),
+select {
+  cursor: pointer;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-raised: var(--bg-raised);
+  --color-sunken: var(--bg-sunken);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+}
+
+@layer components {
+  /* Display face — tight and heavy */
+  .font-display {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: -0.035em;
   }
-  .card:hover {
-    border-color: rgba(34, 211, 238, 0.3);
-    box-shadow: 0 4px 12px rgba(34, 211, 238, 0.08);
+
+  /* HUD micro-label — mono, uppercase, wide tracking */
+  .hud {
+    @apply font-mono text-[11px] uppercase tracking-[0.15em] font-medium;
+    color: var(--faint);
   }
-  /* Demo panels - slightly different from cards */
-  .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
+  .hud-accent {
+    color: var(--accent-ink);
+  }
+
+  /* Sharp hairline panel */
+  .panel {
+    @apply border bg-raised;
+    border-color: var(--line);
+  }
+
+  /* Form controls — sharp, hairline */
+  .field {
+    @apply w-full px-3 py-2 text-sm transition-colors focus:outline-none disabled:opacity-50;
+    @apply border bg-raised;
+    border-color: var(--line-strong);
+    color: var(--ink);
+  }
+  .field::placeholder {
+    color: var(--faint);
+  }
+  .field:focus {
+    border-color: var(--ink);
+  }
+
+  /* Buttons — sharp mono uppercase */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 h-11 px-5 cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none;
+    @apply font-mono text-[11px] font-bold uppercase tracking-[0.12em];
+  }
+  .btn-primary {
+    background: var(--invert-bg);
+    color: var(--invert-fg);
+  }
+  .btn-primary:hover {
+    opacity: 0.85;
+  }
+  .btn-ghost {
+    @apply border;
+    border-color: var(--line-strong);
+    color: var(--ink);
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    background: var(--bg-sunken);
+  }
+  .btn-icon {
+    @apply inline-flex items-center justify-center w-11 h-11 border cursor-pointer transition-colors;
+    border-color: var(--line-strong);
+    color: var(--muted);
+  }
+  .btn-icon:hover {
+    color: var(--ink);
+    background: var(--bg-sunken);
+  }
+
+  /* Section heading with trailing period device */
+  .section-title {
+    @apply text-2xl;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+  }
+  .section-title::after {
+    content: '.';
+    color: var(--accent);
+  }
+
+  /* Monospace output boxes — sunken */
+  .mono-box {
+    @apply p-3.5 font-mono text-xs break-all whitespace-pre-wrap leading-relaxed border;
+    background: var(--bg-sunken);
+    border-color: var(--line);
+    color: var(--ink);
+  }
+
+  /* Segmented options — sharp */
+  .segment {
+    @apply flex-1 h-10 border text-sm transition-colors cursor-pointer;
+    border-color: var(--line-strong);
+    color: var(--muted);
+    background: transparent;
+  }
+  .segment:hover {
+    background: var(--bg-sunken);
+  }
+  .segment-active {
+    background: var(--invert-bg);
+    color: var(--invert-fg);
+    border-color: var(--invert-bg);
+  }
+  .segment-active:hover {
+    background: var(--invert-bg);
+  }
+
+  /* 1px-gap hairline grid — the signature device */
+  .ruled-grid {
+    @apply grid gap-px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .ruled-cell {
+    background: var(--bg);
+    padding: 1.25rem;
+  }
+  .ruled-cell:hover {
+    background: var(--bg-raised);
+  }
+
+  /* Status chips */
+  .chip-ok {
+    @apply px-1.5 py-0.5 border font-mono text-[10px];
+    color: var(--accent-ink);
+    border-color: var(--accent);
+    background: transparent;
+  }
+  .chip-err {
+    @apply px-1.5 py-0.5 border font-mono text-[10px];
+    color: #dc2626;
+    border-color: #dc2626;
+    background: transparent;
+  }
+  [data-theme='dark'] .chip-err {
+    color: #f87171;
+    border-color: #f87171;
+  }
+  .status-ok {
+    color: var(--accent-ink);
+  }
+  .status-err {
+    color: #dc2626;
+  }
+  [data-theme='dark'] .status-err {
+    color: #f87171;
   }
 }
 
-/* Hide scrollbars while keeping scroll functionality - use @utility for Tailwind v4 */
+/* Hide scrollbars while keeping scroll functionality */
 @utility scrollbar-hide {
   scrollbar-width: none;
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* Respect reduced-motion: reveals appear without transforms */
+@media (prefers-reduced-motion: reduce) {
+  .transition-all {
+    transition: none !important;
+    transform: none !important;
   }
 }

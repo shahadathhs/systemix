@@ -1,222 +1,100 @@
 'use client';
 
-import {
-  BookOpen,
-  Braces,
-  ChevronDown,
-  ChevronRight,
-  ExternalLink,
-  FileCode,
-  FileText,
-  Fingerprint,
-  Gauge,
-  Hash,
-  KeyRound,
-  Lock,
-  LockKeyhole,
-  Play,
-  Settings,
-  Shield,
-  User,
-  X,
-} from 'lucide-react';
-import { GithubIcon } from '@/components/brand-icons';
 import Link from 'next/link';
+import { GithubIcon } from '@/components/brand-icons';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-function CollapsibleSection({
-  title,
-  defaultOpen = true,
-  children,
-}: {
-  title: string;
-  defaultOpen?: boolean;
-  children: React.ReactNode;
-}) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div>
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 w-full text-xs font-semibold text-slate-500 uppercase tracking-wider py-2 px-3 rounded-lg hover:bg-slate-800/50 hover:text-slate-400 transition-colors"
-      >
-        {open ? (
-          <ChevronDown className="w-4 h-4 transition-transform" />
-        ) : (
-          <ChevronRight className="w-4 h-4 transition-transform" />
-        )}
-        {title}
-      </button>
-      {open && <div className="pl-2">{children}</div>}
-    </div>
-  );
-}
+import { useEffect } from 'react';
+import { X } from 'lucide-react';
 
 const cn = (...classes: (string | boolean | undefined)[]) =>
   classes.filter(Boolean).join(' ');
 
-const iconShortcuts = [
-  { href: '/', icon: FileText, title: 'Home' },
-  { href: '/docs', icon: BookOpen, title: 'Docs' },
-  { href: '/about', icon: User, title: 'About' },
+const sections = [
   {
-    href: 'https://github.com/shahadathhs/systemix',
-    icon: GithubIcon,
-    title: 'GitHub',
+    title: 'Guide',
+    items: [
+      { href: '/docs', label: 'Introduction' },
+      { href: '/docs/eslint', label: 'ESLint Config' },
+      { href: '/docs/typescript', label: 'TypeScript Config' },
+      { href: '/docs/runner', label: 'Test Runner' },
+    ],
   },
-] as const;
-
-const mainNav = [
-  { href: '/', icon: FileText, label: 'Home', exact: true },
-  { href: '/docs', icon: BookOpen, label: 'Overview', exact: true },
-  { href: '/about', icon: User, label: 'About', exact: true },
-] as const;
-
-const docItems = [
-  { href: '/docs/env', icon: Settings, label: 'Env' },
-  { href: '/docs/password', icon: Lock, label: 'Password' },
-  { href: '/docs/passphrase', icon: KeyRound, label: 'Passphrase' },
-  { href: '/docs/token', icon: Shield, label: 'Token' },
-  { href: '/docs/hash', icon: Hash, label: 'Hash' },
-  { href: '/docs/cipher', icon: LockKeyhole, label: 'Cipher' },
-  { href: '/docs/id', icon: Fingerprint, label: 'Id' },
-  { href: '/docs/rate-limit', icon: Gauge, label: 'Rate Limit' },
-  { href: '/docs/eslint', icon: FileCode, label: 'ESLint' },
-  { href: '/docs/typescript', icon: Braces, label: 'TypeScript' },
-  { href: '/docs/runner', icon: Play, label: 'Runner' },
-] as const;
-
-const demoItems = [
-  { href: '/env', icon: Settings, label: 'Env' },
-  { href: '/password', icon: Lock, label: 'Password' },
-  { href: '/passphrase', icon: KeyRound, label: 'Passphrase' },
-  { href: '/token', icon: Shield, label: 'Token' },
-  { href: '/hash', icon: Hash, label: 'Hash' },
-  { href: '/cipher', icon: LockKeyhole, label: 'Cipher' },
-  { href: '/id', icon: Fingerprint, label: 'Id' },
-  { href: '/rate-limit', icon: Gauge, label: 'Rate Limit' },
+  {
+    title: 'Packages',
+    items: [
+      { href: '/docs/env', label: 'env' },
+      { href: '/docs/password', label: 'password' },
+      { href: '/docs/passphrase', label: 'passphrase' },
+      { href: '/docs/token', label: 'token' },
+      { href: '/docs/hash', label: 'hash' },
+      { href: '/docs/cipher', label: 'cipher' },
+      { href: '/docs/id', label: 'id' },
+      { href: '/docs/rate-limit', label: 'rate-limit' },
+    ],
+  },
+  {
+    title: 'Demos',
+    items: [
+      { href: '/env', label: 'Env Loader' },
+      { href: '/password', label: 'Password' },
+      { href: '/passphrase', label: 'Passphrase' },
+      { href: '/token', label: 'Token' },
+      { href: '/hash', label: 'Hash' },
+      { href: '/cipher', label: 'Cipher' },
+      { href: '/id', label: 'ID' },
+      { href: '/rate-limit', label: 'Rate Limit' },
+    ],
+  },
 ] as const;
 
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
-  const linkClass = (href: string, exact?: boolean) => {
-    const active = exact
-      ? pathname === href
-      : pathname === href || pathname?.startsWith(href + '/');
-    return cn(
-      'flex items-center gap-2 text-sm py-2.5 px-3 rounded-lg transition-colors',
-      active
-        ? 'bg-cyan-500/10 text-cyan-400 font-medium'
-        : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
-    );
-  };
-
-  const linkProps = (href: string) =>
-    href.startsWith('http') ? {} : { onClick: onNavigate };
-
   return (
-    <>
-      {/* Icon section - visible only on sm (mobile drawer) */}
-      <div className="lg:hidden flex gap-2 pb-4 mb-4 border-b border-slate-700/80">
-        {iconShortcuts.map(({ href, icon: Icon, title }) => {
-          const external = href.startsWith('http');
-          const isActive =
-            !external &&
-            (pathname === href || pathname?.startsWith(href + '/'));
-          const baseClass =
-            'p-2.5 rounded-lg transition-colors ' +
-            (isActive
-              ? 'bg-cyan-500/10 text-cyan-400'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/50');
-          return external ? (
-            <a
-              key={href}
-              href={href}
-              target="_blank"
-              rel="noreferrer"
-              className={baseClass}
-              title={title}
-            >
-              <Icon className="w-5 h-5" />
-            </a>
-          ) : (
-            <Link
-              key={href}
-              href={href}
-              className={baseClass}
-              {...linkProps(href)}
-              title={title}
-            >
-              <Icon className="w-5 h-5" />
-            </Link>
-          );
-        })}
-      </div>
-
-      <div className="space-y-1 pb-4 border-b border-slate-700/80 mb-4">
-        {mainNav.map(({ href, icon: Icon, label, exact }) => (
-          <Link
-            key={href}
-            href={href}
-            className={linkClass(href, exact)}
-            {...linkProps(href)}
-          >
-            <Icon className="w-4 h-4 shrink-0 opacity-70" />
-            {label}
-          </Link>
-        ))}
-      </div>
-
-      <div className="space-y-2">
-        <CollapsibleSection title="Documentation" defaultOpen>
-          <ul className="space-y-0.5 pt-1">
-            {docItems.map(({ href, icon: Icon, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className={linkClass(href, true)}
-                  {...linkProps(href)}
-                >
-                  <Icon className="w-4 h-4 shrink-0 opacity-70" />
-                  {label}
-                </Link>
-              </li>
-            ))}
+    <nav className="space-y-7">
+      {sections.map((section) => (
+        <div key={section.title}>
+          <div className="hud mb-2.5 px-2">{section.title}</div>
+          <ul>
+            {section.items.map(({ href, label }) => {
+              // Sidebar items map 1:1 to pages — exact match only, so
+              // /docs/cipher never highlights the /docs introduction too
+              const active = pathname === href;
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    onClick={onNavigate}
+                    className={cn(
+                      'block py-1.5 px-2 text-sm transition-colors border-l-2 -ml-px hover:bg-sunken',
+                      active
+                        ? 'text-ink font-medium'
+                        : 'text-faint hover:text-ink',
+                    )}
+                    style={
+                      active
+                        ? { borderColor: 'var(--accent)' }
+                        : { borderColor: 'transparent' }
+                    }
+                  >
+                    {label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
-        </CollapsibleSection>
-
-        <CollapsibleSection title="Live Demos" defaultOpen>
-          <ul className="space-y-0.5 pt-1">
-            {demoItems.map(({ href, icon: Icon, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className={linkClass(href, true)}
-                  {...linkProps(href)}
-                >
-                  <Icon className="w-4 h-4 shrink-0 opacity-70" />
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </CollapsibleSection>
-
-        <a
-          href="https://github.com/shahadathhs/systemix"
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-2 text-sm text-slate-400 hover:text-white py-2.5 px-3 rounded-lg hover:bg-slate-800/50 transition-colors"
-        >
-          <GithubIcon className="w-4 h-4 shrink-0" />
-          GitHub
-          <ExternalLink className="w-3 h-3 opacity-60" />
-        </a>
-      </div>
-    </>
+        </div>
+      ))}
+      <a
+        href="https://github.com/shahadathhs/systemix"
+        target="_blank"
+        rel="noreferrer"
+        className="flex items-center gap-2 py-1.5 px-2 text-sm text-faint hover:text-ink transition-colors"
+      >
+        <GithubIcon className="size-3.5" />
+        GitHub
+      </a>
+    </nav>
   );
 }
 
@@ -228,57 +106,48 @@ export function Sidebar({
   setOpen: (v: boolean) => void;
 }) {
   useEffect(() => {
-    const handler = () => setOpen(false);
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
-  }, [setOpen]);
-
-  useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+      return () => {
+        document.body.style.overflow = '';
+      };
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [open]);
 
   return (
     <>
-      {/* Mobile overlay - above navbar (z-[60]) */}
       {open && (
         <div
-          className="lg:hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 z-[60] bg-zinc-950/20"
           onClick={() => setOpen(false)}
           aria-hidden="true"
         />
       )}
 
-      {/* Sidebar - drawer on mobile (above navbar), sticky on desktop */}
       <aside
         className={cn(
-          'fixed lg:sticky top-0 lg:top-14 left-0 z-[60] lg:z-40 w-72 shrink-0',
+          'fixed lg:sticky top-0 lg:top-14 left-0 z-[60] lg:z-30 w-60 shrink-0',
           'h-screen lg:h-[calc(100vh-3.5rem)]',
-          'bg-background/95 lg:bg-background border-r border-slate-800/80',
-          'flex flex-col p-4 overflow-y-auto scrollbar-hide',
-          'transition-transform duration-300 ease-in-out',
-          'lg:translate-x-0 lg:shadow-none',
-          open ? 'translate-x-0 shadow-2xl' : '-translate-x-full',
+          'border-r flex flex-col p-4 overflow-y-auto scrollbar-hide',
+          'transition-transform duration-200',
+          'lg:translate-x-0',
+          open ? 'translate-x-0' : '-translate-x-full',
         )}
+        style={{ background: 'var(--bg)', borderColor: 'var(--line)' }}
       >
-        <button
-          type="button"
-          onClick={() => setOpen(false)}
-          className="lg:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-800/50 text-slate-400"
-          aria-label="Close menu"
-        >
-          <X className="w-5 h-5" />
-        </button>
+        <div className="flex items-center justify-between mb-5 lg:hidden">
+          <span className="font-display text-sm text-ink">Systemix</span>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="p-2 text-faint hover:text-ink hover:bg-sunken"
+            aria-label="Close menu"
+          >
+            <X className="size-5" />
+          </button>
+        </div>
 
-        <nav className="flex-1 pt-4">
-          <NavContent onNavigate={() => setOpen(false)} />
-        </nav>
+        <NavContent onNavigate={() => setOpen(false)} />
       </aside>
     </>
   );

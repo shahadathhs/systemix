@@ -14,10 +14,10 @@ export function DocsLayoutClient({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   return (
-    <div className="flex h-[calc(100vh-3.5rem-4rem)] min-h-[32rem] gap-8">
+    <div className="flex gap-10 w-full max-w-6xl mx-auto px-6 sm:px-10 py-10">
       <div
         ref={articleRef}
-        className="flex-1 min-w-0 max-w-3xl border-red-500 overflow-y-auto pr-4 scroll-smooth scrollbar-hide"
+        className="flex-1 min-w-0 max-w-3xl scroll-smooth"
         data-docs-article
       >
         {children}
