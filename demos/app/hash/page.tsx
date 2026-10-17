@@ -202,13 +202,13 @@ export default function HashPage() {
           </button>
 
           {verifyState === 'match' && (
-            <div className="flex items-center gap-2 text-sm text-emerald-700 border border-emerald-200 bg-emerald-50 rounded-md px-3 py-2.5">
+            <div className="flex items-center gap-2 text-sm text-emerald-700 border border-emerald-200 bg-emerald-50 px-3 py-2.5">
               <Check className="size-4" />
               Password matches
             </div>
           )}
           {verifyState === 'mismatch' && (
-            <div className="flex items-center gap-2 text-sm text-red-700 border border-red-200 bg-red-50 rounded-md px-3 py-2.5">
+            <div className="flex items-center gap-2 text-sm text-red-700 border border-red-200 bg-red-50 px-3 py-2.5">
               <X className="size-4" />
               Password does not match
             </div>

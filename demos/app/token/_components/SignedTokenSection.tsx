@@ -136,7 +136,7 @@ export function SignedTokenSection() {
               key={t}
               onClick={() => setTab(t)}
               className={cn(
-                'px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all',
+                'px-4 py-2 text-sm font-medium capitalize transition-all',
                 tab === t
                   ? 'bg-zinc-900 text-zinc-950'
                   : 'bg-white border border-zinc-300 text-zinc-500 hover:bg-zinc-50',
@@ -159,7 +159,7 @@ export function SignedTokenSection() {
                     key={alg}
                     onClick={() => setEncodeAlg(alg)}
                     className={cn(
-                      'px-4 h-9 rounded-md text-sm font-medium transition-colors',
+                      'px-4 h-9 text-sm font-medium transition-colors',
                       encodeAlg === alg
                         ? 'bg-zinc-900 text-zinc-950'
                         : 'bg-white border border-zinc-300 text-zinc-500 hover:bg-zinc-50',
@@ -180,7 +180,7 @@ export function SignedTokenSection() {
                   value={secret}
                   onChange={(e) => setSecret(e.target.value)}
                   placeholder="my-secret-key"
-                  className="w-full px-4 py-2 rounded-lg bg-white border border-zinc-300 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
+                  className="w-full px-4 py-2 bg-white border border-zinc-300 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
                 />
               </div>
             ) : (
@@ -202,7 +202,7 @@ export function SignedTokenSection() {
                   onChange={(e) => setPrivateKey(e.target.value)}
                   rows={6}
                   placeholder="-----BEGIN PRIVATE KEY-----"
-                  className="w-full px-4 py-2 rounded-lg bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
+                  className="w-full px-4 py-2 bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
                 />
               </div>
             )}
@@ -214,7 +214,7 @@ export function SignedTokenSection() {
                 value={payloadJson}
                 onChange={(e) => setPayloadJson(e.target.value)}
                 rows={4}
-                className="w-full px-4 py-2 rounded-lg bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
+                className="w-full px-4 py-2 bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
                 placeholder='{"userId": "123"}'
               />
             </div>
@@ -229,13 +229,13 @@ export function SignedTokenSection() {
                 onChange={(e) =>
                   setExpiresIn(parseInt(e.target.value, 10) || 0)
                 }
-                className="w-32 px-4 py-2 rounded-lg bg-white border border-zinc-300 text-zinc-900 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
+                className="w-32 px-4 py-2 bg-white border border-zinc-300 text-zinc-900 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
               />
             </div>
             <button
               onClick={handleEncode}
               disabled={loading}
-              className="px-6 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-700 text-zinc-950 font-medium disabled:opacity-50 rounded-md h-10 px-4 text-sm"
+              className="px-6 py-2 bg-zinc-900 hover:bg-zinc-700 text-zinc-950 font-medium disabled:opacity-50 h-10 px-4 text-sm"
             >
               {loading ? 'Encoding…' : 'Encode'}
             </button>
@@ -245,7 +245,7 @@ export function SignedTokenSection() {
                   Token
                 </label>
                 <div className="flex gap-2">
-                  <pre className="flex-1 font-mono text-sm text-zinc-950 break-all bg-zinc-50 border border-zinc-200 rounded-md px-3 py-2 overflow-x-auto">
+                  <pre className="flex-1 font-mono text-sm text-zinc-950 break-all bg-zinc-50 border border-zinc-200 px-3 py-2 overflow-x-auto">
                     {encodedToken}
                   </pre>
                   <CopyButton text={encodedToken} />
@@ -292,13 +292,13 @@ export function SignedTokenSection() {
                 onChange={(e) => setDecodeToken(e.target.value)}
                 rows={3}
                 placeholder="Paste signed token (header.payload.signature)"
-                className="w-full px-4 py-2 rounded-lg bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
+                className="w-full px-4 py-2 bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
               />
             </div>
             <button
               onClick={handleDecode}
               disabled={loading}
-              className="px-6 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-700 text-zinc-950 font-medium disabled:opacity-50 rounded-md h-10 px-4 text-sm"
+              className="px-6 py-2 bg-zinc-900 hover:bg-zinc-700 text-zinc-950 font-medium disabled:opacity-50 h-10 px-4 text-sm"
             >
               {loading ? 'Decoding…' : 'Decode'}
             </button>
@@ -312,7 +312,7 @@ export function SignedTokenSection() {
                       <label className="text-sm font-medium text-zinc-600">
                         Header
                       </label>
-                      <pre className="font-mono text-sm text-zinc-950 bg-zinc-50 border border-zinc-200 rounded-md px-3 py-2 overflow-x-auto">
+                      <pre className="font-mono text-sm text-zinc-950 bg-zinc-50 border border-zinc-200 px-3 py-2 overflow-x-auto">
                         {JSON.stringify(decodeResult.header, null, 2)}
                       </pre>
                     </div>
@@ -320,7 +320,7 @@ export function SignedTokenSection() {
                       <label className="text-sm font-medium text-zinc-600">
                         Payload
                       </label>
-                      <pre className="font-mono text-sm text-zinc-950 bg-zinc-50 border border-zinc-200 rounded-md px-3 py-2 overflow-x-auto">
+                      <pre className="font-mono text-sm text-zinc-950 bg-zinc-50 border border-zinc-200 px-3 py-2 overflow-x-auto">
                         {JSON.stringify(decodeResult.payload, null, 2)}
                       </pre>
                     </div>
@@ -340,7 +340,7 @@ export function SignedTokenSection() {
                 onChange={(e) => handleVerifyTokenChange(e.target.value)}
                 rows={3}
                 placeholder="Paste signed token (HMAC or RSA)"
-                className="w-full px-4 py-2 rounded-lg bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
+                className="w-full px-4 py-2 bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
               />
             </div>
             {verifyAlg === 'RS256' ? (
@@ -362,7 +362,7 @@ export function SignedTokenSection() {
                   onChange={(e) => setVerifyPublicKey(e.target.value)}
                   rows={6}
                   placeholder="-----BEGIN PUBLIC KEY-----"
-                  className="w-full px-4 py-2 rounded-lg bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
+                  className="w-full px-4 py-2 bg-white border border-zinc-300 text-zinc-900 font-mono text-sm placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
                 />
               </div>
             ) : (
@@ -375,7 +375,7 @@ export function SignedTokenSection() {
                   value={verifySecret}
                   onChange={(e) => setVerifySecret(e.target.value)}
                   placeholder="Same secret used to encode"
-                  className="w-full px-4 py-2 rounded-lg bg-white border border-zinc-300 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
+                  className="w-full px-4 py-2 bg-white border border-zinc-300 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10"
                 />
               </div>
             )}
@@ -389,7 +389,7 @@ export function SignedTokenSection() {
                   ? !verifyPublicKey.trim()
                   : !verifySecret.trim())
               }
-              className="px-6 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-700 text-zinc-950 font-medium disabled:opacity-50 rounded-md h-10 px-4 text-sm"
+              className="px-6 py-2 bg-zinc-900 hover:bg-zinc-700 text-zinc-950 font-medium disabled:opacity-50 h-10 px-4 text-sm"
             >
               {loading ? 'Verifying…' : 'Verify'}
             </button>
@@ -400,7 +400,7 @@ export function SignedTokenSection() {
                     <p className="text-sm font-medium text-emerald-600">
                       ✓ Valid signature
                     </p>
-                    <pre className="font-mono text-sm text-zinc-950 bg-zinc-50 border border-zinc-200 rounded-md px-3 py-2 overflow-x-auto">
+                    <pre className="font-mono text-sm text-zinc-950 bg-zinc-50 border border-zinc-200 px-3 py-2 overflow-x-auto">
                       {JSON.stringify(verifyResult.payload, null, 2)}
                     </pre>
                   </>

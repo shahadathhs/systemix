@@ -1,11 +1,21 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #18181b;
-  --muted: #71717a;
-  --border: #e4e4e7;
-  --surface: #fafafa;
+  /* Warm paper + ink — technical-drawing palette */
+  --bg: #f2f1ee;
+  --bg-raised: #faf9f7;
+  --bg-sunken: #e9e8e4;
+  --ink: #101014;
+  --ink-strong: #000000;
+  --muted: rgba(16, 16, 20, 0.62);
+  --faint: rgba(16, 16, 20, 0.42);
+  --line: rgba(16, 16, 20, 0.16);
+  --line-strong: rgba(16, 16, 20, 0.4);
+  --accent: #0e7a4e;
+  --accent-ink: #0a5e3c;
+  --invert-bg: #101014;
+  --invert-fg: #f2f1ee;
+
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -15,10 +25,9 @@
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--bg);
+  color: var(--ink);
   font-family: var(--font-sans);
-  font-feature-settings: 'cv11', 'ss01';
   text-rendering: optimizeLegibility;
 }
 
@@ -29,63 +38,179 @@ kbd {
 }
 
 a:not([class]) {
-  color: var(--foreground);
+  color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 2px;
-  text-decoration-color: #d4d4d8;
+  text-decoration-color: var(--line-strong);
 }
 a:not([class]):hover {
-  text-decoration-color: var(--foreground);
+  text-decoration-color: var(--ink);
 }
 
 ::selection {
-  background: #e4e4e7;
+  background: var(--accent);
+  color: var(--invert-fg);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-raised: var(--bg-raised);
+  --color-sunken: var(--bg-sunken);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
 }
 
 @layer components {
-  /* Bordered surface — the only card style in the system */
+  /* Display face — expanded, tight, medium weight */
+  .font-display {
+    font-family: var(--font-sans);
+    font-stretch: 118%;
+    font-weight: 620;
+    letter-spacing: -0.03em;
+  }
+
+  /* HUD micro-label — mono, uppercase, wide tracking */
+  .hud {
+    @apply font-mono text-[11px] uppercase tracking-[0.15em] font-medium;
+    color: var(--faint);
+  }
+  .hud-accent {
+    color: var(--accent);
+  }
+
+  /* Sharp hairline panel */
   .panel {
-    @apply border border-zinc-200 rounded-xl bg-white shadow-xs;
+    @apply border bg-white;
+    border-color: var(--line);
   }
 
-  /* Form controls */
+  /* Form controls — sharp, hairline */
   .field {
-    @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10 disabled:opacity-50;
+    @apply w-full px-3 py-2 text-sm transition-colors focus:outline-none disabled:opacity-50;
+    @apply border bg-white;
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .field::placeholder {
+    color: var(--faint);
+  }
+  .field:focus {
+    border-color: var(--ink);
   }
 
-  /* Buttons */
+  /* Buttons — sharp mono uppercase */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none cursor-pointer;
+    @apply inline-flex items-center justify-center gap-2 h-11 px-5 cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none;
+    @apply font-mono text-[11px] font-bold uppercase tracking-[0.12em];
   }
   .btn-primary {
-    @apply bg-zinc-900 text-white hover:bg-zinc-700 shadow-xs;
+    background: var(--invert-bg);
+    color: var(--invert-fg);
+  }
+  .btn-primary:hover {
+    background: #2a2a30;
   }
   .btn-ghost {
-    @apply border border-zinc-300 bg-white text-zinc-900 hover:bg-zinc-50 shadow-xs;
+    @apply border;
+    border-color: var(--line-strong);
+    color: var(--ink);
+    background: transparent;
+  }
+  .btn-ghost:hover {
+    background: var(--bg-sunken);
   }
   .btn-icon {
-    @apply inline-flex items-center justify-center w-10 h-10 rounded-lg border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors cursor-pointer shadow-xs;
+    @apply inline-flex items-center justify-center w-11 h-11 border cursor-pointer transition-colors;
+    border-color: var(--line-strong);
+    color: var(--muted);
+  }
+  .btn-icon:hover {
+    color: var(--ink);
+    background: var(--bg-sunken);
   }
 
-  /* Typography helpers */
-  .label {
-    @apply text-[11px] font-medium uppercase tracking-widest text-zinc-400;
-  }
+  /* Section heading with trailing period device */
   .section-title {
-    @apply text-base font-semibold text-zinc-950;
+    @apply text-2xl;
+    font-family: var(--font-sans);
+    font-stretch: 118%;
+    font-weight: 620;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  .section-title::after {
+    content: '.';
+    color: var(--accent);
   }
 
-  /* Monospace output boxes */
+  /* Monospace output boxes — sunken */
   .mono-box {
-    @apply rounded-lg border border-zinc-200 bg-zinc-50 p-3.5 font-mono text-xs text-zinc-800 break-all whitespace-pre-wrap leading-relaxed;
+    @apply p-3.5 font-mono text-xs break-all whitespace-pre-wrap leading-relaxed border;
+    background: var(--bg-sunken);
+    border-color: var(--line);
+    color: var(--ink);
   }
 
-  /* Segmented option buttons */
+  /* Segmented options — sharp */
   .segment {
-    @apply flex-1 h-9 rounded-lg border border-zinc-300 bg-white text-sm text-zinc-600 hover:bg-zinc-50 transition-colors cursor-pointer shadow-xs;
+    @apply flex-1 h-10 border text-sm transition-colors cursor-pointer;
+    border-color: var(--line-strong);
+    color: var(--muted);
+    background: transparent;
+  }
+  .segment:hover {
+    background: var(--bg-sunken);
   }
   .segment-active {
-    @apply border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-900;
+    background: var(--invert-bg);
+    color: var(--invert-fg);
+    border-color: var(--invert-bg);
+  }
+  .segment-active:hover {
+    background: var(--invert-bg);
+  }
+
+  /* 1px-gap hairline grid — the signature device */
+  .ruled-grid {
+    @apply grid gap-px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .ruled-cell {
+    background: var(--bg);
+    padding: 1.25rem;
+  }
+  .ruled-cell:hover {
+    background: var(--bg-raised);
+  }
+
+  /* Section rule + eyebrow */
+  .rule-top {
+    position: relative;
+  }
+  .rule-top::before {
+    content: '';
+    @apply absolute inset-x-0 top-0 h-px;
+    background: var(--line-strong);
+  }
+
+  /* Status chips */
+  .chip-ok {
+    @apply px-1.5 py-0.5 border font-mono text-[10px];
+    color: var(--accent-ink);
+    border-color: var(--accent);
+    background: transparent;
+  }
+  .chip-err {
+    @apply px-1.5 py-0.5 border font-mono text-[10px];
+    color: #b3261e;
+    border-color: #b3261e;
+    background: transparent;
   }
 }
 

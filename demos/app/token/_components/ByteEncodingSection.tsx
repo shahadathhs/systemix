@@ -50,7 +50,7 @@ export function ByteEncodingSection() {
                   max="64"
                   value={byteLength}
                   onChange={(e) => setByteLength(parseInt(e.target.value, 10))}
-                  className="w-24 h-2 bg-zinc-200 rounded-lg accent-zinc-900"
+                  className="w-24 h-2 bg-zinc-200 accent-zinc-900"
                 />
                 <span className="text-sm font-mono text-zinc-400 w-8">
                   {byteLength}
@@ -59,7 +59,7 @@ export function ByteEncodingSection() {
             </div>
             <button
               onClick={regenerate}
-              className="inline-flex items-center justify-center w-9 h-9 rounded-md border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
+              className="inline-flex items-center justify-center w-9 h-9 border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
               title="Regenerate bytes"
             >
               <RefreshCw className="w-4 h-4" />
@@ -76,7 +76,7 @@ export function ByteEncodingSection() {
                   </span>
                   <CopyButton text={encodings[format]} />
                 </div>
-                <pre className="font-mono text-sm text-zinc-950 break-all bg-zinc-50 border border-zinc-200 rounded-md px-3 py-2">
+                <pre className="font-mono text-sm text-zinc-950 break-all bg-zinc-50 border border-zinc-200 px-3 py-2">
                   {encodings[format]}
                 </pre>
               </div>

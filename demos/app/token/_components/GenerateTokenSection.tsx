@@ -67,7 +67,7 @@ export function GenerateTokenSection() {
           <div className="flex gap-2 shrink-0">
             <button
               onClick={handleGenerate}
-              className="inline-flex items-center justify-center w-10 h-10 rounded-md border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
+              className="inline-flex items-center justify-center w-10 h-10 border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
               title="Regenerate"
               aria-label="Regenerate token"
             >
@@ -75,7 +75,7 @@ export function GenerateTokenSection() {
             </button>
             <button
               onClick={copyToClipboard}
-              className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-md bg-zinc-900 hover:bg-zinc-700 text-zinc-950 text-sm font-medium transition-colors"
+              className="inline-flex items-center justify-center gap-2 h-10 px-4 bg-zinc-900 hover:bg-zinc-700 text-zinc-950 text-sm font-medium transition-colors"
             >
               {copied ? (
                 <Check className="w-5 h-5" />
@@ -140,7 +140,7 @@ export function GenerateTokenSection() {
                     key={c}
                     onClick={() => setOptions({ ...options, charset: c })}
                     className={cn(
-                      'px-4 h-9 rounded-md text-sm font-medium transition-colors',
+                      'px-4 h-9 text-sm font-medium transition-colors',
                       options.charset === c
                         ? 'bg-zinc-900 text-zinc-950'
                         : 'bg-white border border-zinc-300 text-zinc-500 hover:bg-zinc-50',
@@ -160,7 +160,7 @@ export function GenerateTokenSection() {
                     key={n}
                     onClick={() => setOptions({ ...options, count: n })}
                     className={cn(
-                      'px-4 h-9 rounded-md text-sm font-medium transition-colors',
+                      'px-4 h-9 text-sm font-medium transition-colors',
                       options.count === n
                         ? 'bg-zinc-900 text-zinc-950'
                         : 'bg-white border border-zinc-300 text-zinc-500 hover:bg-zinc-50',

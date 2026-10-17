@@ -96,7 +96,7 @@ export default function RateLimitPage() {
                 type="button"
                 onClick={() => setAlgorithm(a.id)}
                 className={cn(
-                  'p-3 rounded-lg border text-left transition-colors cursor-pointer',
+                  'p-3 border text-left transition-colors cursor-pointer',
                   algorithm === a.id
                     ? 'border-zinc-900 bg-zinc-50'
                     : 'border-zinc-200 hover:bg-zinc-50',
@@ -249,7 +249,7 @@ export default function RateLimitPage() {
                 key={`${entry.at}-${i}`}
                 title={new Date(entry.at).toLocaleTimeString()}
                 className={cn(
-                  'size-3 rounded-sm',
+                  'size-3 ',
                   entry.allowed ? 'bg-emerald-500' : 'bg-red-500',
                 )}
               />

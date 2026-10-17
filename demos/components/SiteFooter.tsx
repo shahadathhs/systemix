@@ -48,15 +48,13 @@ const columns = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-zinc-200 bg-zinc-50/60">
-      <div className="max-w-[1400px] mx-auto border-x border-zinc-200 px-8 py-12">
+    <footer className="border-t" style={{ borderColor: 'var(--line)' }}>
+      <div className="max-w-[1280px] mx-auto border-x px-6 sm:px-10 py-14">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {columns.map((col) => (
             <div key={col.title}>
-              <div className="text-[11px] font-medium uppercase tracking-widest text-zinc-400 mb-3">
-                {col.title}
-              </div>
-              <ul className="space-y-2">
+              <div className="hud mb-4">{col.title}</div>
+              <ul className="space-y-2.5">
                 {col.links.map((link) => (
                   <li key={link.label}>
                     {link.href.startsWith('/') ? (
@@ -83,13 +81,14 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-12 pt-6 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div
+          className="mt-14 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3"
+          style={{ borderColor: 'var(--line)' }}
+        >
           <span className="text-xs text-zinc-500">
             © {new Date().getFullYear()} Shahadath Hossen Sajib. MIT License.
           </span>
-          <span className="text-xs text-zinc-400 font-mono">
-            built with @systemix
-          </span>
+          <span className="hud">made for builders · zero deps</span>
         </div>
       </div>
     </footer>

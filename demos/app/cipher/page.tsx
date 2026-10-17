@@ -205,13 +205,13 @@ export default function CipherPage() {
         </div>
 
         {decrypted && (
-          <div className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-mono text-emerald-900 break-all">
+          <div className="border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-mono text-emerald-900 break-all">
             {decrypted}
           </div>
         )}
 
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-800">
+          <div className="border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-800">
             {error}
           </div>
         )}

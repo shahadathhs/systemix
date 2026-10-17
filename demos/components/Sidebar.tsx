@@ -51,11 +51,11 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <nav className="space-y-6">
+    <nav className="space-y-7">
       {sections.map((section) => (
         <div key={section.title}>
-          <div className="label mb-2">{section.title}</div>
-          <ul className="space-y-0.5">
+          <div className="hud mb-2.5 px-2">{section.title}</div>
+          <ul>
             {section.items.map(({ href, label }) => {
               const active =
                 pathname === href || pathname?.startsWith(href + '/');
@@ -65,11 +65,16 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
                     href={href}
                     onClick={onNavigate}
                     className={cn(
-                      'block py-1.5 px-2 rounded-md text-sm transition-colors',
+                      'block py-1.5 px-2 text-sm transition-colors border-l-2 -ml-px',
                       active
-                        ? 'text-zinc-950 font-medium bg-zinc-100'
-                        : 'text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50',
+                        ? 'text-zinc-950 font-medium'
+                        : 'text-zinc-500 hover:text-zinc-950',
                     )}
+                    style={
+                      active
+                        ? { borderColor: 'var(--accent)' }
+                        : { borderColor: 'transparent' }
+                    }
                   >
                     {label}
                   </Link>
@@ -83,7 +88,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
         href="https://github.com/shahadathhs/systemix"
         target="_blank"
         rel="noreferrer"
-        className="flex items-center gap-2 py-1.5 px-2 rounded-md text-sm text-zinc-600 hover:text-zinc-950 hover:bg-zinc-50 transition-colors"
+        className="flex items-center gap-2 py-1.5 px-2 text-sm text-zinc-500 hover:text-zinc-950 transition-colors"
       >
         <GithubIcon className="size-3.5" />
         GitHub
@@ -120,21 +125,21 @@ export function Sidebar({
 
       <aside
         className={cn(
-          'fixed lg:sticky top-0 lg:top-14 left-0 z-[60] lg:z-30 w-64 shrink-0',
+          'fixed lg:sticky top-0 lg:top-14 left-0 z-[60] lg:z-30 w-60 shrink-0',
           'h-screen lg:h-[calc(100vh-3.5rem)]',
-          'bg-zinc-50/60 lg:bg-zinc-50/60 border-r border-zinc-200',
-          'flex flex-col p-4 overflow-y-auto scrollbar-hide',
+          'border-r flex flex-col p-4 overflow-y-auto scrollbar-hide',
           'transition-transform duration-200',
           'lg:translate-x-0',
           open ? 'translate-x-0' : '-translate-x-full',
         )}
+        style={{ background: 'var(--bg)', borderColor: 'var(--line)' }}
       >
-        <div className="flex items-center justify-between mb-4 lg:hidden">
-          <span className="text-sm font-semibold text-zinc-950">Systemix</span>
+        <div className="flex items-center justify-between mb-5 lg:hidden">
+          <span className="font-display text-sm text-zinc-950">Systemix</span>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="p-2 rounded-md text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
+            className="p-2 text-zinc-500 hover:text-zinc-950 hover:bg-zinc-950/5"
             aria-label="Close menu"
           >
             <X className="size-5" />

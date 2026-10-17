@@ -64,7 +64,7 @@ export default function IdPage() {
               type="button"
               onClick={() => setKind(k.id)}
               className={cn(
-                'p-3 rounded-lg border text-left transition-colors cursor-pointer',
+                'p-3 border text-left transition-colors cursor-pointer',
                 kind === k.id
                   ? 'border-zinc-900 bg-zinc-50'
                   : 'border-zinc-200 hover:bg-zinc-50',
@@ -130,7 +130,7 @@ export default function IdPage() {
           {ids.map((item, index) => (
             <div
               key={`${item.id}-${index}`}
-              className="group flex items-center justify-between gap-4 px-4 py-3 hover:bg-zinc-50 transition-colors first:rounded-t-xl last:rounded-b-xl"
+              className="group flex items-center justify-between gap-4 px-4 py-3 hover:bg-zinc-50 transition-colors"
             >
               <code className="text-[13px] font-mono text-zinc-900 truncate">
                 {item.id}

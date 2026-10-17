@@ -102,7 +102,7 @@ export function DocToc({ scrollContainerRef }: DocTocProps) {
   return (
     <aside className="hidden xl:block w-52 shrink-0 pl-8">
       <nav className="sticky top-20">
-        <div className="label mb-3">On this page</div>
+        <div className="hud mb-3">On this page</div>
         <ul className="space-y-1.5 text-[13px]">
           {items.map((item) => (
             <li
