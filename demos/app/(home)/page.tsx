@@ -48,27 +48,35 @@ const packages = [
   },
 ];
 
+const tooling = [
+  { name: '@systemix/eslint', description: 'ESLint v10 flat configs', href: '/docs/eslint' },
+  { name: '@systemix/typescript', description: 'Base tsconfig presets', href: '/docs/typescript' },
+  { name: '@systemix/runner', description: 'Minimal test runner', href: '/docs/runner' },
+];
+
 export default function Home() {
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-4xl">
       {/* Hero */}
-      <section className="pt-6 pb-12">
-        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tighter text-zinc-950">
+      <section className="pt-10 pb-16">
+        <h1 className="text-5xl sm:text-6xl font-bold tracking-tighter text-zinc-950">
           Systemix
         </h1>
-        <p className="mt-4 text-lg text-zinc-600 leading-relaxed max-w-xl">
-          A modular toolkit for secure JavaScript and TypeScript systems. Zero
-          dependencies, Web Crypto under the hood, tree-shakeable ESM.
+        <p className="mt-5 text-xl text-zinc-600 leading-relaxed max-w-2xl">
+          A modular toolkit for secure JavaScript and TypeScript systems.
         </p>
-        <div className="mt-6 flex items-center gap-3">
-          <Link href="/docs" className="btn btn-primary">
+        <p className="mt-2 text-sm text-zinc-500">
+          Zero dependencies · Web Crypto under the hood · Tree-shakeable ESM
+        </p>
+        <div className="mt-8 flex items-center gap-3">
+          <Link href="/docs" className="btn btn-primary h-11 px-5">
             Get started
           </Link>
           <a
             href="https://github.com/shahadathhs/systemix"
             target="_blank"
             rel="noreferrer"
-            className="btn btn-ghost"
+            className="btn btn-ghost h-11 px-5"
           >
             <GithubIcon className="size-4" />
             GitHub
@@ -77,13 +85,15 @@ export default function Home() {
       </section>
 
       {/* Quick start */}
-      <section className="pb-12">
-        <h2 className="section-title mb-1">Quick start</h2>
-        <p className="text-sm text-zinc-600 mb-3">
-          Install what you need. Every package is independent.
+      <section className="pb-16">
+        <h2 className="text-lg font-semibold tracking-tight text-zinc-950">
+          Quick start
+        </h2>
+        <p className="mt-1.5 text-sm text-zinc-600">
+          Install what you need — every package is independent.
         </p>
         <CodeBlock>
-          <code>{`npm install @systemix/env @systemix/password @systemix/hash`}</code>
+          <code>{'npm install @systemix/env @systemix/password @systemix/hash'}</code>
         </CodeBlock>
         <CodeBlock>
           <code>{`import { load } from '@systemix/env';
@@ -99,29 +109,31 @@ await verifyPassword(password, encoded); // true`}</code>
       </section>
 
       {/* Packages */}
-      <section className="pb-12">
-        <h2 className="section-title mb-1">Packages</h2>
-        <p className="text-sm text-zinc-600 mb-4">
+      <section className="pb-16">
+        <h2 className="text-lg font-semibold tracking-tight text-zinc-950">
+          Packages
+        </h2>
+        <p className="mt-1.5 mb-5 text-sm text-zinc-600">
           Published to npm under the{' '}
-          <code className="font-mono text-[0.8125rem] bg-zinc-100 border border-zinc-200 rounded px-1 py-0.5">
+          <code className="font-mono text-[0.8125rem] bg-zinc-100 border border-zinc-200 rounded px-1.5 py-0.5">
             @systemix
           </code>{' '}
           scope.
         </p>
-        <div className="grid sm:grid-cols-2 gap-3">
+        <div className="grid sm:grid-cols-2 gap-4">
           {packages.map((pkg) => (
             <Link
               key={pkg.name}
               href={pkg.href}
-              className="panel p-4 group hover:border-zinc-300 transition-colors"
+              className="panel p-5 group hover:border-zinc-300 hover:shadow-sm transition-all"
             >
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[13px] font-medium text-zinc-950">
+                <span className="font-mono text-sm font-medium text-zinc-950">
                   {pkg.name}
                 </span>
                 <ArrowRight className="size-3.5 text-zinc-300 group-hover:text-zinc-950 group-hover:translate-x-0.5 transition-all" />
               </div>
-              <p className="mt-1.5 text-sm text-zinc-600 leading-relaxed">
+              <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
                 {pkg.description}
               </p>
             </Link>
@@ -130,23 +142,26 @@ await verifyPassword(password, encoded); // true`}</code>
       </section>
 
       {/* Tooling */}
-      <section className="pb-16">
-        <h2 className="section-title mb-1">Tooling</h2>
-        <p className="text-sm text-zinc-600 mb-4">
+      <section className="pb-20">
+        <h2 className="text-lg font-semibold tracking-tight text-zinc-950">
+          Tooling
+        </h2>
+        <p className="mt-1.5 mb-5 text-sm text-zinc-600">
           Shareable configs and the test runner the packages are built with.
         </p>
-        <div className="grid sm:grid-cols-3 gap-3">
-          {[
-            { name: '@systemix/eslint', href: '/docs/eslint' },
-            { name: '@systemix/typescript', href: '/docs/typescript' },
-            { name: '@systemix/runner', href: '/docs/runner' },
-          ].map(({ name, href }) => (
+        <div className="grid sm:grid-cols-3 gap-4">
+          {tooling.map((tool) => (
             <Link
-              key={name}
-              href={href}
-              className="panel p-4 font-mono text-[13px] font-medium text-zinc-950 hover:border-zinc-300 transition-colors"
+              key={tool.name}
+              href={tool.href}
+              className="panel p-5 hover:border-zinc-300 hover:shadow-sm transition-all"
             >
-              {name}
+              <div className="font-mono text-sm font-medium text-zinc-950">
+                {tool.name}
+              </div>
+              <div className="text-xs text-zinc-500 mt-1.5">
+                {tool.description}
+              </div>
             </Link>
           ))}
         </div>

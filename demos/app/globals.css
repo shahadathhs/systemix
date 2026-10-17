@@ -6,12 +6,24 @@
   --muted: #71717a;
   --border: #e4e4e7;
   --surface: #fafafa;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
+  font-family: var(--font-sans);
   font-feature-settings: 'cv11', 'ss01';
+  text-rendering: optimizeLegibility;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--font-mono);
 }
 
 a:not([class]) {
@@ -31,44 +43,44 @@ a:not([class]):hover {
 @layer components {
   /* Bordered surface — the only card style in the system */
   .panel {
-    @apply border border-zinc-200 rounded-xl bg-white;
+    @apply border border-zinc-200 rounded-xl bg-white shadow-xs;
   }
 
   /* Form controls */
   .field {
-    @apply w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10 disabled:opacity-50;
+    @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 transition-colors focus:outline-none focus:border-zinc-500 focus:ring-2 focus:ring-zinc-900/10 disabled:opacity-50;
   }
 
   /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-md text-sm font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none cursor-pointer;
+    @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none cursor-pointer;
   }
   .btn-primary {
-    @apply bg-zinc-900 text-white hover:bg-zinc-700;
+    @apply bg-zinc-900 text-white hover:bg-zinc-700 shadow-xs;
   }
   .btn-ghost {
-    @apply border border-zinc-300 bg-white text-zinc-900 hover:bg-zinc-50;
+    @apply border border-zinc-300 bg-white text-zinc-900 hover:bg-zinc-50 shadow-xs;
   }
   .btn-icon {
-    @apply inline-flex items-center justify-center w-10 h-10 rounded-md border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors cursor-pointer;
+    @apply inline-flex items-center justify-center w-10 h-10 rounded-lg border border-zinc-300 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors cursor-pointer shadow-xs;
   }
 
   /* Typography helpers */
   .label {
-    @apply text-xs font-medium uppercase tracking-wider text-zinc-500;
+    @apply text-[11px] font-medium uppercase tracking-widest text-zinc-400;
   }
   .section-title {
-    @apply text-sm font-semibold text-zinc-900;
+    @apply text-base font-semibold text-zinc-950;
   }
 
   /* Monospace output boxes */
   .mono-box {
-    @apply rounded-md border border-zinc-200 bg-zinc-50 p-3 font-mono text-xs text-zinc-800 break-all whitespace-pre-wrap;
+    @apply rounded-lg border border-zinc-200 bg-zinc-50 p-3.5 font-mono text-xs text-zinc-800 break-all whitespace-pre-wrap leading-relaxed;
   }
 
   /* Segmented option buttons */
   .segment {
-    @apply flex-1 h-9 rounded-md border border-zinc-300 bg-white text-sm text-zinc-600 hover:bg-zinc-50 transition-colors cursor-pointer;
+    @apply flex-1 h-9 rounded-lg border border-zinc-300 bg-white text-sm text-zinc-600 hover:bg-zinc-50 transition-colors cursor-pointer shadow-xs;
   }
   .segment-active {
     @apply border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-900;
