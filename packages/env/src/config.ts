@@ -1,4 +1,9 @@
-import type { EnvSchema, EnvResult, LoadOptions } from './types/env';
+import type {
+  CheckedEnvSchema,
+  EnvSchema,
+  EnvResult,
+  LoadOptions,
+} from './types/env';
 import { load } from './env/load';
 
 /**
@@ -17,13 +22,13 @@ export class Config<T extends EnvSchema> {
   /**
    * Create Config from a schema and env source.
    * @param schema - Env variable definitions
-   * @param options - Source, fromFile, or strict. Legacy: plain object as source.
+   * @param options - Source, fromFile, or strict.
    */
   static fromEnv<S extends EnvSchema>(
-    schema: S,
-    options?: LoadOptions | Record<string, string | undefined>,
+    schema: S & CheckedEnvSchema<S>,
+    options?: LoadOptions,
   ): Config<S> {
-    const config = load(schema, options);
+    const config = load<S>(schema, options);
     return new Config(config);
   }
 
@@ -66,7 +71,7 @@ export class Config<T extends EnvSchema> {
   }
 
   /** Return a copy with secret values masked as '***'. */
-  toSafeLog(): Record<string, string | number | boolean | undefined> {
+  toSafeLog(): Record<string, unknown> {
     return this.config.toSafeLog();
   }
 
