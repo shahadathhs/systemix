@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Cipher Demo',
   description:
-    'Encrypt and decrypt text with authenticated AES-256-GCM using Web Crypto. Try the Systemix cipher demo with tamper detection.',
+    'Encrypt and decrypt text with authenticated AES-256-GCM with a versioned envelope. Try the Systemix cipher demo with key rotation and tamper detection.',
   openGraph: {
     title: 'Cipher Demo | Systemix Demos',
     description:

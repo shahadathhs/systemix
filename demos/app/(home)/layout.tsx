@@ -3,16 +3,16 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Systemix Demos',
   description:
-    'Live demos and documentation for Systemix packages. A modular, high-performance toolkit for building secure and scalable JavaScript and TypeScript systems.',
+    'Zero-dependency security packages for Node.js: password hashing, encryption, signed tokens, IDs, env loading and rate limiting. Live demos and docs.',
   openGraph: {
-    title: 'Systemix Demos | Secure toolkit for modern JS',
+    title: 'Systemix | Security packages for Node.js',
     description:
-      'Live demos and documentation for Systemix packages. A modular toolkit for secure and scalable JavaScript and TypeScript.',
+      'Zero-dependency security packages for Node.js: password hashing, encryption, signed tokens, IDs, env loading and rate limiting. Live demos and docs.',
   },
   twitter: {
-    title: 'Systemix Demos | Secure toolkit for modern JS',
+    title: 'Systemix | Security packages for Node.js',
     description:
-      'Live demos and documentation for Systemix packages. A modular toolkit for secure and scalable JavaScript and TypeScript.',
+      'Zero-dependency security packages for Node.js: password hashing, encryption, signed tokens, IDs, env loading and rate limiting. Live demos and docs.',
   },
 };
 

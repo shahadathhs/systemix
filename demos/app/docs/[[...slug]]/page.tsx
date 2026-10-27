@@ -14,6 +14,7 @@ const docsSlugs = [
   'eslint',
   'typescript',
   'runner',
+  'security',
 ] as const;
 
 type Slug = (typeof docsSlugs)[number];
@@ -42,22 +43,22 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
   token: {
     title: '@systemix/token',
     description:
-      'API reference for @systemix/token. Secure token generator with hex, base64, base64url, alphanumeric charsets and encoding utilities.',
+      'API reference for @systemix/token. Secure token generator and hardened JWS signing (HS, RS, PS, ES, EdDSA).',
   },
   hash: {
     title: '@systemix/hash',
     description:
-      'API reference for @systemix/hash. Password hashing and verification with PBKDF2 and scrypt, built on Web Crypto and Node built-ins.',
+      'API reference for @systemix/hash. Argon2id password hashing in PHC format, with scrypt and PBKDF2 support.',
   },
   cipher: {
     title: '@systemix/cipher',
     description:
-      'API reference for @systemix/cipher. Authenticated AES-256-GCM encryption and decryption for sensitive data at rest.',
+      'API reference for @systemix/cipher. Authenticated AES-256-GCM encryption with a versioned envelope and key rotation.',
   },
   id: {
     title: '@systemix/id',
     description:
-      'API reference for @systemix/id. UUID v4, ULID, and nanoid-style ID generation with crypto-grade randomness.',
+      'API reference for @systemix/id. UUIDv7, UUID v4, ULID, and nanoid-style ID generation with crypto-grade randomness.',
   },
   'rate-limit': {
     title: '@systemix/rate-limit',
@@ -79,6 +80,11 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
     description:
       'Minimal test runner for Systemix packages. assert, assertThrows, createRunner, runSuites.',
   },
+  security: {
+    title: 'Security and support',
+    description:
+      'How to report a vulnerability, supported Node.js versions, versioning, release provenance and the known limits of the Systemix packages.',
+  },
 };
 
 const docModules: Record<
@@ -97,6 +103,7 @@ const docModules: Record<
   eslint: () => import('../../../docs/eslint.mdx'),
   typescript: () => import('../../../docs/typescript.mdx'),
   runner: () => import('../../../docs/runner.mdx'),
+  security: () => import('../../../docs/security.mdx'),
 };
 
 export async function generateMetadata({

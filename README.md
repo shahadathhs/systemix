@@ -93,9 +93,9 @@ limiter.limit('user:42'); // → { success: true, remaining: 99, ... }
 | [`@systemix/password`](packages/password) · [npm](https://www.npmjs.com/package/@systemix/password)       | Cryptographically secure password generator with character guarantees and entropy tools. |
 | [`@systemix/passphrase`](packages/passphrase) · [npm](https://www.npmjs.com/package/@systemix/passphrase) | Human-readable passphrase generator with formatting and entropy tools.                   |
 | [`@systemix/token`](packages/token) · [npm](https://www.npmjs.com/package/@systemix/token)                | Secure token generator (hex, base64, base64url) and signed-token module.                 |
-| [`@systemix/hash`](packages/hash) · [npm](https://www.npmjs.com/package/@systemix/hash)                   | Password hashing and verification with PBKDF2 and scrypt.                                |
+| [`@systemix/hash`](packages/hash) · [npm](https://www.npmjs.com/package/@systemix/hash)                   | Argon2id password hashing in PHC format, with scrypt and PBKDF2.                         |
 | [`@systemix/cipher`](packages/cipher) · [npm](https://www.npmjs.com/package/@systemix/cipher)             | Authenticated AES-256-GCM encryption and decryption for data at rest.                    |
-| [`@systemix/id`](packages/id) · [npm](https://www.npmjs.com/package/@systemix/id)                         | UUID v4, ULID, and nanoid-style ID generation with crypto-grade randomness.              |
+| [`@systemix/id`](packages/id) · [npm](https://www.npmjs.com/package/@systemix/id)                         | UUIDv7, UUID v4, ULID, and nanoid-style IDs, crypto-grade randomness.                    |
 | [`@systemix/rate-limit`](packages/rate-limit) · [npm](https://www.npmjs.com/package/@systemix/rate-limit) | Fixed-window, sliding-window, and token-bucket rate limiting with Express middleware.    |
 | [`@systemix/eslint`](configs/eslint) · [npm](https://www.npmjs.com/package/@systemix/eslint)              | ESLint v10 flat configs for JS, TS, React, Express, and Next.js.                         |
 | [`@systemix/typescript`](configs/typescript) · [npm](https://www.npmjs.com/package/@systemix/typescript)  | Base TypeScript configs for various environments.                                        |

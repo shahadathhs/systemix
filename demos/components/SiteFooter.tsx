@@ -37,6 +37,7 @@ const columns = [
     title: 'Project',
     links: [
       { label: 'Documentation', href: '/docs' },
+      { label: 'Security', href: '/docs/security' },
       { label: 'GitHub', href: 'https://github.com/shahadathhs/systemix' },
       { label: 'npm org', href: 'https://www.npmjs.com/org/systemix' },
       {
@@ -93,7 +94,7 @@ export function SiteFooter() {
           <span className="text-xs text-faint">
             © {new Date().getFullYear()} Shahadath Hossen Sajib. MIT License.
           </span>
-          <span className="hud">made for builders · zero deps</span>
+          <span className="hud">Node.js 24.7+</span>
         </div>
       </div>
     </footer>

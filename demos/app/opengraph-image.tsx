@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og';
 
-export const alt = 'Systemix — security primitives, engineered for modern JS';
+export const alt =
+  'Systemix — security packages for Node.js that depend on nothing';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -70,7 +71,7 @@ export default function OpengraphImage() {
           marginTop: 20,
         }}
       >
-        Security primitives, engineered for modern JS.
+        Security packages for Node.js that depend on nothing.
       </div>
 
       <div
@@ -108,7 +109,7 @@ export default function OpengraphImage() {
           letterSpacing: '0.15em',
         }}
       >
-        ZERO DEPENDENCIES · WEB CRYPTO · MIT
+        ZERO-DEPENDENCY LIBRARIES · NODE 24+ · MIT
       </div>
     </div>,
     size,

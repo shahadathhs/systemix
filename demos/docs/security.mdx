@@ -1,0 +1,53 @@
+# Security and support
+
+How to report a vulnerability, what is supported, how versions work, and the limits you should know about before depending on these packages.
+
+## Reporting a vulnerability
+
+Report it privately through [GitHub's private vulnerability reporting](https://github.com/shahadathhs/systemix/security/advisories/new). Please do not open a public issue for a security problem.
+
+A useful report has:
+
+- the package and version, and your Node.js version
+- a short reproduction, ideally a few lines of code
+- what an attacker gains
+
+Systemix has one maintainer, so there is no guaranteed response time. A confirmed issue is fixed on `main` and released through the normal release workflow; the release notes say what changed.
+
+## What is supported
+
+- **Runtime:** Node.js 24.7 or newer. The `hash` package needs `crypto.argon2`, which arrived in 24.7. CI runs on Node 24 and 26. Older Node versions and browsers are neither supported nor tested.
+- **Versions:** fixes land on `main` and ship as a new release. There are no maintenance branches, so an older version is not patched separately. To get a fix, update to the latest release of the package.
+
+## Versioning
+
+Packages follow semantic versioning, managed with Changesets.
+
+- Packages below 1.0 signal a breaking change with a **minor** bump and a fix with a **patch** bump.
+- `@systemix/token` is past 1.0, so its breaking changes are **major** releases.
+- Each package keeps a changelog, and every release has [release notes on GitHub](https://github.com/shahadathhs/systemix/releases).
+
+Data you have already stored keeps working across upgrades. Hashes made by earlier versions of `@systemix/hash` still verify, and ciphertexts made by earlier versions of `@systemix/cipher` still decrypt. `needsRehash` and `needsRotation` tell you which values to upgrade.
+
+## How releases are built
+
+Packages are published from GitHub Actions to npm using Trusted Publishing (OIDC) with provenance, so there is no long-lived npm token to leak and each version links back to the commit and workflow that built it. The same packages are mirrored to GitHub Packages under the `@shahadathhs` scope.
+
+## Dependencies
+
+The eight libraries (`env`, `password`, `passphrase`, `token`, `hash`, `cipher`, `id`, `rate-limit`) have no runtime dependencies. They use `node:crypto` and the standard library. `@systemix/eslint` is a shared configuration, so it depends on ESLint and its plugins.
+
+## Known limits
+
+These are real, and some are by design. Read them before relying on a package.
+
+- **No third-party audit.** The packages have not been independently audited. The audit mentioned in the release notes was the maintainer reviewing the code, and it found real bugs, which is why you should not assume there are none left.
+- **`cipher`: message count per key.** A random 96-bit IV is safe for roughly 2^32 messages under one key. This is documented, not enforced. Use `createKeyring` and rotate keys well before that.
+- **`cipher`: password-derived keys.** `deriveKeyFromPassword` defaults to 210,000 PBKDF2-HMAC-SHA256 iterations. That is below OWASP's current 600,000 for this algorithm. Pass a higher `iterations` value and store it with the salt. The default stays as it is because changing it would silently change every key already derived with it.
+- **`rate-limit`: one process.** The built-in store lives in the memory of one process. With several instances, each keeps its own counts. The store contract is atomic and documented so you can back it with something shared, but no Redis store ships with the package.
+- **`token`: signing only.** It signs and verifies JWS tokens. It does not implement JWE (encrypted tokens) or JWKS key fetching.
+- **Public demos.** The server actions behind the `/hash` and `/token` demos are rate limited per instance and cap their inputs, but they are demos, not a service.
+
+## Past defects
+
+Defects found in earlier versions, including a rate-limit bypass and an RS256 to HS256 key-confusion flaw, are listed on the [home page](/) and in the [release notes](https://github.com/shahadathhs/systemix/releases).
