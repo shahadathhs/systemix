@@ -1,6 +1,6 @@
 # @systemix/cipher
 
-Authenticated AES-256-GCM encryption and decryption built on Web Crypto. For encrypting sensitive data at rest — database fields, config secrets, tokens.
+Authenticated AES-256-GCM encryption and decryption built on Web Crypto. Versioned envelope with key ids and key rotation. Requires Node.js 24.7+. For encrypting sensitive data at rest — database fields, config secrets, tokens.
 
 ## Installation
 
@@ -20,12 +20,12 @@ import {
 const key = generateKeyBytes(); // 32 random bytes (AES-256)
 
 const payload = await encryptString('sensitive data', key);
-// → "k9fT2x..." (base64url of [IV][ciphertext + tag])
+// → "U1gBAC..." (base64url of the envelope)
 
 await decryptString(payload, key); // → "sensitive data"
 ```
 
-The 12-byte random IV is embedded in the payload — store one value, no extra columns.
+The payload is a versioned envelope — `SX | version | keyId | IV | ciphertext + tag`. It's one value to store, the IV is random per call, and the header is authenticated so it can't be altered undetected. Payloads from 0.1.x still decrypt.
 
 ## Tamper Detection
 
@@ -63,6 +63,26 @@ import { deriveKeyFromPassword, generateSalt } from '@systemix/cipher';
 const salt = generateSalt(); // store alongside the ciphertext
 const key = await deriveKeyFromPassword('master password', salt);
 ```
+
+### Key rotation
+
+```typescript
+import { createKeyring } from '@systemix/cipher';
+
+const ring = createKeyring({
+  keys: { k2: newKey, k1: oldKey },
+  current: 'k2',
+});
+
+const blob = await ring.encryptString('secret'); // stamped "k2"
+await ring.decryptString(oldBlob); // envelope names "k1" → still works
+
+if (ring.needsRotation(oldBlob)) {
+  save(await ring.encryptString(await ring.decryptString(oldBlob)));
+}
+```
+
+Random 96-bit IVs are safe for roughly 2^32 messages per key; rotate well before that.
 
 ## Key Management
 

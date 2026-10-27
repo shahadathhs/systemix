@@ -7,7 +7,8 @@ import {
   importAesKey,
 } from './internals';
 import { IV_LENGTH } from './key';
-import { InvalidPayloadError } from '../utils/errors';
+import { DecryptionError, InvalidPayloadError } from '../utils/errors';
+import { buildAad, buildHeader, parseEnvelope } from './envelope';
 
 const encoder = new TextEncoder();
 
@@ -19,14 +20,19 @@ export function toBytes(data: string | Uint8Array): Uint8Array {
 }
 
 /**
- * Encrypts data with AES-256-GCM (authenticated encryption).
+ * Encrypts data with AES-GCM (authenticated encryption).
  *
- * Output layout: `[12-byte IV][ciphertext + 16-byte auth tag]` — a single
- * blob safe to store or transmit.
+ * Output is a versioned envelope — see ./envelope.ts:
+ * `SX | version | keyIdLen | keyId | 12-byte IV | ciphertext + 16-byte tag`.
+ * The header is authenticated, the IV is random per call, and the whole thing
+ * is a single blob safe to store or transmit.
+ *
+ * A random 96-bit IV is safe for roughly 2^32 messages per key; rotate keys
+ * well before that (see createKeyring).
  *
  * @param data Plaintext string (UTF-8) or bytes.
  * @param key AES key: 16, 24, or 32 bytes (see generateKeyBytes).
- * @param options Optional AAD and IV.
+ * @param options Optional AAD and key id.
  */
 export async function encrypt(
   data: string | Uint8Array,
@@ -36,9 +42,13 @@ export async function encrypt(
   assertValidKey(key);
   assertValidOptions(options);
 
-  const { additionalData, iv = generateIv() } = options;
+  const header = buildHeader(options.keyId ?? '');
+  const iv = generateIv();
   const cryptoKey = await importAesKey(key, ['encrypt']);
-  const algorithm = buildAlgorithm(iv, additionalData);
+  const algorithm = buildAlgorithm(
+    iv,
+    buildAad(header, options.additionalData),
+  );
 
   const encrypted = await crypto.subtle.encrypt(
     algorithm,
@@ -46,9 +56,12 @@ export async function encrypt(
     toBytes(data) as unknown as ArrayBuffer,
   );
 
-  const payload = new Uint8Array(IV_LENGTH + encrypted.byteLength);
-  payload.set(iv, 0);
-  payload.set(new Uint8Array(encrypted), IV_LENGTH);
+  const payload = new Uint8Array(
+    header.length + IV_LENGTH + encrypted.byteLength,
+  );
+  payload.set(header, 0);
+  payload.set(iv, header.length);
+  payload.set(new Uint8Array(encrypted), header.length + IV_LENGTH);
   return payload;
 }
 
@@ -65,13 +78,36 @@ export async function encryptString(
   return bytesToBase64Url(payload);
 }
 
+async function aesGcmDecrypt(
+  key: Uint8Array,
+  iv: Uint8Array,
+  ciphertext: Uint8Array,
+  aad: Uint8Array | undefined,
+): Promise<Uint8Array> {
+  const cryptoKey = await importAesKey(key, ['decrypt']);
+  try {
+    const decrypted = await crypto.subtle.decrypt(
+      buildAlgorithm(iv, aad),
+      cryptoKey,
+      ciphertext as unknown as ArrayBuffer,
+    );
+    return new Uint8Array(decrypted);
+  } catch {
+    throw new DecryptionError(
+      'Decryption failed. Wrong key, tampered data, or wrong additional data.',
+    );
+  }
+}
+
 /**
- * Decrypts an AES-GCM payload produced by encrypt.
+ * Decrypts a payload produced by encrypt. Also accepts the legacy
+ * `[IV][ciphertext+tag]` format from 0.1.x unless `allowLegacy` is false.
  *
- * @param payload Encrypted blob: [12-byte IV][ciphertext + tag].
+ * @param payload Encrypted blob.
  * @param key The same AES key used for encryption.
  * @param options The same AAD used for encryption, if any.
- * @throws {DecryptionError} On wrong key, tampered data, wrong AAD, or malformed payload.
+ * @throws {InvalidPayloadError} If the payload is too short to be valid.
+ * @throws {DecryptionError} On wrong key, tampered data, or wrong AAD.
  */
 export async function decrypt(
   payload: Uint8Array,
@@ -85,25 +121,33 @@ export async function decrypt(
     throw new InvalidPayloadError();
   }
 
-  const { additionalData } = options;
-  const iv = payload.slice(0, IV_LENGTH);
-  const ciphertext = payload.slice(IV_LENGTH);
+  const { additionalData, allowLegacy = true } = options;
+  const envelope = parseEnvelope(payload);
 
-  const cryptoKey = await importAesKey(key, ['decrypt']);
-  const algorithm = buildAlgorithm(iv, additionalData);
-
-  try {
-    const decrypted = await crypto.subtle.decrypt(
-      algorithm,
-      cryptoKey,
-      ciphertext as unknown as ArrayBuffer,
-    );
-    return new Uint8Array(decrypted);
-  } catch {
+  if (envelope) {
+    try {
+      return await aesGcmDecrypt(
+        key,
+        envelope.iv,
+        envelope.ciphertext,
+        buildAad(envelope.header, additionalData),
+      );
+    } catch (error) {
+      // A legacy payload can, rarely, start with the envelope magic.
+      if (!allowLegacy) throw error;
+    }
+  } else if (!allowLegacy) {
     throw new InvalidPayloadError(
-      'Decryption failed. Wrong key, tampered data, or wrong additional data.',
+      'Unrecognized payload. Expected a versioned envelope.',
     );
   }
+
+  return aesGcmDecrypt(
+    key,
+    payload.slice(0, IV_LENGTH),
+    payload.slice(IV_LENGTH),
+    additionalData,
+  );
 }
 
 const BASE64URL_PATTERN = /-/g;

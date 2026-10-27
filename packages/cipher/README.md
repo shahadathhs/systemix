@@ -2,13 +2,16 @@
 
 [![npm](https://img.shields.io/npm/v/@systemix/cipher.svg)](https://www.npmjs.com/package/@systemix/cipher)
 
-`@systemix/cipher` provides authenticated AES-256-GCM encryption and decryption for sensitive data at rest — database fields, config secrets, tokens. Built entirely on Web Crypto, isomorphic across Node.js 18+ and browsers. Zero dependencies.
+`@systemix/cipher` provides authenticated AES-256-GCM encryption and decryption for sensitive data at rest — database fields, config secrets, tokens. Built entirely on Web Crypto. Zero dependencies. Requires Node.js 24.7+.
 
 ## Features
 
 - **Authenticated Encryption**: AES-GCM with a 128-bit auth tag — tampering is detected, not decrypted.
 - **Isomorphic**: Web Crypto in both Node.js and browsers.
-- **Simple Blob Output**: Random 12-byte IV is embedded in the payload (`[IV][ciphertext+tag]`) — store one value, no extra columns.
+- **Versioned envelope**: `SX | version | keyId | IV | ciphertext + tag` — one value to store, no extra columns. The header is authenticated, so it can't be altered without detection.
+- **Key rotation**: `createKeyring` encrypts with the current key and decrypts by the key id in the envelope; `needsRotation` flags payloads to re-encrypt.
+- **No nonce footguns**: the IV is always random per call and cannot be supplied.
+- **Backward compatible**: payloads from 0.1.x (`[IV][ciphertext+tag]`) still decrypt.
 - **Additional Authenticated Data**: Bind ciphertext to context (user IDs, record types) via AAD.
 - **Password-Derived Keys**: PBKDF2-HMAC-SHA256 key derivation helper.
 - **Typed Errors**: `DecryptionError`, `InvalidKeyError`, `InvalidPayloadError`.
@@ -49,7 +52,7 @@ import {
 const key = generateKeyBytes(); // 32 random bytes (AES-256)
 
 const payload = await encryptString('sensitive data', key);
-// → "k9fT2x..." (base64url of [IV][ciphertext+tag])
+// → "U1gBAC..." (base64url of the envelope)
 
 const plaintext = await decryptString(payload, key); // "sensitive data"
 ```
@@ -99,11 +102,13 @@ try {
 | Option           | Type         | Default | Description                                             |
 | :--------------- | :----------- | :------ | :------------------------------------------------------ |
 | `additionalData` | `Uint8Array` | —       | AAD — authenticated but not encrypted.                  |
-| `iv`             | `Uint8Array` | random  | Custom 12-byte IV (omit unless you know you need this). |
+| `keyId`          | `string`     | `''`    | Key id written into the envelope header (max 64 bytes). |
+
+`decrypt` also takes `allowLegacy` (default `true`) to accept or reject the pre-envelope 0.1.x format.
 
 ### `decrypt(payload, key, options?): Promise<Uint8Array>`
 
-Throws `DecryptionError` on wrong key, tampered data, wrong AAD, or malformed payload.
+Throws `DecryptionError` on wrong key, tampered data (including the header), or wrong AAD, and `InvalidPayloadError` if the payload is too short.
 
 ### String Helpers
 
@@ -111,6 +116,27 @@ Throws `DecryptionError` on wrong key, tampered data, wrong AAD, or malformed pa
 | :---------------------------------------- | :---------------------------------------- |
 | `encryptString(plaintext, key, options?)` | Encrypts to a base64url string.           |
 | `decryptString(payload, key, options?)`   | Decrypts a base64url payload to a string. |
+
+### Key rotation
+
+```typescript
+import { createKeyring } from '@systemix/cipher';
+
+const ring = createKeyring({
+  keys: { k2: newKey, k1: oldKey }, // keep retired keys until nothing uses them
+  current: 'k2',
+});
+
+const blob = await ring.encryptString('secret'); // stamped "k2"
+await ring.decryptString(oldBlob); // still works: envelope names "k1"
+
+if (ring.needsRotation(oldBlob)) {
+  // legacy payload or encrypted with an older key
+  save(await ring.encryptString(await ring.decryptString(oldBlob)));
+}
+```
+
+AES-GCM with random 96-bit IVs is safe for roughly 2^32 messages per key (NIST's collision bound). Rotate well before that.
 
 ### Key Management
 
