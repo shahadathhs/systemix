@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/@systemix/token.svg)](https://www.npmjs.com/package/@systemix/token)
 
-A cryptographically secure token generator and signed-token module for API keys, session tokens, CSRF tokens, and auth. Zero external dependencies, pure Node.js and browser built-ins.
+A cryptographically secure token generator and signed-token module for API keys, session tokens, CSRF tokens, and auth. Zero external dependencies, built on Node.js built-ins. Requires Node.js 24.7+.
 
 ---
 
@@ -26,7 +26,7 @@ A cryptographically secure token generator and signed-token module for API keys,
 
 - **Secure**: Uses `crypto.getRandomValues()` for cryptographically strong randomness.
 - **Multiple Charsets**: Hex, base64, base64url (URL-safe), and alphanumeric.
-- **Signed Tokens**: HMAC (HS256/384/512) and RSA (RS256/384/512) with standard claims.
+- **Signed Tokens**: HS256/384/512, RS/PS256/384/512, ES256/384/512 and EdDSA, with standard claims, `typ` checks, `maxAge` and `kid`-based key selection.
 - **Subpath Exports**: Import only what you need (`/token`, `/signed`, `/rsa`, `/common`).
 - **Zero Dependencies**: Built with Node.js/browser built-ins only.
 - **TypeScript Ready**: Full type definitions included.
@@ -52,7 +52,7 @@ npm install @systemix/token
 | `@systemix/token`        | Main entry — re-exports token, signed, rsa, common |
 | `@systemix/token/token`  | Token generator, encoding utils, validation        |
 | `@systemix/token/signed` | Signed token encode/decode/verify                  |
-| `@systemix/token/rsa`    | RSA sign/verify (Node + browser, auto-detect)      |
+| `@systemix/token/rsa`    | RSA sign/verify (Node)      |
 | `@systemix/token/common` | Crypto, enums, types, errors, utils                |
 
 ---
@@ -169,7 +169,7 @@ import type { GenerateTokenFunctionProps } from '@systemix/token/token';
 
 ## Signed Tokens
 
-Signed tokens are compact, URL-safe strings with a header, payload, and signature. Use for auth, sessions, or any signed claims. **HMAC and RSA work in both Node and browser** (Web Crypto API; RSA auto-detects environment).
+Signed tokens are compact, URL-safe strings with a header, payload, and signature. Use for auth, sessions, or any signed claims. Supports HS/RS/PS/ES/EdDSA with `node:crypto`.
 
 ### `encodeSigned(payload, secret, options?)`
 
@@ -178,7 +178,7 @@ Creates a signed token. Returns `Promise<string>`. Supports HMAC (shared secret)
 ```typescript
 import { encodeSigned } from '@systemix/token/signed';
 
-// HMAC (shared secret) — works in browser and Node
+// HMAC (shared secret of 32+ bytes)
 const token = await encodeSigned(
   { userId: '123', role: 'admin' },
   'my-secret-key',
@@ -263,6 +263,8 @@ const payload = await verifySigned<{ userId: string }>(token, 'my-secret', {
 | Option             | Type                 | Required | Description                                          |
 | :----------------- | :------------------- | :------- | :--------------------------------------------------- |
 | `algorithms`       | `SignedAlgorithm[]`  | **Yes**  | Allowed algorithms. Prevents algorithm-swap attacks. |
+| `typ`              | `string`             | No       | Required `typ` header (case-insensitive).            |
+| `maxAge`           | `number`             | No       | Reject tokens older than N seconds since `iat`.      |
 | `issuer`           | `string \| string[]` | No       | Expected `iss`.                                      |
 | `audience`         | `string \| string[]` | No       | Expected `aud`.                                      |
 | `subject`          | `string`             | No       | Expected `sub`.                                      |
@@ -274,10 +276,15 @@ const payload = await verifySigned<{ userId: string }>(token, 'my-secret', {
 
 ### Algorithms
 
-| Algorithm           | Type             | Secret / key                                      |
-| :------------------ | :--------------- | :------------------------------------------------ |
-| HS256, HS384, HS512 | HMAC (symmetric) | Shared secret string                              |
-| RS256, RS384, RS512 | RSA (asymmetric) | PEM private key (encode), PEM public key (verify) |
+| Algorithm           | Type             | Key                                                        |
+| :------------------ | :--------------- | :--------------------------------------------------------- |
+| HS256, HS384, HS512 | HMAC (symmetric) | Secret of at least 32 / 48 / 64 bytes (RFC 7518 §3.2)      |
+| RS256, RS384, RS512 | RSASSA-PKCS1-v1_5 | PEM private key (encode) / public key (verify), ≥ 2048 bits |
+| PS256, PS384, PS512 | RSASSA-PSS       | Same as RS\*; preferred for new RSA systems                |
+| ES256, ES384, ES512 | ECDSA            | EC key on P-256 / P-384 / P-521; raw `r\|\|s` signatures    |
+| EdDSA               | Ed25519 / Ed448  | Ed25519 or Ed448 key                                       |
+
+Keys are PEM strings or `node:crypto` `KeyObject`s. The library refuses keys that don't fit the algorithm: a PEM can't be an HMAC secret (the RS256→HS256 downgrade), RSA keys under 2048 bits and EC keys on the wrong curve are rejected, and so are short HMAC secrets. These throw `InvalidKeyError`.
 
 ```typescript
 import {
@@ -496,11 +503,41 @@ const token = bytesToBase64Url(bytes);
 
 ---
 
+### Key rotation with `kid`
+
+```typescript
+const keys = { '2026-10': currentSecret, '2026-04': previousSecret };
+
+const token = await encodeSigned({ sub: 'u1' }, currentSecret, { kid: '2026-10' });
+
+await verifySigned(token, (header) => keys[header.kid], {
+  algorithms: ['HS256'],
+  typ: 'ST',
+});
+```
+
+### Compared with `jose`
+
+[`jose`](https://github.com/panva/jose) is the full JOSE toolkit. This package is a small, opinionated JWS signer and verifier: use it when you want a compact API with safe defaults. Use `jose` when you need more.
+
+| | `@systemix/token` | `jose` |
+| :-- | :-- | :-- |
+| Signed tokens (JWS compact) | Yes | Yes |
+| Encrypted tokens (JWE) | No | Yes |
+| JWK / JWKS handling and remote JWKS | No | Yes |
+| Runtimes | Node.js 24.7+ | Node, browsers, edge runtimes |
+| Dependencies | None | None |
+
+Tokens produced here are standard compact JWS, so `jose` and other libraries can verify them.
+
 ## Security Notes
 
-- **Algorithm whitelist**: Always pass `algorithms` to `verifySigned`. Never trust the token header.
-- **Secret strength**: Use at least 256 bits (32 bytes) for HMAC secrets.
-- **RSA keys**: Use 2048+ bit keys. Keep the private key secret.
+- **Algorithm whitelist**: `algorithms` is required, and the token's own `alg` is never trusted.
+- **Key confusion**: a key only works with an algorithm of its own type (see Algorithms) — an RSA public key can't be used as an HMAC secret.
+- **Secret strength**: HMAC secrets must be at least as long as the hash output (32 / 48 / 64 bytes); shorter ones are rejected.
+- **Explicit typing**: pass `typ` to `verifySigned` so a token minted for one purpose can't be accepted for another (RFC 8725 §3.11).
+- **Hardening**: tokens with a `crit` header are rejected, payloads must be JSON objects, signatures must be canonical base64url, and a token is expired at its exact `exp` second.
+- **Key rotation**: pass a function as the key to pick it by `kid` (see below). Treat the header as untrusted — use it only to look a key up in a set you control.
 - **Clock skew**: Use `clockTolerance` when servers may have time drift.
 - **Sensitive data**: Signed tokens are signed, not encrypted. Do not put secrets in the payload.
 
@@ -530,7 +567,7 @@ Re-exports everything from `/token`, `/signed`, `/rsa`, and `/common`.
 
 ### RSA (`@systemix/token/rsa`)
 
-Direct RSA sign/verify for custom formats. Auto-detects Node vs browser.
+Direct RSA sign/verify for custom formats.
 
 ```typescript
 import { signRsa, verifyRsa } from '@systemix/token/rsa';

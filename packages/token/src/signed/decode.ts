@@ -6,11 +6,11 @@ import { InvalidTokenError } from '../common/errors';
  * Decode a signed token without verification.
  */
 export function decodeSigned<T = unknown>(token: string): DecodedToken<T> {
-  if (typeof token !== 'string' || !token.trim()) {
+  if (typeof token !== 'string' || !token) {
     throw new InvalidTokenError('Token must be a non-empty string');
   }
 
-  const parts = token.trim().split('.');
+  const parts = token.split('.');
   if (parts.length !== 3) {
     throw new InvalidTokenError(
       'Token must have exactly 3 parts (header.payload.signature)',
@@ -34,8 +34,15 @@ export function decodeSigned<T = unknown>(token: string): DecodedToken<T> {
     throw new InvalidTokenError('Invalid payload encoding');
   }
 
-  if (typeof header !== 'object' || header === null) {
+  if (typeof header !== 'object' || header === null || Array.isArray(header)) {
     throw new InvalidTokenError('Header must be an object');
+  }
+  if (
+    typeof payload !== 'object' ||
+    payload === null ||
+    Array.isArray(payload)
+  ) {
+    throw new InvalidTokenError('Payload must be a JSON object');
   }
 
   return { header, payload, signature: signatureB64 };

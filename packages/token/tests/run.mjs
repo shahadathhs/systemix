@@ -11,6 +11,7 @@ import * as subpathSuite from './subpath.test.mjs';
 import * as commonSuite from './common.test.mjs';
 import * as signedSuite from './signed.test.mjs';
 import * as rsaSuite from './rsa.test.mjs';
+import * as jwsSuite from './jws.test.mjs';
 
 const suites = [
   { name: 'generator', ...generatorSuite },
@@ -19,6 +20,7 @@ const suites = [
   { name: 'common', ...commonSuite },
   { name: 'signed', ...signedSuite },
   { name: 'rsa', ...rsaSuite },
+  { name: 'jws', ...jwsSuite },
 ];
 
 await runSuites(suites, { packageName: '@systemix/token' });

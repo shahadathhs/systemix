@@ -1,4 +1,4 @@
-import { getRandomBytes } from '../common/crypto';
+import { getRandomBytes } from '../common/crypto/random';
 import {
   bytesToAlphanumeric,
   bytesToBase64,

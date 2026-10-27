@@ -6,17 +6,16 @@ import {
   bytesToBase64Url,
   bytesToHex,
 } from '@systemix/token/token';
-import { getRandomBytes } from '@systemix/token/common';
 import { Info, RefreshCw } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { CopyButton } from './CopyButton';
 
 export function ByteEncodingSection() {
   const [byteLength, setByteLength] = useState(16);
-  const [bytes, setBytes] = useState<Uint8Array>(() => getRandomBytes(16));
+  const [bytes, setBytes] = useState<Uint8Array>(() => crypto.getRandomValues(new Uint8Array(16)));
 
   const regenerate = useCallback(() => {
-    setBytes(getRandomBytes(byteLength));
+    setBytes(crypto.getRandomValues(new Uint8Array(byteLength)));
   }, [byteLength]);
 
   useEffect(() => {

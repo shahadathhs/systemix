@@ -10,7 +10,7 @@ import {
 
 export const { run, getCounts } = createRunner(
   async ({ assert, assertThrows, assertThrowsAsync }) => {
-    const secret = 'my-secret-key-for-hmac';
+    const secret = 'my-secret-key-for-hmac-0123456789abcdef';
     const verifyOpts = (opts = {}) => ({ algorithms: ['HS256'], ...opts });
 
     const token = await encodeSigned({ userId: '123', role: 'admin' }, secret);
@@ -26,7 +26,12 @@ export const { run, getCounts } = createRunner(
     assert(verified.userId === '123', 'verifySigned returns payload');
 
     await assertThrowsAsync(
-      () => verifySigned(token, 'wrong-secret', verifyOpts()),
+      () =>
+        verifySigned(
+          token,
+          'a-different-secret-of-sufficient-length-0123',
+          verifyOpts(),
+        ),
       'verifySigned throws on wrong secret',
     );
 

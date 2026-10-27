@@ -1,37 +1,100 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import {
-  decodeSigned,
-  encodeSigned,
-  verifySigned,
-  type SignedAlgorithm as TokenSignedAlgorithm,
-} from '@systemix/token/signed';
-import { Shield } from 'lucide-react';
+import { Loader2, Shield } from 'lucide-react';
 import { useState } from 'react';
+import {
+  decodeAction,
+  encodeAction,
+  generateKeyAction,
+  verifyAction,
+} from '../actions';
+import { DEMO_ALGORITHMS, type DemoAlgorithm } from '../limits';
 import { CopyButton } from './CopyButton';
-import { SAMPLE_RSA_PRIVATE_KEY, SAMPLE_RSA_PUBLIC_KEY } from './constants';
 
 type SignedTab = 'encode' | 'decode' | 'verify';
 
+const INPUT =
+  'w-full px-4 py-2 bg-raised border border-line-strong text-ink placeholder:text-faint focus:outline-none focus:border-[var(--ink)] focus:ring-2 focus:ring-[var(--accent)]/20';
+const MONO = `${INPUT} font-mono text-sm`;
+const PRE =
+  'font-mono text-sm text-ink bg-sunken border border-line px-3 py-2 overflow-x-auto';
+
+const HINTS: Record<DemoAlgorithm, string> = {
+  HS256: 'Shared secret (32+ bytes).',
+  ES256: 'ECDSA P-256. Small, fast signatures.',
+  EdDSA: 'Ed25519. Fast, no parameter choices.',
+  PS256: 'RSA-PSS. Preferred over RS256 for RSA.',
+  RS256: 'RSA PKCS#1 v1.5. Widely supported.',
+};
+
+/** Reads `alg` from the (unverified) header, only to preselect a choice. */
+function peekAlg(token: string): DemoAlgorithm | null {
+  try {
+    const part = token.trim().split('.')[0];
+    const json = atob(part.replace(/-/g, '+').replace(/_/g, '/'));
+    const alg = (JSON.parse(json) as { alg?: string }).alg;
+    return DEMO_ALGORITHMS.find((a) => a === alg) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+const isSymmetric = (alg: DemoAlgorithm) => alg === 'HS256';
+
+const tabButton = (active: boolean) =>
+  cn(
+    'px-4 py-2 text-sm font-medium transition-all',
+    active
+      ? 'bg-ink text-ink'
+      : 'bg-raised border border-line-strong text-faint hover:bg-sunken',
+  );
+
+function AlgPicker({
+  value,
+  onChange,
+}: {
+  value: DemoAlgorithm;
+  onChange: (a: DemoAlgorithm) => void;
+}) {
+  return (
+    <div className="space-y-2">
+      <label className="text-sm font-medium text-muted">Algorithm</label>
+      <div className="flex flex-wrap gap-2">
+        {DEMO_ALGORITHMS.map((a) => (
+          <button
+            key={a}
+            type="button"
+            onClick={() => onChange(a)}
+            className={cn('px-4 h-9 text-sm font-mono', tabButton(value === a))}
+          >
+            {a}
+          </button>
+        ))}
+      </div>
+      <p className="text-xs text-faint">{HINTS[value]}</p>
+    </div>
+  );
+}
+
 export function SignedTokenSection() {
   const [tab, setTab] = useState<SignedTab>('encode');
-  const [encodeAlg, setEncodeAlg] = useState<TokenSignedAlgorithm>('HS256');
-  const [secret, setSecret] = useState('my-secret-key');
-  const [privateKey, setPrivateKey] = useState('');
+  const [alg, setAlg] = useState<DemoAlgorithm>('HS256');
+  const [signKey, setSignKey] = useState('');
+  const [verifyKey, setVerifyKey] = useState('');
+  const [kid, setKid] = useState('');
   const [payloadJson, setPayloadJson] = useState(
     '{"userId": "123", "role": "admin"}',
   );
   const [expiresIn, setExpiresIn] = useState(3600);
   const [encodedToken, setEncodedToken] = useState('');
+  const [encodeError, setEncodeError] = useState('');
   const [decodeToken, setDecodeToken] = useState('');
   const [decodeResult, setDecodeResult] = useState<
     { header: unknown; payload: unknown } | { error: string } | null
   >(null);
   const [verifyToken, setVerifyToken] = useState('');
-  const [verifyAlg, setVerifyAlg] = useState<TokenSignedAlgorithm | null>(null);
-  const [verifySecret, setVerifySecret] = useState('');
-  const [verifyPublicKey, setVerifyPublicKey] = useState('');
+  const [verifyAlg, setVerifyAlg] = useState<DemoAlgorithm>('HS256');
   const [verifyResult, setVerifyResult] = useState<{
     valid: boolean;
     payload?: unknown;
@@ -39,88 +102,55 @@ export function SignedTokenSection() {
   } | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleVerifyTokenChange = (value: string) => {
-    setVerifyToken(value);
-    if (!value.trim()) {
-      setVerifyAlg(null);
-      return;
+  const handleGenerateKey = async () => {
+    setLoading(true);
+    setEncodeError('');
+    const r = await generateKeyAction(alg);
+    if (r.ok) {
+      setSignKey(r.signKey);
+      setVerifyKey(r.verifyKey);
+    } else {
+      setEncodeError(r.error);
     }
-    try {
-      const decoded = decodeSigned(value.trim());
-      setVerifyAlg(decoded.header.alg === 'RS256' ? 'RS256' : 'HS256');
-    } catch {
-      setVerifyAlg(null);
-    }
+    setLoading(false);
   };
 
   const handleEncode = async () => {
     setLoading(true);
-    try {
-      let payload: Record<string, unknown>;
-      try {
-        payload = JSON.parse(payloadJson) as Record<string, unknown>;
-      } catch {
-        setEncodedToken('');
-        return;
-      }
-      const key = encodeAlg === 'HS256' ? secret : privateKey;
-      if (!key.trim()) {
-        setEncodedToken(
-          encodeAlg === 'HS256'
-            ? 'Enter a secret'
-            : 'Enter or load private key',
-        );
-        return;
-      }
-      const token = await encodeSigned(payload, key, {
-        algorithm: encodeAlg,
-        expiresIn: expiresIn > 0 ? expiresIn : undefined,
-      });
-      setEncodedToken(token);
-    } catch (e) {
-      setEncodedToken(e instanceof Error ? e.message : 'Error');
-    } finally {
-      setLoading(false);
-    }
+    setEncodeError('');
+    setEncodedToken('');
+    const r = await encodeAction(payloadJson, alg, signKey, expiresIn, kid);
+    if (r.ok) setEncodedToken(r.token);
+    else setEncodeError(r.error);
+    setLoading(false);
   };
 
-  const handleDecode = () => {
+  const handleDecode = async () => {
     if (!decodeToken.trim()) return;
     setLoading(true);
     setDecodeResult(null);
-    try {
-      const decoded = decodeSigned(decodeToken.trim());
-      setDecodeResult({ header: decoded.header, payload: decoded.payload });
-    } catch (e) {
-      setDecodeResult({
-        error: e instanceof Error ? e.message : String(e),
-      });
-    } finally {
-      setLoading(false);
-    }
+    const r = await decodeAction(decodeToken);
+    setDecodeResult(
+      r.ok ? { header: r.header, payload: r.payload } : { error: r.error },
+    );
+    setLoading(false);
   };
 
   const handleVerify = async () => {
-    if (!verifyToken.trim()) return;
-    const key = verifyAlg === 'RS256' ? verifyPublicKey : verifySecret;
-    if (!key.trim()) return;
+    if (!verifyToken.trim() || !verifyKey.trim()) return;
     setLoading(true);
     setVerifyResult(null);
-    try {
-      const algorithms: TokenSignedAlgorithm[] =
-        verifyAlg === 'RS256' ? ['RS256'] : ['HS256'];
-      const payload = await verifySigned(verifyToken.trim(), key.trim(), {
-        algorithms,
-      });
-      setVerifyResult({ valid: true, payload });
-    } catch (e) {
-      setVerifyResult({
-        valid: false,
-        error: e instanceof Error ? e.message : String(e),
-      });
-    } finally {
-      setLoading(false);
-    }
+    const r = await verifyAction(verifyToken, verifyKey, verifyAlg);
+    setVerifyResult(
+      r.ok ? { valid: true, payload: r.payload } : { valid: false, error: r.error },
+    );
+    setLoading(false);
+  };
+
+  const onVerifyTokenChange = (value: string) => {
+    setVerifyToken(value);
+    const detected = peekAlg(value);
+    if (detected) setVerifyAlg(detected);
   };
 
   return (
@@ -130,17 +160,19 @@ export function SignedTokenSection() {
         Signed Tokens
       </h2>
       <div className="panel p-6 space-y-6">
+        <p className="text-xs text-faint leading-relaxed">
+          Signing runs on the server (it needs <code>node:crypto</code>). Keys
+          are throwaway demo keys — never paste a real secret. Verify only
+          accepts the algorithm you pick, never the token&apos;s own{' '}
+          <code>alg</code> header.
+        </p>
+
         <div className="flex gap-2">
           {(['encode', 'decode', 'verify'] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={cn(
-                'px-4 py-2 text-sm font-medium capitalize transition-all',
-                tab === t
-                  ? 'bg-ink text-ink'
-                  : 'bg-raised border border-line-strong text-faint hover:bg-sunken',
-              )}
+              className={cn(tabButton(tab === t), 'capitalize')}
             >
               {t}
             </button>
@@ -149,61 +181,63 @@ export function SignedTokenSection() {
 
         {tab === 'encode' && (
           <div className="space-y-4">
+            <AlgPicker
+              value={alg}
+              onChange={(a) => {
+                setAlg(a);
+                setSignKey('');
+                setVerifyKey('');
+                setEncodedToken('');
+                setEncodeError('');
+              }}
+            />
+
             <div className="space-y-2">
-              <label className="text-sm font-medium text-muted">
-                Algorithm
-              </label>
-              <div className="flex gap-2">
-                {(['HS256', 'RS256'] as const).map((alg) => (
-                  <button
-                    key={alg}
-                    onClick={() => setEncodeAlg(alg)}
-                    className={cn(
-                      'px-4 h-9 text-sm font-medium transition-colors',
-                      encodeAlg === alg
-                        ? 'bg-ink text-ink'
-                        : 'bg-raised border border-line-strong text-faint hover:bg-sunken',
-                    )}
-                  >
-                    {alg}
-                  </button>
-                ))}
+              <div className="flex justify-between items-center">
+                <label className="text-sm font-medium text-muted">
+                  {isSymmetric(alg) ? 'Secret' : 'Private key (PEM)'}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => void handleGenerateKey()}
+                  disabled={loading}
+                  className="text-xs text-ink hover:underline disabled:opacity-50"
+                >
+                  Generate {isSymmetric(alg) ? 'secret' : 'key pair'}
+                </button>
               </div>
-            </div>
-            {encodeAlg === 'HS256' ? (
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-muted">Secret</label>
+              {isSymmetric(alg) ? (
                 <input
                   type="text"
-                  value={secret}
-                  onChange={(e) => setSecret(e.target.value)}
-                  placeholder="my-secret-key"
-                  className="w-full px-4 py-2 bg-raised border border-line-strong text-ink placeholder:text-faint focus:outline-none focus:border-[var(--ink)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                  value={signKey}
+                  onChange={(e) => setSignKey(e.target.value)}
+                  placeholder="At least 32 bytes — or press Generate"
+                  className={INPUT}
                 />
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium text-muted">
-                    Private key (PEM)
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setPrivateKey(SAMPLE_RSA_PRIVATE_KEY)}
-                    className="text-xs text-ink hover:underline"
-                  >
-                    Use sample keys
-                  </button>
-                </div>
+              ) : (
                 <textarea
-                  value={privateKey}
-                  onChange={(e) => setPrivateKey(e.target.value)}
-                  rows={6}
-                  placeholder="-----BEGIN PRIVATE KEY-----"
-                  className="w-full px-4 py-2 bg-raised border border-line-strong text-ink font-mono text-sm placeholder:text-faint focus:outline-none focus:border-[var(--ink)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                  value={signKey}
+                  onChange={(e) => setSignKey(e.target.value)}
+                  rows={5}
+                  placeholder="-----BEGIN PRIVATE KEY----- — or press Generate"
+                  className={MONO}
                 />
-              </div>
-            )}
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted">
+                Key id (<code>kid</code>, optional)
+              </label>
+              <input
+                type="text"
+                value={kid}
+                onChange={(e) => setKid(e.target.value)}
+                placeholder="2026-10"
+                className={cn(INPUT, 'w-48')}
+              />
+            </div>
+
             <div className="space-y-2">
               <label className="text-sm font-medium text-muted">
                 Payload (JSON)
@@ -212,7 +246,7 @@ export function SignedTokenSection() {
                 value={payloadJson}
                 onChange={(e) => setPayloadJson(e.target.value)}
                 rows={4}
-                className="w-full px-4 py-2 bg-raised border border-line-strong text-ink font-mono text-sm placeholder:text-faint focus:outline-none focus:border-[var(--ink)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                className={MONO}
                 placeholder='{"userId": "123"}'
               />
             </div>
@@ -227,21 +261,28 @@ export function SignedTokenSection() {
                 onChange={(e) =>
                   setExpiresIn(parseInt(e.target.value, 10) || 0)
                 }
-                className="w-32 px-4 py-2 bg-raised border border-line-strong text-ink focus:outline-none focus:border-[var(--ink)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                className={cn(INPUT, 'w-32')}
               />
             </div>
             <button
-              onClick={handleEncode}
-              disabled={loading}
+              onClick={() => void handleEncode()}
+              disabled={loading || !signKey.trim()}
               className="px-6 py-2 bg-ink hover:bg-zinc-700 text-ink font-medium disabled:opacity-50 h-10 px-4 text-sm"
             >
-              {loading ? 'Encoding…' : 'Encode'}
+              {loading ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                'Encode'
+              )}
             </button>
-            {encodedToken && !encodedToken.startsWith('Error') && (
+            {encodeError && (
+              <p className="text-sm text-red-600">{encodeError}</p>
+            )}
+            {encodedToken && (
               <div className="space-y-2 pt-4 border-t border-line">
                 <label className="text-sm font-medium text-muted">Token</label>
                 <div className="flex gap-2">
-                  <pre className="flex-1 font-mono text-sm text-ink break-all bg-sunken border border-line px-3 py-2 overflow-x-auto">
+                  <pre className={cn(PRE, 'flex-1 break-all')}>
                     {encodedToken}
                   </pre>
                   <CopyButton text={encodedToken} />
@@ -261,12 +302,7 @@ export function SignedTokenSection() {
                     type="button"
                     onClick={() => {
                       setVerifyToken(encodedToken);
-                      handleVerifyTokenChange(encodedToken);
-                      if (encodeAlg === 'HS256') {
-                        setVerifySecret(secret);
-                      } else {
-                        setVerifyPublicKey(SAMPLE_RSA_PUBLIC_KEY);
-                      }
+                      setVerifyAlg(alg);
                       setTab('verify');
                     }}
                     className="text-xs text-ink hover:underline"
@@ -288,11 +324,15 @@ export function SignedTokenSection() {
                 onChange={(e) => setDecodeToken(e.target.value)}
                 rows={3}
                 placeholder="Paste signed token (header.payload.signature)"
-                className="w-full px-4 py-2 bg-raised border border-line-strong text-ink font-mono text-sm placeholder:text-faint focus:outline-none focus:border-[var(--ink)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                className={MONO}
               />
+              <p className="text-xs text-faint">
+                Decoding does not verify anything — never trust a decoded
+                payload.
+              </p>
             </div>
             <button
-              onClick={handleDecode}
+              onClick={() => void handleDecode()}
               disabled={loading}
               className="px-6 py-2 bg-ink hover:bg-zinc-700 text-ink font-medium disabled:opacity-50 h-10 px-4 text-sm"
             >
@@ -308,7 +348,7 @@ export function SignedTokenSection() {
                       <label className="text-sm font-medium text-muted">
                         Header
                       </label>
-                      <pre className="font-mono text-sm text-ink bg-sunken border border-line px-3 py-2 overflow-x-auto">
+                      <pre className={PRE}>
                         {JSON.stringify(decodeResult.header, null, 2)}
                       </pre>
                     </div>
@@ -316,7 +356,7 @@ export function SignedTokenSection() {
                       <label className="text-sm font-medium text-muted">
                         Payload
                       </label>
-                      <pre className="font-mono text-sm text-ink bg-sunken border border-line px-3 py-2 overflow-x-auto">
+                      <pre className={PRE}>
                         {JSON.stringify(decodeResult.payload, null, 2)}
                       </pre>
                     </div>
@@ -333,56 +373,42 @@ export function SignedTokenSection() {
               <label className="text-sm font-medium text-muted">Token</label>
               <textarea
                 value={verifyToken}
-                onChange={(e) => handleVerifyTokenChange(e.target.value)}
+                onChange={(e) => onVerifyTokenChange(e.target.value)}
                 rows={3}
-                placeholder="Paste signed token (HMAC or RSA)"
-                className="w-full px-4 py-2 bg-raised border border-line-strong text-ink font-mono text-sm placeholder:text-faint focus:outline-none focus:border-[var(--ink)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                placeholder="Paste a signed token"
+                className={MONO}
               />
             </div>
-            {verifyAlg === 'RS256' ? (
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium text-muted">
-                    Public key (PEM)
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setVerifyPublicKey(SAMPLE_RSA_PUBLIC_KEY)}
-                    className="text-xs text-ink hover:underline"
-                  >
-                    Use sample keys
-                  </button>
-                </div>
-                <textarea
-                  value={verifyPublicKey}
-                  onChange={(e) => setVerifyPublicKey(e.target.value)}
-                  rows={6}
-                  placeholder="-----BEGIN PUBLIC KEY-----"
-                  className="w-full px-4 py-2 bg-raised border border-line-strong text-ink font-mono text-sm placeholder:text-faint focus:outline-none focus:border-[var(--ink)] focus:ring-2 focus:ring-[var(--accent)]/20"
-                />
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-muted">Secret</label>
+            <AlgPicker value={verifyAlg} onChange={setVerifyAlg} />
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted">
+                {isSymmetric(verifyAlg) ? 'Secret' : 'Public key (PEM)'}
+              </label>
+              {isSymmetric(verifyAlg) ? (
                 <input
                   type="text"
-                  value={verifySecret}
-                  onChange={(e) => setVerifySecret(e.target.value)}
+                  value={verifyKey}
+                  onChange={(e) => setVerifyKey(e.target.value)}
                   placeholder="Same secret used to encode"
-                  className="w-full px-4 py-2 bg-raised border border-line-strong text-ink placeholder:text-faint focus:outline-none focus:border-[var(--ink)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                  className={INPUT}
                 />
-              </div>
-            )}
+              ) : (
+                <textarea
+                  value={verifyKey}
+                  onChange={(e) => setVerifyKey(e.target.value)}
+                  rows={5}
+                  placeholder="-----BEGIN PUBLIC KEY-----"
+                  className={MONO}
+                />
+              )}
+            </div>
+            <p className="text-xs text-faint">
+              Try picking a different algorithm than the token&apos;s — it is
+              rejected, not auto-detected.
+            </p>
             <button
-              onClick={handleVerify}
-              disabled={
-                loading ||
-                !verifyToken.trim() ||
-                !verifyAlg ||
-                (verifyAlg === 'RS256'
-                  ? !verifyPublicKey.trim()
-                  : !verifySecret.trim())
-              }
+              onClick={() => void handleVerify()}
+              disabled={loading || !verifyToken.trim() || !verifyKey.trim()}
               className="px-6 py-2 bg-ink hover:bg-zinc-700 text-ink font-medium disabled:opacity-50 h-10 px-4 text-sm"
             >
               {loading ? 'Verifying…' : 'Verify'}
@@ -394,7 +420,7 @@ export function SignedTokenSection() {
                     <p className="text-sm font-medium text-emerald-600">
                       ✓ Valid signature
                     </p>
-                    <pre className="font-mono text-sm text-ink bg-sunken border border-line px-3 py-2 overflow-x-auto">
+                    <pre className={PRE}>
                       {JSON.stringify(verifyResult.payload, null, 2)}
                     </pre>
                   </>
