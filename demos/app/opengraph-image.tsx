@@ -108,7 +108,7 @@ export default function OpengraphImage() {
           letterSpacing: '0.15em',
         }}
       >
-        ZERO DEPENDENCIES · WEB CRYPTO · MIT
+        ZERO DEPENDENCIES · NODE 24+ · MIT
       </div>
     </div>,
     size,

@@ -8,14 +8,14 @@ import Link from 'next/link';
 const stats = [
   { value: '11', label: 'packages' },
   { value: '0', label: 'runtime dependencies' },
-  { value: '285', label: 'tests passing' },
+  { value: '458', label: 'tests passing' },
   { value: '100%', label: 'TypeScript, strict' },
 ];
 
 const features = [
   {
     title: 'Zero supply-chain surface',
-    body: 'Every package runs on Node built-ins and the Web Crypto API. No transitive dependencies to audit, no Friday-night CVEs — your dependency tree ends at @systemix.',
+    body: 'Every package runs on Node built-ins (node:crypto and Web Crypto). No transitive dependencies to audit, no Friday-night CVEs — your dependency tree ends at @systemix.',
   },
   {
     title: 'Crypto done correctly',
@@ -32,7 +32,7 @@ const features = [
 ];
 
 const packages = [
-  { name: '@systemix/env', description: 'Typed env loading and validation.' },
+  { name: '@systemix/env', description: 'Typed env loading, real env wins.' },
   {
     name: '@systemix/password',
     description: 'Crypto-secure password generator.',
@@ -43,20 +43,20 @@ const packages = [
   },
   {
     name: '@systemix/token',
-    description: 'Tokens and HMAC/RSA signed tokens.',
+    description: 'Random tokens and hardened JWS signing.',
   },
   {
     name: '@systemix/hash',
-    description: 'PBKDF2 and scrypt password hashing.',
+    description: 'Argon2id password hashing, PHC format.',
   },
   {
     name: '@systemix/cipher',
-    description: 'Authenticated AES-256-GCM encryption.',
+    description: 'AES-256-GCM with key rotation.',
   },
-  { name: '@systemix/id', description: 'UUID v4, ULID, nanoid-style IDs.' },
+  { name: '@systemix/id', description: 'UUIDv7, ULID, nanoid-style IDs.' },
   {
     name: '@systemix/rate-limit',
-    description: 'Window and bucket rate limiting.',
+    description: 'Atomic window and bucket limiting.',
   },
 ];
 
@@ -156,7 +156,7 @@ export default function Home() {
 
           <Reveal delay={320}>
             <div className="mt-6 font-mono text-[11px] tracking-[0.12em] uppercase text-faint">
-              npm install @systemix/env — Node 18+ · Browsers · MIT
+              npm install @systemix/env — Node 24.7+ · MIT
             </div>
           </Reveal>
 
@@ -177,7 +177,7 @@ await verifyPassword(password, encoded); // true`}
               />
               <div className="flex justify-between mt-2 px-1">
                 <span className="hud">quickstart.ts</span>
-                <span className="hud">38 chars · 128 bits</span>
+                <span className="hud">Argon2id · PHC string</span>
               </div>
             </div>
           </Reveal>

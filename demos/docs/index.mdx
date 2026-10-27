@@ -14,7 +14,7 @@ The toolkit provides cryptographically secure utilities with zero external produ
 - **@systemix/typescript** — Shareable TypeScript configs for base, Express, and Next.js
 - **@systemix/runner** — Minimal test runner with assert, assertThrows, createRunner, runSuites
 
-All utilities use `globalThis.crypto` (Node.js `crypto` or Web Crypto API) for bias-free randomization.
+All utilities use Node's built-in crypto for bias-free randomization and require Node.js 24.7+.
 
 ## Quick Start
 

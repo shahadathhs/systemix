@@ -7,7 +7,7 @@
 ## Features
 
 - **Authenticated Encryption**: AES-GCM with a 128-bit auth tag — tampering is detected, not decrypted.
-- **Isomorphic**: Web Crypto in both Node.js and browsers.
+- **Standard APIs**: built on Web Crypto, no native add-ons.
 - **Versioned envelope**: `SX | version | keyId | IV | ciphertext + tag` — one value to store, no extra columns. The header is authenticated, so it can't be altered without detection.
 - **Key rotation**: `createKeyring` encrypts with the current key and decrypts by the key id in the envelope; `needsRotation` flags payloads to re-encrypt.
 - **No nonce footguns**: the IV is always random per call and cannot be supplied.
