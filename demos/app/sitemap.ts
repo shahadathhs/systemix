@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/docs/eslint',
     '/docs/typescript',
     '/docs/runner',
+    '/docs/security',
   ];
   const demos = [
     '/env',

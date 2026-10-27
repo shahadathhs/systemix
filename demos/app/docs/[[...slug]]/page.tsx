@@ -14,6 +14,7 @@ const docsSlugs = [
   'eslint',
   'typescript',
   'runner',
+  'security',
 ] as const;
 
 type Slug = (typeof docsSlugs)[number];
@@ -79,6 +80,11 @@ const docMeta: Record<Slug, { title: string; description: string }> = {
     description:
       'Minimal test runner for Systemix packages. assert, assertThrows, createRunner, runSuites.',
   },
+  security: {
+    title: 'Security and support',
+    description:
+      'How to report a vulnerability, supported Node.js versions, versioning, release provenance and the known limits of the Systemix packages.',
+  },
 };
 
 const docModules: Record<
@@ -97,6 +103,7 @@ const docModules: Record<
   eslint: () => import('../../../docs/eslint.mdx'),
   typescript: () => import('../../../docs/typescript.mdx'),
   runner: () => import('../../../docs/runner.mdx'),
+  security: () => import('../../../docs/security.mdx'),
 };
 
 export async function generateMetadata({

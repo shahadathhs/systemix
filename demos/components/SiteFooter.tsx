@@ -37,6 +37,7 @@ const columns = [
     title: 'Project',
     links: [
       { label: 'Documentation', href: '/docs' },
+      { label: 'Security', href: '/docs/security' },
       { label: 'GitHub', href: 'https://github.com/shahadathhs/systemix' },
       { label: 'npm org', href: 'https://www.npmjs.com/org/systemix' },
       {

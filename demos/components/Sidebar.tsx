@@ -17,6 +17,7 @@ const sections = [
       { href: '/docs/eslint', label: 'ESLint Config' },
       { href: '/docs/typescript', label: 'TypeScript Config' },
       { href: '/docs/runner', label: 'Test Runner' },
+      { href: '/docs/security', label: 'Security & support' },
     ],
   },
   {
