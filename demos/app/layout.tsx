@@ -26,11 +26,11 @@ const siteUrl = 'https://systemix.vercel.app';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Systemix — Security primitives, engineered for modern JS',
+    default: 'Systemix — Security packages for Node.js that depend on nothing',
     template: '%s | Systemix',
   },
   description:
-    'Live demos and documentation for Systemix packages. A modular, high-performance toolkit for building secure and scalable JavaScript and TypeScript systems.',
+    'Zero-dependency security packages for Node.js: password hashing, encryption, signed tokens, IDs, env loading and rate limiting. Live demos and docs.',
   applicationName: 'Systemix',
   category: 'developer tools',
   keywords: [
@@ -39,10 +39,8 @@ export const metadata: Metadata = {
     'TypeScript',
     'toolkit',
     'secure',
-    'scalable',
     'demos',
     'documentation',
-    'modular',
     'open source',
     'password hashing',
     'encryption',
@@ -62,18 +60,18 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: siteUrl,
     siteName: 'Systemix',
-    title: 'Systemix — Security primitives, engineered for modern JS',
+    title: 'Systemix — Security packages for Node.js that depend on nothing',
     description:
-      'Eleven packages, zero runtime dependencies: typed env loading, crypto-grade randomness, password hashing, authenticated encryption, IDs and rate limiting.',
+      'Eight libraries with no dependencies: password hashing, encryption, signed tokens, IDs, env loading and rate limiting.',
     images: [
       { url: '/opengraph-image', width: 1200, height: 630, alt: 'Systemix' },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Systemix — Security primitives, engineered for modern JS',
+    title: 'Systemix — Security packages for Node.js that depend on nothing',
     description:
-      'Eleven packages, zero runtime dependencies: typed env loading, crypto-grade randomness, password hashing, authenticated encryption, IDs and rate limiting.',
+      'Eight libraries with no dependencies: password hashing, encryption, signed tokens, IDs, env loading and rate limiting.',
   },
   robots: {
     index: true,
@@ -108,9 +106,9 @@ export default function RootLayout({
               '@type': 'SoftwareApplication',
               name: 'Systemix',
               applicationCategory: 'DeveloperApplication',
-              operatingSystem: 'Node.js, Web',
+              operatingSystem: 'Node.js',
               description:
-                'Modular toolkit of secure, zero-dependency JavaScript and TypeScript packages: env loading, passwords, hashing, encryption, IDs, rate limiting.',
+                'Zero-dependency security packages for Node.js: password hashing, encryption, signed tokens, IDs, env loading and rate limiting.',
               url: siteUrl,
               author: {
                 '@type': 'Person',
