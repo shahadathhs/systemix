@@ -100,5 +100,8 @@
   ],
   "browser": {
     "node:crypto": false
+  },
+  "engines": {
+    "node": ">=24.7.0"
   }
 }
