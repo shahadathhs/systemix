@@ -1,22 +1,41 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { generateId, generateUlid, generateUuid, isUuid } from '@systemix/id';
+import {
+  createMonotonicUlid,
+  createMonotonicUuidV7,
+  generateId,
+  generateUuid,
+  isUuid,
+  ulidTimestamp,
+  uuidV7Timestamp,
+} from '@systemix/id';
 import { Check, Copy, RefreshCw, Trash2 } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
-type IdKind = 'nanoid' | 'ulid' | 'uuid';
+type IdKind = 'nanoid' | 'ulid' | 'uuid' | 'uuidv7';
+
+// Monotonic: IDs from the same millisecond still sort in creation order.
+const nextUlid = createMonotonicUlid();
+const nextUuidV7 = createMonotonicUuidV7();
 
 const KINDS = [
   { id: 'nanoid', label: 'nanoid', description: 'URL-safe random ID' },
   { id: 'ulid', label: 'ULID', description: 'Sortable, timestamped' },
   { id: 'uuid', label: 'UUID v4', description: 'RFC 9562 random UUID' },
+  {
+    id: 'uuidv7',
+    label: 'UUID v7',
+    description: 'Time-ordered, DB-friendly',
+  },
 ] as const;
 
 interface GeneratedId {
   id: string;
   kind: IdKind;
   valid: string | false;
+  /** Creation time decoded from the ID itself (ULID, UUID v7). */
+  timestamp?: number;
 }
 
 export default function IdPage() {
@@ -27,11 +46,19 @@ export default function IdPage() {
 
   const generateBatch = useCallback(() => {
     const batch = Array.from({ length: 5 }, () => {
-      let value: string;
-      if (kind === 'nanoid') value = generateId({ size });
-      else if (kind === 'ulid') value = generateUlid();
-      else value = generateUuid();
-      return { id: value, kind, valid: isUuid(value) };
+      if (kind === 'nanoid') {
+        return { id: generateId({ size }), kind, valid: false as const };
+      }
+      if (kind === 'ulid') {
+        const id = nextUlid();
+        return { id, kind, valid: false as const, timestamp: ulidTimestamp(id) };
+      }
+      if (kind === 'uuidv7') {
+        const id = nextUuidV7();
+        return { id, kind, valid: isUuid(id, 7), timestamp: uuidV7Timestamp(id) };
+      }
+      const id = generateUuid();
+      return { id, kind, valid: isUuid(id, 4) };
     });
     setIds((prev) => [...batch, ...prev].slice(0, 30));
   }, [kind, size]);
@@ -51,13 +78,14 @@ export default function IdPage() {
         </h1>
         <p className="mt-2 text-sm text-muted leading-relaxed">
           Unique, non-secret identifiers with bias-free crypto-grade randomness.
-          ULIDs sort chronologically; UUIDs follow RFC 9562.
+          ULIDs and UUID v7 sort by creation time and expose it — decoded below;
+          UUID v4 is fully random. All follow their specs (RFC 9562 for UUIDs).
         </p>
       </div>
 
       {/* Controls */}
       <div className="panel p-6 space-y-5">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {KINDS.map((k) => (
             <button
               key={k.id}
@@ -134,14 +162,21 @@ export default function IdPage() {
                 {item.id}
               </code>
               <div className="flex items-center gap-2 shrink-0">
-                {item.kind === 'uuid' && (
+                {item.timestamp !== undefined && (
+                  <span className="text-[10px] font-mono text-faint">
+                    {new Date(item.timestamp).toISOString().slice(11, 23)}
+                  </span>
+                )}
+                {(item.kind === 'uuid' || item.kind === 'uuidv7') && (
                   <span
                     className={cn(
                       'text-[10px] font-mono px-1.5 py-0.5 rounded border',
                       item.valid ? 'chip-ok' : 'chip-err',
                     )}
                   >
-                    {item.valid ? 'valid v4' : 'invalid'}
+                    {item.valid
+                      ? `valid v${item.kind === 'uuidv7' ? 7 : 4}`
+                      : 'invalid'}
                   </span>
                 )}
                 <button
