@@ -1,5 +1,5 @@
 ---
-'@systemix/token': minor
+'@systemix/token': major
 ---
 
 Harden signed tokens per RFC 8725 and add ES256/384/512, PS256/384/512 and EdDSA. **Requires Node.js 24.7+; browser support for signing is removed.**

@@ -5,7 +5,7 @@
 '@systemix/passphrase': minor
 '@systemix/password': minor
 '@systemix/rate-limit': minor
-'@systemix/token': minor
+'@systemix/token': major
 '@systemix/eslint': minor
 '@systemix/typescript': minor
 '@systemix/runner': minor
