@@ -8,11 +8,17 @@ export type {
   VerifySignedOptions,
   DecodedToken,
   StandardClaims,
+  KeyInput,
+  KeyResolver,
 } from '../common/types/signed.types';
 export type {
   SignedAlgorithm,
   HmacAlgorithm,
   RsaAlgorithm,
+  PssAlgorithm,
+  EcdsaAlgorithm,
+  EddsaAlgorithm,
+  AsymmetricAlgorithm,
 } from '../common/enums';
 export {
   SignedTokenError,
@@ -22,4 +28,5 @@ export {
   InvalidTokenError,
   AudienceMismatchError,
   IssuerMismatchError,
+  InvalidKeyError,
 } from '../common/errors';

@@ -41,7 +41,7 @@ Use `@shahadathhs/passphrase` in imports.
 import { generatePassphrase } from '@systemix/passphrase';
 
 const passphrase = generatePassphrase();
-console.log(passphrase); // Example: "apple orange banana kiwi"
+console.log(passphrase); // Example: "abacus handbag zodiac gravel"
 ```
 
 ### Advanced Formatting
@@ -70,20 +70,26 @@ console.log(`Entropy: ${entropy} bits`);
 
 ### `generatePassphrase(props?: PassphraseProps): string`
 
-| Property          | Type       | Default    | Description                        |
-| :---------------- | :--------- | :--------- | :--------------------------------- |
-| `wordCount`       | `number`   | `4`        | Number of words (1 to 100).        |
-| `separator`       | `string`   | `" "`      | Separator between words.           |
-| `wordList`        | `string[]` | _Built-in_ | Custom list of words.              |
-| `useTitleCase`    | `boolean`  | `false`    | Convert words to TitleCase.        |
-| `useUpperCase`    | `boolean`  | `false`    | Convert words to UPPERCASE.        |
-| `includeNumber`   | `boolean`  | `false`    | Inject a random digit into words.  |
-| `randomSeparator` | `boolean`  | `false`    | Randomize separator between words. |
+| Property          | Type       | Default     | Description                        |
+| :---------------- | :--------- | :---------- | :--------------------------------- |
+| `wordCount`       | `number`   | `4`         | Number of words (1 to 100).        |
+| `separator`       | `string`   | `" "`       | Separator between words.           |
+| `wordList`        | `string[]` | _EFF large_ | Custom list of words.              |
+| `useTitleCase`    | `boolean`  | `false`     | Convert words to TitleCase.        |
+| `useUpperCase`    | `boolean`  | `false`     | Convert words to UPPERCASE.        |
+| `includeNumber`   | `boolean`  | `false`     | Inject a random digit into words.  |
+| `randomSeparator` | `boolean`  | `false`     | Randomize separator between words. |
 
 ### `calculatePassphraseEntropy(wordCount: number, wordListSize: number): number`
 
 Calculates the theoretical entropy of a passphrase (H = L \* log2(N)).
 
+### `defaultWordList`
+
+The [EFF large wordlist](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases): 7,776 words, about 12.9 bits per word, so the default 4-word passphrase carries about 51.7 bits. Custom lists are your responsibility: entropy is `wordCount * log2(list size)`, so small lists weaken the result quickly.
+
 ## License
 
 MIT © [shahadathhs](https://github.com/shahadathhs)
+
+The built-in word list is the EFF large wordlist, © Electronic Frontier Foundation, licensed [CC BY 3.0 US](https://creativecommons.org/licenses/by/3.0/us/).

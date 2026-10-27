@@ -2,13 +2,14 @@
 
 [![npm](https://img.shields.io/npm/v/@systemix/id.svg)](https://www.npmjs.com/package/@systemix/id)
 
-`@systemix/id` generates unique, non-secret identifiers: UUID v4, lexicographically sortable ULIDs, and nanoid-style URL-safe IDs. Built on crypto-grade randomness via `crypto.getRandomValues`. Zero dependencies.
+`@systemix/id` generates unique, non-secret identifiers: UUID v4, time-ordered UUID v7, lexicographically sortable ULIDs, and nanoid-style URL-safe IDs. Built on crypto-grade randomness via `crypto.getRandomValues`. Zero dependencies. Requires Node.js 24.7+.
 
 > For secrets and tokens (API keys, session tokens), use [`@systemix/token`](https://www.npmjs.com/package/@systemix/token) instead.
 
 ## Features
 
-- **UUID v4**: RFC 9562-compliant, with `getRandomValues` fallback.
+- **UUID v4**: RFC 9562-compliant via `crypto.randomUUID`.
+- **UUID v7**: RFC 9562 time-ordered UUIDs with a monotonic generator — the best default for new database primary keys.
 - **ULID**: 26-character sortable IDs with 48-bit timestamp prefix, plus a monotonic factory.
 - **nanoid-style**: Compact URL-safe IDs with custom size and alphabet support.
 - **Bias-Free**: Rejection sampling guarantees uniform character distribution.
@@ -61,6 +62,25 @@ nextUlid(); // "01ARZ3NDEKTSV4RRFFQ69G5FAW"
 nextUlid(); // "01ARZ3NDEKTSV4RRFFQ69G5FAX"
 ```
 
+### UUID v7 (time-ordered)
+
+```typescript
+import {
+  generateUuidV7,
+  createMonotonicUuidV7,
+  uuidV7Timestamp,
+} from '@systemix/id';
+
+generateUuidV7(); // "018bcfe5-687b-7e4e-93c7-f59b358ffd5b"
+
+const next = createMonotonicUuidV7(); // strictly increasing, even within a ms
+next() < next(); // true
+
+uuidV7Timestamp('018bcfe5-687b-7e4e-93c7-f59b358ffd5b'); // 1700000000123
+```
+
+The creation time is readable from a v7 UUID (or ULID). Use v4 where it must stay private.
+
 ### UUID v4
 
 ```typescript
@@ -87,7 +107,19 @@ isUuid(uuid, 4); // true — must be version 4
 
 ### `createMonotonicUlid(): (timestamp?) => string`
 
-Returns a generator whose output strictly increases — when called within the same millisecond, the random suffix is incremented instead of re-randomized. Useful for database primary keys generated in tight loops.
+Returns a generator whose output strictly increases — within the same millisecond, or if the clock steps backwards, the random suffix is incremented instead of re-randomized. Throws if the 80 random bits are exhausted (the ULID spec's overflow rule) rather than wrapping.
+
+### `generateUuidV7(timestamp?): string`
+
+UUID version 7 (RFC 9562): 48-bit millisecond timestamp + 74 random bits. IDs from the same millisecond are unique but not ordered — use the monotonic generator when that matters.
+
+### `createMonotonicUuidV7(): (timestamp?) => string`
+
+Strictly increasing UUIDv7s (RFC 9562 §6.2). Within a millisecond, or if the clock steps backwards, the random bits are incremented; on overflow the timestamp advances by 1 ms.
+
+### `uuidV7Timestamp(uuid): number` / `ulidTimestamp(ulid): number`
+
+Extract the millisecond Unix timestamp from a UUIDv7 or ULID. Throw on invalid input.
 
 ### `generateUuid(): string`
 

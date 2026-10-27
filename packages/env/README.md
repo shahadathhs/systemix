@@ -1,6 +1,6 @@
 # @systemix/env
 
-Typed environment variable loading and validation. Zero dependencies. Built-in .env file support.
+Typed environment variable loading and validation. Zero dependencies. Built-in .env file support. Requires Node.js 24.7+.
 
 ## Installation
 
@@ -40,27 +40,53 @@ console.log(env.toSafeLog()); // { DATABASE_URL: '***', ... }
 
 ## Options
 
-Pass options as second argument. For backward compat, a plain `Record` is treated as `{ source }`:
-
 ```typescript
-load(schema, { PORT: '4000' }); // legacy: treated as source
 load(schema, {
-  source: { PORT: '4000' }, // Custom env source
-  fromFile: '.env.local', // Load from .env file(s)
-  fromFile: ['.env', '.env.local'], // Multiple files, later overrides
-  strict: true, // Ignore vars not in schema
+  source: { PORT: '4000' }, // env source (default: process.env)
+  fromFile: ['.env', '.env.local'], // .env file(s); later files override earlier ones
+  strict: true, // error on keys in a .env file that are not in the schema
 });
 ```
 
-## .env File Loading
+### Precedence
 
-Load from file. Cross-platform (Windows, macOS, Linux).
+Highest first: `source` (the real environment), then `fromFile` files (later over earlier), then schema `default`s. **A `.env` file never overrides a variable that is really set**, so a stray `.env` in production cannot replace deployed secrets. Missing files are skipped.
+
+### `strict`
+
+With `strict: true`, a `.env` file that contains a key the schema doesn't know is an error, which catches typos like `DATABSE_URL` that would otherwise be silently ignored. Unrelated variables in the real environment are not flagged.
+
+## Standard Schema (Zod, Valibot, ArkType)
+
+Any [Standard Schema](https://standardschema.dev) validator can validate a variable. It receives the raw string, so coercing schemas work, and the result type is the schema's output type:
+
+```typescript
+import { z } from 'zod';
+
+const env = load({
+  PORT: { schema: z.coerce.number().int().min(1).max(65535), default: 3000 },
+  DATABASE_URL: { schema: z.url(), required: true, secret: true },
+});
+
+env.PORT; // number
+env.DATABASE_URL; // string
+```
+
+`required`, `default` (checked against the output type) and `secret` work the same as for built-in types. Validators must be synchronous; an async one fails with a clear error. This package doesn't depend on any validator library.
+
+## .env Files
 
 ```typescript
 const env = load(schema, { fromFile: '.env.local' });
 ```
 
-Or parse content yourself:
+The parser (also exported as `parseEnvFile`) supports:
+
+- `KEY=value` with an optional `export ` prefix, and `#` comment lines
+- inline comments: `KEY=value # note` (a `#` with no space before it, as in URLs, is kept)
+- `"double quotes"`: may span lines; `\n \r \t \" \\` are expanded, other backslashes kept
+- `'single quotes'`: literal, may span lines
+- invalid keys and lines without `=` are skipped
 
 ```typescript
 import { parseEnvFile } from '@systemix/env';
@@ -70,7 +96,7 @@ const vars = parseEnvFile(readFileSync('.env', 'utf-8'));
 
 ## Secret Masking
 
-Mark sensitive vars with `secret: true`. Use `toSafeLog()` for logging:
+Mark sensitive vars with `secret: true`:
 
 ```typescript
 const env = load(
@@ -81,9 +107,13 @@ const env = load(
   { source: { API_KEY: 'sk-123', PORT: '3000' } },
 );
 
-console.log(env.toSafeLog());
-// { API_KEY: '***', PORT: 3000 }
+env.API_KEY; // 'sk-123' — still readable
+JSON.stringify(env); // '{"PORT":3000}' — secrets are not enumerable
+console.log(env); // secrets don't appear
+env.toSafeLog(); // { API_KEY: '***', PORT: 3000 }
 ```
+
+Secrets are non-enumerable (so logging, `JSON.stringify` and spread don't expose them), never appear in validation errors, and the result object is frozen.
 
 ## Batch Error Reporting
 
@@ -117,10 +147,11 @@ config.getRaw(); // raw env object
 
 Create from existing env: `Config.from(load(schema))`.
 
-## Boolean Parsing
+## Number and Boolean Parsing
 
-- `true`: `"true"`, `"1"`, `"yes"`
-- `false`: `"false"`, `"0"`, `"no"`, `""`
+- Numbers must be decimal (`42`, `-5`, `.5`, `1e3`). Empty or whitespace-only input, `0x10`, `Infinity` and `1_000` are rejected.
+- Booleans (case-insensitive): `true`, `1`, `yes`, `on` and `false`, `0`, `no`, `off`.
+- An empty variable counts as unset: the `default` applies, or a required variable is reported missing.
 
 ## License
 

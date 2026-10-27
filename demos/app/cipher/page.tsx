@@ -1,19 +1,37 @@
 'use client';
 
 import {
-  decryptString,
-  encryptString,
+  base64UrlToBytes,
+  createKeyring,
   generateKeyBytes,
+  parseEnvelope,
 } from '@systemix/cipher';
-import { Check, Copy, KeyRound, Loader2, Lock, LockOpen } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import {
+  Check,
+  Copy,
+  KeyRound,
+  Loader2,
+  Lock,
+  LockOpen,
+  RefreshCw,
+} from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 function toHex(bytes: Uint8Array): string {
   return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 export default function CipherPage() {
-  const [key, setKey] = useState<Uint8Array | null>(null);
+  const [keys, setKeys] = useState<Record<string, Uint8Array>>({});
+  const [currentId, setCurrentId] = useState('k1');
+  const key: Uint8Array | null = keys[currentId] ?? null;
+  const ring = useMemo(
+    () =>
+      Object.keys(keys).length > 0
+        ? createKeyring({ keys, current: currentId })
+        : null,
+    [keys, currentId],
+  );
   const [plaintext, setPlaintext] = useState('Meet me at dawn. Bring coffee.');
   const [payload, setPayload] = useState('');
   const [decrypted, setDecrypted] = useState('');
@@ -22,21 +40,32 @@ export default function CipherPage() {
   const [copied, setCopied] = useState<'key' | 'payload' | null>(null);
 
   const regenerateKey = useCallback(() => {
-    setKey(generateKeyBytes());
+    setKeys({ k1: generateKeyBytes() });
+    setCurrentId('k1');
+    setPayload('');
     setDecrypted('');
     setError('');
   }, []);
+
+  // New key becomes current; old keys stay so existing payloads still decrypt.
+  const rotateKey = () => {
+    const next = `k${Object.keys(keys).length + 1}`;
+    setKeys({ ...keys, [next]: generateKeyBytes() });
+    setCurrentId(next);
+    setDecrypted('');
+    setError('');
+  };
 
   useEffect(() => {
     regenerateKey();
   }, [regenerateKey]);
 
   const handleEncrypt = async () => {
-    if (!key || !plaintext) return;
+    if (!ring || !plaintext) return;
     setBusy('encrypt');
     setError('');
     try {
-      const result = await encryptString(plaintext, key);
+      const result = await ring.encryptString(plaintext);
       setPayload(result);
       setDecrypted('');
     } catch (e) {
@@ -47,11 +76,11 @@ export default function CipherPage() {
   };
 
   const handleDecrypt = async () => {
-    if (!key || !payload) return;
+    if (!ring || !payload) return;
     setBusy('decrypt');
     setError('');
     try {
-      const result = await decryptString(payload, key);
+      const result = await ring.decryptString(payload);
       setDecrypted(result);
     } catch {
       setError(
@@ -61,6 +90,30 @@ export default function CipherPage() {
       setBusy(null);
     }
   };
+
+  const handleReencrypt = async () => {
+    if (!ring || !payload) return;
+    setBusy('encrypt');
+    try {
+      const text = await ring.decryptString(payload);
+      setPayload(await ring.encryptString(text));
+      setDecrypted('');
+      setError('');
+    } catch {
+      setError('Could not re-encrypt — payload no longer decrypts.');
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const envelope = useMemo(() => {
+    if (!payload) return null;
+    try {
+      return parseEnvelope(base64UrlToBytes(payload));
+    } catch {
+      return null;
+    }
+  }, [payload]);
 
   const handleTamper = () => {
     if (payload.length < 10) return;
@@ -85,8 +138,10 @@ export default function CipherPage() {
           Cipher
         </h1>
         <p className="mt-2 text-sm text-muted leading-relaxed">
-          Authenticated AES-256-GCM. The random IV is embedded in the payload,
-          and any tampering is detected — not decrypted.
+          Authenticated AES-256-GCM in a versioned envelope: header, key id,
+          random IV, ciphertext and tag in one value. Tampering — including with
+          the header — is detected, not decrypted. Rotate the key and old
+          payloads still decrypt.
         </p>
       </div>
 
@@ -97,6 +152,9 @@ export default function CipherPage() {
             <div className="label mb-2 flex items-center gap-1.5">
               <KeyRound className="size-3.5" />
               AES-256 key
+              <span className="ml-1 font-mono text-ink normal-case">
+                · id {currentId}
+              </span>
             </div>
             <code className="block text-xs font-mono text-ink break-all">
               {key ? toHex(key) : '…'}
@@ -118,9 +176,20 @@ export default function CipherPage() {
             <button
               type="button"
               onClick={regenerateKey}
-              className="btn btn-primary"
+              className="btn btn-ghost"
+              title="Start over with a single fresh key"
             >
               New key
+            </button>
+            <button
+              type="button"
+              onClick={rotateKey}
+              disabled={!key}
+              className="btn btn-primary"
+              title="Add a new current key; keep old keys for decrypting"
+            >
+              <RefreshCw className="size-4" />
+              Rotate
             </button>
           </div>
         </div>
@@ -165,7 +234,7 @@ export default function CipherPage() {
         {payload && (
           <div className="space-y-2 border-t border-line pt-4">
             <div className="flex items-center justify-between">
-              <span className="label">Payload — IV + ciphertext + tag</span>
+              <span className="label">Payload — envelope (base64url)</span>
               <button
                 type="button"
                 onClick={() => copy('payload')}
@@ -179,6 +248,59 @@ export default function CipherPage() {
               </button>
             </div>
             <div className="mono-box status-ok">{payload}</div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-line border border-line text-xs">
+              {envelope ? (
+                <>
+                  <div className="bg-surface p-2.5">
+                    <div className="label mb-1">Header</div>
+                    <span className="font-mono text-ink">
+                      SX v{envelope.version}
+                    </span>
+                  </div>
+                  <div className="bg-surface p-2.5">
+                    <div className="label mb-1">Key id</div>
+                    <span className="font-mono text-ink">
+                      {envelope.keyId || '(none)'}
+                    </span>
+                  </div>
+                  <div className="bg-surface p-2.5 min-w-0">
+                    <div className="label mb-1">IV (12 B)</div>
+                    <span className="font-mono text-ink break-all">
+                      {toHex(envelope.iv)}
+                    </span>
+                  </div>
+                  <div className="bg-surface p-2.5">
+                    <div className="label mb-1">Ciphertext + tag</div>
+                    <span className="font-mono text-ink">
+                      {envelope.ciphertext.length} B
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div className="bg-surface p-2.5 col-span-full text-faint">
+                  Not a valid envelope (tampered or malformed).
+                </div>
+              )}
+            </div>
+
+            {ring && envelope && ring.needsRotation(payload) && (
+              <div className="flex items-center justify-between gap-3 border px-3 py-2.5 text-sm status-err">
+                <span>
+                  <span className="font-mono">needsRotation</span>: encrypted
+                  with <span className="font-mono">{envelope.keyId}</span>, the
+                  current key is <span className="font-mono">{currentId}</span>.
+                </span>
+                <button
+                  type="button"
+                  onClick={() => void handleReencrypt()}
+                  disabled={busy !== null}
+                  className="btn btn-ghost shrink-0"
+                >
+                  Re-encrypt
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

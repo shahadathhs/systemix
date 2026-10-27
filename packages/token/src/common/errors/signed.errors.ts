@@ -59,3 +59,12 @@ export class IssuerMismatchError extends SignedTokenError {
     Object.setPrototypeOf(this, IssuerMismatchError.prototype);
   }
 }
+
+/** The key is unsuitable for the algorithm (wrong type, too weak, or PEM used as HMAC secret). */
+export class InvalidKeyError extends SignedTokenError {
+  override name = 'InvalidKeyError';
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, InvalidKeyError.prototype);
+  }
+}

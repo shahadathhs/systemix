@@ -9,15 +9,24 @@ if (!crypto) {
 export interface CipherOptions {
   /**
    * Additional authenticated data (AAD). Authenticated but not encrypted —
-   * the same AAD must be provided for decryption.
+   * the same AAD must be provided for decryption. Bind ciphertexts to their
+   * context (e.g. `user:42`) so they cannot be moved between records.
    */
   additionalData?: Uint8Array;
 
   /**
-   * Custom 12-byte IV. If omitted, a random IV is generated.
-   * Provide only when an external process controls IV generation.
+   * Key identifier written into the envelope header (encrypt only, max 64
+   * bytes UTF-8). Used by keyrings to pick the right key on decrypt.
+   * @default ''
    */
-  iv?: Uint8Array;
+  keyId?: string;
+
+  /**
+   * Whether decrypt may fall back to the pre-envelope `[IV][ciphertext+tag]`
+   * format written by @systemix/cipher 0.1.x (decrypt only).
+   * @default true
+   */
+  allowLegacy?: boolean;
 }
 
 /**
@@ -36,7 +45,7 @@ export function assertValidKey(key: Uint8Array): void {
  * Validates optional cipher inputs (AAD and IV).
  */
 export function assertValidOptions(options: CipherOptions): void {
-  const { additionalData, iv } = options;
+  const { additionalData, keyId, allowLegacy } = options;
   if (
     additionalData !== undefined &&
     (!(additionalData instanceof Uint8Array) || additionalData.length === 0)
@@ -45,13 +54,11 @@ export function assertValidOptions(options: CipherOptions): void {
       'Invalid additionalData. It must be a non-empty Uint8Array.',
     );
   }
-  if (
-    iv !== undefined &&
-    (!(iv instanceof Uint8Array) || iv.length !== IV_LENGTH)
-  ) {
-    throw new CipherError(
-      `Invalid iv. It must be a Uint8Array of exactly ${IV_LENGTH} bytes.`,
-    );
+  if (keyId !== undefined && typeof keyId !== 'string') {
+    throw new CipherError('Invalid keyId. It must be a string.');
+  }
+  if (allowLegacy !== undefined && typeof allowLegacy !== 'boolean') {
+    throw new CipherError('Invalid allowLegacy. It must be a boolean.');
   }
 }
 

@@ -26,6 +26,14 @@ export const { run, getCounts } = createRunner(
     assert(payload instanceof Uint8Array, 'encrypt returns Uint8Array');
     assert(payload.length > IV_LENGTH + 16, 'payload includes IV and tag');
     assert(
+      payload[0] === 0x53 && payload[1] === 0x58 && payload[2] === 1,
+      'payload starts with the SX v1 envelope header',
+    );
+    assert(
+      payload.length === 4 + IV_LENGTH + plaintext.length + 16,
+      'envelope = header + IV + ciphertext + tag',
+    );
+    assert(
       !decoder.decode(payload).includes(plaintext),
       'ciphertext hides plaintext',
     );
@@ -40,7 +48,7 @@ export const { run, getCounts } = createRunner(
     );
 
     const tampered = Uint8Array.from(payload);
-    tampered[IV_LENGTH] ^= 0xff;
+    tampered[tampered.length - 1] ^= 0xff;
     await assertThrowsAsync(
       () => decrypt(tampered, key),
       'decrypt detects tampering',
@@ -94,6 +102,17 @@ export const { run, getCounts } = createRunner(
     await assertThrowsAsync(
       () => decryptString('', key),
       'decryptString rejects empty payload',
+    );
+    await assertThrowsAsync(
+      () =>
+        decrypt(withAad, key, { additionalData: aad, allowLegacy: false }).then(
+          () =>
+            decrypt(withAad, key, {
+              additionalData: encoder.encode('x'),
+              allowLegacy: false,
+            }),
+        ),
+      'allowLegacy:false still rejects wrong AAD',
     );
     await assertThrowsAsync(
       () => decrypt(new Uint8Array(10), key),

@@ -40,27 +40,33 @@ export const { run, getCounts } = createRunner(
     assert(limiter.options.limit === 3, 'resolves options');
 
     for (let i = 0; i < 3; i++) {
-      assert(limiter.limit('k1').success, `request ${i + 1} allowed`);
+      assert((await limiter.limit('k1')).success, `request ${i + 1} allowed`);
     }
-    assert(!limiter.limit('k1').success, 'blocks at limit (integration)');
+    assert(
+      !(await limiter.limit('k1')).success,
+      'blocks at limit (integration)',
+    );
 
-    const peeked = limiter.peek('k1');
+    const peeked = await limiter.peek('k1');
     assert(!peeked.success, 'peek does not record a hit');
 
-    limiter.resetKey('k1');
-    assert(limiter.limit('k1').success, 'resetKey clears state');
+    await limiter.resetKey('k1');
+    assert((await limiter.limit('k1')).success, 'resetKey clears state');
 
     await sleep(45);
-    assert(limiter.limit('k1').success, 'window reset in real time');
+    assert((await limiter.limit('k1')).success, 'window reset in real time');
 
-    limiter.limit('k2');
-    limiter.resetAll();
-    assert(limiter.peek('k2').remaining === 3, 'resetAll clears all keys');
+    await limiter.limit('k2');
+    await limiter.resetAll();
+    assert(
+      (await limiter.peek('k2')).remaining === 3,
+      'resetAll clears all keys',
+    );
 
-    limiter.limit('a');
-    limiter.limit('b');
-    limiter.sweep();
-    limiter.resetAll();
+    await limiter.limit('a');
+    await limiter.limit('b');
+    await limiter.sweep();
+    await limiter.resetAll();
 
     assertThrows(
       () => createRateLimiter({ limit: 0, windowMs: 1000 }),
@@ -79,7 +85,11 @@ export const { run, getCounts } = createRunner(
         }),
       'rejects unknown algorithm',
     );
-    assertThrows(() => limiter.limit(''), 'rejects empty key');
+    await assertThrowsAsync(() => limiter.limit(''), 'rejects empty key');
+    await assertThrowsAsync(
+      () => limiter.limit('x'.repeat(1025)),
+      'rejects keys over 1024 characters',
+    );
 
     // --- withRateLimit ---
     const limiter2 = createRateLimiter({ limit: 2, windowMs: 50 });
@@ -117,16 +127,16 @@ export const { run, getCounts } = createRunner(
     const request = { headers: {}, ip: '10.0.0.1' };
 
     const response1 = createMockResponse();
-    middleware(request, response1, () => (response1.statusCode = 200));
+    await middleware(request, response1, () => (response1.statusCode = 200));
     assert(response1.statusCode === 200, 'middleware allows under limit');
     assert(
       response1.headers['RateLimit-Limit'] === '2',
       'emits RateLimit-Limit header',
     );
 
-    middleware(request, createMockResponse(), () => {});
+    await middleware(request, createMockResponse(), () => {});
     const blocked = createMockResponse();
-    middleware(request, blocked, () => (blocked.statusCode = 200));
+    await middleware(request, blocked, () => (blocked.statusCode = 200));
     assert(blocked.statusCode === 429, 'middleware returns 429 at limit');
     assert(
       blocked.body.message === rateLimitExceededMessage,
@@ -136,6 +146,11 @@ export const { run, getCounts } = createRunner(
       Number(blocked.headers['Retry-After']) > 0,
       'emits Retry-After header',
     );
+    assert(
+      Number(blocked.headers['RateLimit-Reset']) > 0 &&
+        Number(blocked.headers['RateLimit-Reset']) <= 60,
+      'RateLimit-Reset is seconds until reset, not an epoch timestamp',
+    );
 
     const custom = expressRateLimit({
       limit: 1,
@@ -143,23 +158,20 @@ export const { run, getCounts } = createRunner(
       statusCode: 429,
       keyGenerator: (req) => req.headers['x-api-key'],
       message: { error: 'custom' },
-      standardHeaders: false,
+      headers: false,
     });
     const reqA = { headers: { 'x-api-key': 'a' } };
     const res1 = createMockResponse();
-    custom(reqA, res1, () => (res1.statusCode = 200));
+    await custom(reqA, res1, () => (res1.statusCode = 200));
     const res2 = createMockResponse();
-    custom(reqA, res2, () => (res2.statusCode = 200));
+    await custom(reqA, res2, () => (res2.statusCode = 200));
     assert(
       res2.statusCode === 429 && res2.body.error === 'custom',
       'custom key and message',
     );
-    assert(
-      !res2.headers['RateLimit-Limit'],
-      'standard headers can be disabled',
-    );
+    assert(!res2.headers['RateLimit-Limit'], 'headers can be disabled');
     const resB = createMockResponse();
-    custom(
+    await custom(
       { headers: { 'x-api-key': 'b' } },
       resB,
       () => (resB.statusCode = 200),

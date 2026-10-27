@@ -45,11 +45,14 @@
     "crypto",
     "typescript",
     "node",
-    "utility"
+    "utility",
+    "argon2",
+    "argon2id",
+    "phc"
   ],
   "author": "Shahadath Hossen Sajib <shahadathhossensajib732@gmail.com> (https://github.com/shahadathhs)",
   "license": "MIT",
-  "description": "Password hashing and verification with PBKDF2 and scrypt, built on Web Crypto and Node.js built-ins. Zero dependencies. Part of the Systemix toolkit.",
+  "description": "Password hashing and verification with Argon2id, scrypt and PBKDF2, built on Node.js built-ins. PHC format, needsRehash, zero dependencies. Part of the Systemix toolkit.",
   "devDependencies": {
     "@systemix/runner": "workspace:*",
     "@systemix/typescript": "workspace:*",
@@ -72,5 +75,8 @@
     "README.md",
     "package.json"
   ],
-  "tsconfig": null
+  "tsconfig": null,
+  "engines": {
+    "node": ">=24.7.0"
+  }
 }

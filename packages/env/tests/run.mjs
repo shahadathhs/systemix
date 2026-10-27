@@ -10,6 +10,7 @@ import * as validationSuite from './validation.test.mjs';
 import * as configSuite from './config.test.mjs';
 import * as parseSuite from './parse.test.mjs';
 import * as fileSuite from './file.test.mjs';
+import * as hardeningSuite from './hardening.test.mjs';
 
 const suites = [
   { name: 'load', ...loadSuite },
@@ -17,6 +18,7 @@ const suites = [
   { name: 'config', ...configSuite },
   { name: 'parse', ...parseSuite },
   { name: 'file', ...fileSuite },
+  { name: 'hardening', ...hardeningSuite },
 ];
 
 await runSuites(suites, { packageName: '@systemix/env' });

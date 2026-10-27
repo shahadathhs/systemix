@@ -1,5 +1,5 @@
 import { GenerateIdOptions } from '../types/id.types';
-import { getRandomInt } from '../utils/random';
+import { getRandomBytes } from '../utils/random';
 import { alphabetError, sizeError } from '../utils/error.message';
 
 /**
@@ -12,7 +12,7 @@ const DEFAULT_SIZE = 21;
 const MAX_SIZE = 1024;
 const MAX_ALPHABET_LENGTH = 256;
 
-function validateOptions(size: number, alphabet: string): void {
+function validateOptions(size: number, alphabet: string): string[] {
   if (!Number.isInteger(size) || size <= 0) {
     throw new Error(sizeError.invalidSize);
   }
@@ -22,34 +22,46 @@ function validateOptions(size: number, alphabet: string): void {
   if (typeof alphabet !== 'string') {
     throw new Error(alphabetError.invalidAlphabet);
   }
-  if (alphabet.length < 2) {
+  // Split by code point so astral characters are one symbol, not two halves.
+  const chars = Array.from(alphabet);
+  if (chars.length < 2) {
     throw new Error(alphabetError.alphabetTooSmall);
   }
-  if (alphabet.length > MAX_ALPHABET_LENGTH) {
+  if (chars.length > MAX_ALPHABET_LENGTH) {
     throw new Error(alphabetError.alphabetTooLarge);
   }
-  const seen = new Set<string>();
-  for (const char of alphabet) {
-    if (seen.has(char)) {
-      throw new Error(alphabetError.duplicateAlphabetChars);
-    }
-    seen.add(char);
+  if (new Set(chars).size !== chars.length) {
+    throw new Error(alphabetError.duplicateAlphabetChars);
   }
+  return chars;
 }
 
 /**
- * Generates a compact, URL-safe, nanoid-style random ID using
- * crypto-grade randomness with bias-free character selection.
+ * Generates a compact, URL-safe, nanoid-style random ID using crypto-grade
+ * randomness. Bytes are drawn in batches and masked to the alphabet's bit
+ * width; out-of-range values are rejected, so every character is uniform.
  *
  * @example generateId() // "V1StGXR8_Z5jdHi6B-myT"
  */
 export function generateId(options: GenerateIdOptions = {}): string {
   const { size = DEFAULT_SIZE, alphabet = urlAlphabet } = options;
-  validateOptions(size, alphabet);
+  const chars = validateOptions(size, alphabet);
+
+  const length = chars.length;
+  const mask = (2 << (31 - Math.clz32((length - 1) | 1))) - 1;
+  // Expected bytes needed per character is (mask + 1) / length; 1.6x covers it.
+  const batch = Math.ceil((1.6 * mask * size) / length);
 
   let id = '';
-  for (let i = 0; i < size; i++) {
-    id += alphabet[getRandomInt(alphabet.length)];
+  let count = 0;
+  for (;;) {
+    const bytes = getRandomBytes(batch);
+    for (let i = 0; i < batch; i++) {
+      const index = bytes[i] & mask;
+      if (index < length) {
+        id += chars[index];
+        if (++count === size) return id;
+      }
+    }
   }
-  return id;
 }

@@ -1,6 +1,8 @@
 import type {
+  CheckedEnvSchema,
   EnvSchema,
   EnvVarSchema,
+  EnvVarStandardSchema,
   EnvVarType,
   EnvResult,
   LoadOptions,
@@ -10,125 +12,126 @@ import { loadEnvFile, getCwd, mergeEnv, getEnvSource } from './file';
 
 const MASK = '***';
 
+type Definition = EnvVarSchema<EnvVarType> | EnvVarStandardSchema;
+
+function isStandard(def: Definition): def is EnvVarStandardSchema {
+  return 'schema' in def && def.schema !== undefined;
+}
+
+/** Parses and validates one raw value. Returns the value or throws. */
+function parseValue(def: Definition, raw: string): unknown {
+  if (isStandard(def)) {
+    const result = def.schema['~standard'].validate(raw);
+    if (result instanceof Promise) {
+      void result.catch(() => undefined);
+      throw new Error('async validators are not supported; use a sync schema');
+    }
+    if (result.issues) {
+      throw new Error(result.issues.map((issue) => issue.message).join('; '));
+    }
+    return result.value;
+  }
+
+  const { type } = def;
+  let value: string | number | boolean;
+  if (def.transform) {
+    value = def.transform(raw);
+  } else if (type === 'number') {
+    value = parseNumber(raw);
+  } else if (type === 'boolean') {
+    value = parseBoolean(raw);
+  } else {
+    value = raw;
+  }
+
+  if (type === 'number' && typeof value === 'number') {
+    if (def.min !== undefined && value < def.min) {
+      throw new Error(`must be >= ${def.min}`);
+    }
+    if (def.max !== undefined && value > def.max) {
+      throw new Error(`must be <= ${def.max}`);
+    }
+  }
+  if (type === 'string' && typeof value === 'string') {
+    if (def.regex && !def.regex.test(value)) {
+      throw new Error(`must match ${def.regex}`);
+    }
+    if (def.oneOf && !def.oneOf.includes(value)) {
+      throw new Error(`must be one of [${def.oneOf.join(', ')}]`);
+    }
+  }
+  return value;
+}
+
 /**
  * Load and validate environment variables from a schema.
- * Parses strings, numbers, and booleans; validates min/max, regex, oneOf.
- * Returns a typed object with toSafeLog() for safe logging (masks secrets).
  *
- * @param schema - Map of var names to schema definitions
- * @param options - Source override, fromFile, or strict mode. Legacy: plain object as source.
- * @returns Typed env object with toSafeLog()
- * @throws When required vars are missing or validation fails
+ * Parses strings, numbers and booleans; validates min/max, regex, oneOf, or
+ * delegates to any Standard Schema validator (Zod, Valibot, ArkType). Returns
+ * a frozen, typed object. Variables marked `secret` are non-enumerable (so
+ * `console.log`, `JSON.stringify` and spread don't expose them), never appear
+ * in error messages, and are masked by `toSafeLog()`.
+ *
+ * Precedence, highest first: `source` (default `process.env`), then the
+ * `fromFile` files (later files override earlier ones), then schema defaults.
+ * A `.env` file never overrides a variable that is really set.
+ *
+ * @throws When required vars are missing or validation fails (all problems are reported together)
  *
  * @example
  * const env = load(
- *   { PORT: { type: 'number', default: 3000 }, API_KEY: { type: 'string', required: true } },
- *   { source: process.env }
+ *   { PORT: { type: 'number', default: 3000 }, API_KEY: { type: 'string', required: true, secret: true } },
+ *   { fromFile: '.env' },
  * );
  */
 export function load<T extends EnvSchema>(
-  schema: T,
-  options?: LoadOptions | Record<string, string | undefined>,
+  schema: T & CheckedEnvSchema<T>,
+  options: LoadOptions = {},
 ): EnvResult<T> {
-  const opts = options ?? {};
-  const isLegacySource =
-    opts &&
-    typeof opts === 'object' &&
-    !Array.isArray(opts) &&
-    !('source' in opts) &&
-    !('fromFile' in opts) &&
-    !('strict' in opts);
-  const normalized = isLegacySource
-    ? { source: opts as Record<string, string | undefined> }
-    : (opts as LoadOptions);
-  const { source, fromFile, strict = false } = normalized;
+  const { source, fromFile, strict = false } = options;
+  const schemaKeys = Object.keys(schema);
+  const errors: string[] = [];
 
-  let env = source ?? getEnvSource();
-
+  const fileVars: Record<string, string> = {};
   if (fromFile) {
     const cwd = getCwd();
     const files = Array.isArray(fromFile) ? fromFile : [fromFile];
-    for (const f of files) {
-      const loaded = loadEnvFile(f, cwd);
-      env = mergeEnv(env, loaded);
-    }
+    for (const file of files) Object.assign(fileVars, loadEnvFile(file, cwd));
   }
-
   if (strict) {
-    const schemaKeys = new Set(Object.keys(schema));
-    const filtered: Record<string, string | undefined> = {};
-    for (const [k, v] of Object.entries(env)) {
-      if (schemaKeys.has(k)) filtered[k] = v;
+    const known = new Set(schemaKeys);
+    for (const key of Object.keys(fileVars)) {
+      if (!known.has(key)) errors.push(`Unknown env var in .env file: ${key}`);
     }
-    env = filtered;
   }
 
-  const schemaKeys = Object.keys(schema);
-  const errors: string[] = [];
-  const result = {} as Record<string, unknown>;
+  const env = mergeEnv(fileVars, source ?? getEnvSource());
+  const values: Record<string, unknown> = {};
 
   for (const key of schemaKeys) {
-    const def = schema[key] as EnvVarSchema<EnvVarType>;
+    const def = schema[key] as Definition;
     const raw = env[key];
-    const { type, required = false, default: defaultValue } = def;
+    const { required = false, default: defaultValue } = def;
 
     if (raw === undefined || raw === '') {
       if (required && defaultValue === undefined) {
         errors.push(`Missing required env var: ${key}`);
         continue;
       }
-      result[key] = defaultValue ?? undefined;
+      values[key] = defaultValue ?? undefined;
       continue;
     }
 
     try {
-      let value: string | number | boolean;
-
-      if (def.transform) {
-        value = def.transform(raw);
-      } else {
-        switch (type) {
-          case 'string':
-            value = raw;
-            break;
-          case 'number':
-            value = parseNumber(raw);
-            break;
-          case 'boolean':
-            value = parseBoolean(raw);
-            break;
-          default:
-            value = raw;
-        }
-      }
-
-      if (type === 'number' && typeof value === 'number') {
-        if (def.min !== undefined && value < def.min) {
-          errors.push(`${key}: must be >= ${def.min}`);
-          continue;
-        }
-        if (def.max !== undefined && value > def.max) {
-          errors.push(`${key}: must be <= ${def.max}`);
-          continue;
-        }
-      }
-
-      if (type === 'string' && typeof value === 'string') {
-        if (def.regex && !def.regex.test(value)) {
-          errors.push(`${key}: must match ${def.regex}`);
-          continue;
-        }
-        if (def.oneOf && !def.oneOf.includes(value)) {
-          errors.push(`${key}: must be one of [${def.oneOf.join(', ')}]`);
-          continue;
-        }
-      }
-
-      result[key] = value;
+      values[key] = parseValue(def, raw);
     } catch (err) {
-      errors.push(
-        `${key}: ${err instanceof Error ? err.message : String(err)}`,
-      );
+      // Never echo a secret's raw value through an error message.
+      const detail = def.secret
+        ? 'invalid value'
+        : err instanceof Error
+          ? err.message
+          : String(err);
+      errors.push(`${key}: ${detail}`);
     }
   }
 
@@ -138,21 +141,27 @@ export function load<T extends EnvSchema>(
     );
   }
 
-  const toSafeLog = (): Record<
-    string,
-    string | number | boolean | undefined
-  > => {
-    const safe: Record<string, string | number | boolean | undefined> = {};
-    for (const key of schemaKeys) {
-      const def = schema[key] as EnvVarSchema<EnvVarType>;
-      const val = result[key];
-      safe[key] =
-        def.secret && val !== undefined
-          ? MASK
-          : (val as string | number | boolean | undefined);
-    }
-    return safe;
-  };
-
-  return Object.assign(result, { toSafeLog }) as EnvResult<T>;
+  const result = {} as Record<string, unknown>;
+  for (const key of schemaKeys) {
+    Object.defineProperty(result, key, {
+      value: values[key],
+      enumerable: !(schema[key] as Definition).secret,
+      writable: false,
+      configurable: false,
+    });
+  }
+  Object.defineProperty(result, 'toSafeLog', {
+    value: (): Record<string, unknown> => {
+      const safe: Record<string, unknown> = {};
+      for (const key of schemaKeys) {
+        safe[key] =
+          (schema[key] as Definition).secret && values[key] !== undefined
+            ? MASK
+            : values[key];
+      }
+      return safe;
+    },
+    enumerable: false,
+  });
+  return Object.freeze(result) as EnvResult<T>;
 }

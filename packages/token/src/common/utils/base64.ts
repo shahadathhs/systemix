@@ -1,29 +1,26 @@
-/** Browser and Node compatible (uses TextEncoder, btoa, atob) */
-export function base64UrlEncode(input: string | Uint8Array | Buffer): string {
-  const bytes =
-    typeof input === 'string'
-      ? new TextEncoder().encode(input)
-      : input instanceof Uint8Array
-        ? input
-        : new Uint8Array(input as ArrayLike<number> & { length: number });
-  const binary = String.fromCharCode(...bytes);
-  const base64 = btoa(binary);
-  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const BASE64URL = /^[A-Za-z0-9_-]*$/;
+
+export function base64UrlEncode(input: string | Uint8Array): string {
+  return Buffer.from(input).toString('base64url');
 }
 
-/** Browser and Node compatible (returns Uint8Array) */
+/**
+ * Strict base64url decoding (RFC 7515 §2): URL-safe alphabet only, no padding,
+ * no whitespace. Throws on anything else.
+ */
 export function base64UrlDecode(input: string): Uint8Array {
-  let base64 = input.replace(/-/g, '+').replace(/_/g, '/');
-  const pad = base64.length % 4;
-  if (pad) base64 += '='.repeat(4 - pad);
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
+  if (
+    typeof input !== 'string' ||
+    !BASE64URL.test(input) ||
+    input.length % 4 === 1
+  ) {
+    throw new Error('Invalid base64url');
   }
-  return bytes;
+  return new Uint8Array(Buffer.from(input, 'base64url'));
 }
 
 export function base64UrlDecodeToUtf8(input: string): string {
-  return new TextDecoder().decode(base64UrlDecode(input));
+  return new TextDecoder('utf-8', { fatal: true }).decode(
+    base64UrlDecode(input),
+  );
 }

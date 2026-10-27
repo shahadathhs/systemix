@@ -1,6 +1,6 @@
 const crypto = globalThis.crypto;
 if (!crypto) {
-  throw new Error('Crypto not available. Requires Node 18+ or browser.');
+  throw new Error('Crypto not available. Requires Node.js 24.7+.');
 }
 
 import { PbkdfDeriveOptions } from '../types/hash.types';
@@ -11,9 +11,13 @@ import {
 } from '../utils/error.message';
 import { passwordToBytes } from '../utils/encode';
 
-export const DEFAULT_PBKDF2_ITERATIONS = 210_000;
+export const DEFAULT_PBKDF2_ITERATIONS = 600_000;
 export const DEFAULT_KEY_LENGTH = 32;
 export const DEFAULT_DIGEST = 'SHA-256';
+
+/** Upper bounds stop untrusted encoded hashes from forcing unbounded work. */
+export const MAX_PBKDF2_ITERATIONS = 10_000_000;
+export const MAX_KEY_LENGTH = 1024;
 
 const ALLOWED_DIGESTS = ['SHA-256', 'SHA-384', 'SHA-512'];
 
@@ -51,8 +55,14 @@ export async function pbkdf2DeriveBits(
   if (!Number.isInteger(iterations) || iterations <= 0) {
     throw new Error(iterationsError.invalidIterations);
   }
+  if (iterations > MAX_PBKDF2_ITERATIONS) {
+    throw new Error(iterationsError.iterationsTooHigh);
+  }
   if (!Number.isInteger(keyLength) || keyLength <= 0) {
     throw new Error(keyLengthError.invalidKeyLength);
+  }
+  if (keyLength > MAX_KEY_LENGTH) {
+    throw new Error(keyLengthError.keyLengthTooLarge);
   }
 
   const keyMaterial = await crypto.subtle.importKey(

@@ -5,6 +5,8 @@ import {
 } from '../types/rate-limit.types';
 import { createRateLimiter } from '../limiter/create-rate-limiter';
 import { RateLimiter } from '../types/rate-limit.types';
+import { normalizeIp } from '../utils/ip';
+import { rateLimitHeaders } from './headers';
 import {
   rateLimitExceededMessage,
   statusCodeError,
@@ -26,12 +28,13 @@ export function expressRateLimit(
   request: ExpressLikeRequest,
   response: ExpressLikeResponse,
   next: NextFunction,
-) => void {
+) => Promise<void> {
   const {
     keyGenerator,
     message = { message: rateLimitExceededMessage },
     statusCode = 429,
-    standardHeaders = true,
+    headers = 'legacy',
+    failOpen = false,
     ...limiterOptions
   } = options;
 
@@ -43,36 +46,31 @@ export function expressRateLimit(
 
   const getKey = (request: ExpressLikeRequest): string => {
     if (keyGenerator) return keyGenerator(request);
-    return (
-      request.ip ??
-      request.socket?.remoteAddress ??
-      request.headers['x-forwarded-for']?.toString().split(',')[0].trim() ??
-      'unknown'
+    return normalizeIp(
+      request.ip ?? request.socket?.remoteAddress ?? 'unknown',
     );
   };
 
-  return (request, response, next) => {
-    const result = limiter.limit(getKey(request));
+  return async (request, response, next) => {
+    let result;
+    try {
+      result = await limiter.limit(getKey(request));
+    } catch (error) {
+      if (failOpen) next();
+      else next(error);
+      return;
+    }
 
-    if (standardHeaders) {
-      response.setHeader('RateLimit-Limit', String(result.limit));
-      response.setHeader('RateLimit-Remaining', String(result.remaining));
-      response.setHeader(
-        'RateLimit-Reset',
-        String(Math.ceil(result.reset / 1000)),
-      );
+    if (headers) {
+      const map = rateLimitHeaders(result, limiter.options, headers);
+      for (const [name, value] of Object.entries(map)) {
+        response.setHeader(name, value);
+      }
     }
 
     if (result.success) {
       next();
       return;
-    }
-
-    if (standardHeaders) {
-      response.setHeader(
-        'Retry-After',
-        String(Math.ceil(result.retryAfter / 1000)),
-      );
     }
     response.status(statusCode).json(message);
   };

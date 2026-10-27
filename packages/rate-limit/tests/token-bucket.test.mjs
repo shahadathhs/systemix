@@ -2,10 +2,10 @@
  * Tests for @systemix/rate-limit – token-bucket algorithm.
  */
 import { createRunner } from '@systemix/runner';
-import { InMemoryStore, hitTokenBucket } from '../dist/index.js';
+import { hitTokenBucket } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert }) => {
-  const store = new InMemoryStore();
+  const store = new Map();
   const now = 1_000;
 
   // Bucket starts full: burst up to limit succeeds instantly

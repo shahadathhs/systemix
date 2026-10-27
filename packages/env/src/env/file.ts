@@ -17,34 +17,31 @@ export function loadEnvFile(
   if (!existsSync(resolved)) {
     return {};
   }
-  const content = readFileSync(resolved, 'utf-8');
-  return parseEnvFile(content);
+  return parseEnvFile(readFileSync(resolved, 'utf-8'));
 }
 
-/** Get current working directory, or '.' if process.cwd is unavailable. */
+/** Get the current working directory. */
 export function getCwd(): string {
-  return typeof globalThis.process?.cwd === 'function'
-    ? globalThis.process.cwd()
-    : '.';
+  return process.cwd();
 }
 
-/** Merge overlay env into base. Overlay keys override base. */
+/**
+ * Merge env layers. Later layers win; `undefined` values never override.
+ * Typical order: .env files first, the real environment last.
+ */
 export function mergeEnv(
-  base: Record<string, string | undefined>,
-  overlay: Record<string, string>,
+  ...layers: ReadonlyArray<Record<string, string | undefined>>
 ): Record<string, string | undefined> {
-  const merged = { ...base };
-  for (const [k, v] of Object.entries(overlay)) {
-    merged[k] = v;
+  const merged: Record<string, string | undefined> = {};
+  for (const layer of layers) {
+    for (const [key, value] of Object.entries(layer)) {
+      if (value !== undefined) merged[key] = value;
+    }
   }
   return merged;
 }
 
-/** Get process.env as a plain object, or {} if unavailable. */
+/** Get process.env as a plain object. */
 export function getEnvSource(): Record<string, string | undefined> {
-  const env = globalThis.process?.env;
-  if (env && typeof env === 'object') {
-    return env as Record<string, string | undefined>;
-  }
-  return {};
+  return process.env;
 }

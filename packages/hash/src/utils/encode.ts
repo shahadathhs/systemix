@@ -1,6 +1,8 @@
+import { timingSafeEqual } from 'node:crypto';
+
 const crypto = globalThis.crypto;
 if (!crypto) {
-  throw new Error('Crypto not available. Requires Node 18+ or browser.');
+  throw new Error('Crypto not available. Requires Node.js 24.7+.');
 }
 
 const encoder = new TextEncoder();
@@ -41,14 +43,10 @@ export function passwordToBytes(password: string): Uint8Array {
 }
 
 /**
- * Constant-time comparison of two byte arrays. Prevents timing attacks when
- * comparing derived hashes.
+ * Constant-time comparison of two byte arrays (node:crypto.timingSafeEqual).
+ * Differing lengths return false immediately; lengths are not secret.
  */
 export function bytesEqual(a: Uint8Array, b: Uint8Array): boolean {
   if (a.length !== b.length) return false;
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a[i] ^ b[i];
-  }
-  return result === 0;
+  return timingSafeEqual(a, b);
 }

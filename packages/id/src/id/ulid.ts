@@ -1,5 +1,5 @@
 import { getRandomInt } from '../utils/random';
-import { ulidError } from '../utils/error.message';
+import { ulidError, ulidOverflowError } from '../utils/error.message';
 
 /**
  * Crockford Base32 alphabet per the ULID spec (excludes I, L, O, U).
@@ -62,6 +62,8 @@ export function createMonotonicUlid(): (timestamp?: number) => string {
       }
       lastChars[i] = CROCKFORD_BASE32[0];
     }
+    // All 80 bits were set: wrapping would break ordering (ULID spec: error).
+    throw new Error(ulidOverflowError);
   };
 
   return (timestamp: number = Date.now()): string => {
@@ -72,13 +74,33 @@ export function createMonotonicUlid(): (timestamp?: number) => string {
       throw new Error(ulidError.timestampTooLarge);
     }
 
-    if (timestamp === lastTime) {
-      incrementChars();
-    } else {
+    if (timestamp > lastTime) {
+      lastTime = timestamp;
       lastChars = randomChars(RANDOM_LENGTH);
+    } else {
+      // Same millisecond, or the clock stepped backwards: keep the last
+      // timestamp and increment so output never goes backwards.
+      incrementChars();
     }
-    lastTime = timestamp;
 
-    return encodeTime(timestamp) + lastChars.join('');
+    return encodeTime(lastTime) + lastChars.join('');
   };
+}
+
+/**
+ * Extracts the millisecond Unix timestamp from a ULID.
+ * @throws If the value is not a valid 26-character ULID.
+ */
+export function ulidTimestamp(ulid: string): number {
+  if (
+    typeof ulid !== 'string' ||
+    !/^[0-7][0-9A-HJKMNP-TV-Z]{25}$/i.test(ulid)
+  ) {
+    throw new Error(ulidError.notUlid);
+  }
+  let time = 0;
+  for (const char of ulid.slice(0, TIME_LENGTH).toUpperCase()) {
+    time = time * 32 + CROCKFORD_BASE32.indexOf(char);
+  }
+  return time;
 }

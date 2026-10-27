@@ -1,6 +1,8 @@
 # @systemix/hash
 
-Password hashing and verification with PBKDF2 and scrypt, built entirely on Web Crypto and Node.js built-ins. Completes the auth flow: generate → hash → store → verify.
+Password hashing and verification with Argon2id (the OWASP first choice), scrypt and PBKDF2, built entirely on Node.js built-ins — no native bindings. Completes the auth flow: generate → hash → store → verify.
+
+**Requires Node.js 24.7 or newer** (`crypto.argon2`).
 
 ## Installation
 
@@ -14,50 +16,67 @@ pnpm add @systemix/hash
 import { hashPassword, verifyPassword } from '@systemix/hash';
 
 const encoded = await hashPassword('hunter2');
-// → "pbkdf2$SHA-256$210000$C5eX...$k9fT..."
+// → "$argon2id$v=19$m=19456,t=2,p=1$C5eX...$k9fT..."
 
 await verifyPassword('hunter2', encoded); // → true
 await verifyPassword('letmein', encoded); // → false
 ```
 
-The encoded hash embeds the algorithm, parameters, salt, and hash — store it as a single database column.
+The output is a standard [PHC string](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md) embedding the algorithm, parameters, salt, and hash — store it as a single database column. Hashes from 0.1.x (`pbkdf2$…`, `scrypt$…`) still verify.
 
 ## Options
 
-| Option                  | Type                                  | Default     | Description                            |
-| ----------------------- | ------------------------------------- | ----------- | -------------------------------------- |
-| `algorithm`             | `'pbkdf2' \| 'scrypt'`                | `'pbkdf2'`  | Hashing algorithm                      |
-| `digest`                | `'SHA-256' \| 'SHA-384' \| 'SHA-512'` | `'SHA-256'` | PBKDF2 digest function                 |
-| `iterations`            | `number`                              | `210000`    | PBKDF2 iterations (OWASP minimum)      |
-| `keyLength`             | `number`                              | `32`        | Derived key length in bytes (max 1024) |
-| `salt`                  | `Uint8Array`                          | random 16B  | Custom salt (min 8 bytes)              |
-| `costFactor`            | `number`                              | `16384`     | scrypt cost factor N (power of 2)      |
-| `blockSizeFactor`       | `number`                              | `8`         | scrypt block size r                    |
-| `parallelizationFactor` | `number`                              | `1`         | scrypt parallelization p               |
+| Option                  | Type                                  | Default      | Description                             |
+| ----------------------- | ------------------------------------- | :----------- | --------------------------------------- |
+| `algorithm`             | `'argon2id' \| 'scrypt' \| 'pbkdf2'`  | `'argon2id'` | Hashing algorithm.                      |
+| `memoryCost`            | `number`                              | `19456`      | Argon2id memory in KiB (max 262,144).   |
+| `timeCost`              | `number`                              | `2`          | Argon2id passes (max 10).               |
+| `parallelism`           | `number`                              | `1`          | Argon2id lanes (max 16).                |
+| `costFactor`            | `number`                              | `131072`     | scrypt cost factor N (power of 2).      |
+| `blockSizeFactor`       | `number`                              | `8`          | scrypt block size r.                    |
+| `parallelizationFactor` | `number`                              | `1`          | scrypt parallelization p.               |
+| `digest`                | `'SHA-256' \| 'SHA-384' \| 'SHA-512'` | `'SHA-256'`  | PBKDF2 digest function.                 |
+| `iterations`            | `number`                              | `600000`     | PBKDF2 iteration count.                 |
+| `keyLength`             | `number`                              | `32`         | Derived key length in bytes (max 1024). |
+| `salt`                  | `Uint8Array`                          | random 16B   | Custom salt (min 8 bytes).              |
 
 ## Examples
 
-### scrypt (Node.js only)
+### Upgrade hashes at login
 
 ```typescript
-const encoded = await hashPassword('hunter2', {
-  algorithm: 'scrypt',
-  costFactor: 16384,
-});
+import { verifyPassword, hashPassword, needsRehash } from '@systemix/hash';
+
+if (await verifyPassword(password, user.passwordHash)) {
+  if (needsRehash(user.passwordHash)) {
+    user.passwordHash = await hashPassword(password);
+    await user.save();
+  }
+}
+```
+
+`needsRehash` is `true` for legacy-format hashes, a different algorithm, or any weaker cost parameter.
+
+### Other algorithms
+
+```typescript
+await hashPassword('hunter2', { algorithm: 'scrypt' }); // N=2^17, r=8, p=1
+await hashPassword('hunter2', { algorithm: 'pbkdf2' }); // 600,000 iterations (FIPS-140)
 ```
 
 ### Low-level derivation
 
 ```typescript
-import { pbkdf2DeriveBits, generateSalt } from '@systemix/hash';
+import { argon2DeriveBits, generateSalt } from '@systemix/hash';
 
-const key = await pbkdf2DeriveBits('password', generateSalt(16), {
-  iterations: 100_000,
+const key = await argon2DeriveBits('password', generateSalt(16), {
+  memoryCost: 19_456,
+  timeCost: 2,
   keyLength: 32,
 });
 ```
 
-Verification compares derived hashes in constant time, so timing attacks cannot reveal how close a guess was.
+Verification compares derived hashes in constant time. Cost parameters read from a stored hash are bounded, so a tampered hash cannot force unbounded CPU or memory use.
 
 ## Try it
 

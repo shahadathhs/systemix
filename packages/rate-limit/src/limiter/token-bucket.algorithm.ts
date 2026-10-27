@@ -1,7 +1,7 @@
 import {
   RateLimitEntry,
   RateLimitResult,
-  RateLimitStore,
+  EntryStore,
 } from '../types/rate-limit.types';
 import { createEntry } from './store';
 import { allowedResult, blockedResult } from './result';
@@ -26,7 +26,7 @@ function refill(
  * Smooths bursts while allowing short spikes.
  */
 export function hitTokenBucket(
-  store: RateLimitStore,
+  store: EntryStore,
   key: string,
   limit: number,
   windowMs: number,
@@ -37,13 +37,23 @@ export function hitTokenBucket(
 
   if (tokens < 1) {
     const reset = Math.ceil(now + (1 - tokens) * (windowMs / limit));
-    store.set(key, { ...entry, tokens, lastRefill: now });
+    store.set(key, {
+      ...entry,
+      tokens,
+      lastRefill: now,
+      expiresAt: Math.ceil(now + (limit - tokens) * (windowMs / limit)),
+    });
     return blockedResult(limit, reset, now);
   }
 
   const remaining = Math.min(limit - 1, Math.floor(tokens - 1));
   const reset = Math.ceil(now + (limit - (tokens - 1)) * (windowMs / limit));
-  store.set(key, { ...entry, tokens: tokens - 1, lastRefill: now });
+  store.set(key, {
+    ...entry,
+    tokens: tokens - 1,
+    lastRefill: now,
+    expiresAt: reset,
+  });
   return allowedResult(limit, remaining, reset);
 }
 
@@ -51,7 +61,7 @@ export function hitTokenBucket(
  * Peeks at token-bucket state without consuming a token.
  */
 export function peekTokenBucket(
-  store: RateLimitStore,
+  store: EntryStore,
   key: string,
   limit: number,
   windowMs: number,

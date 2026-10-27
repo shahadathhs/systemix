@@ -1,36 +1,35 @@
+import { signBytes, verifyBytes, type KeyInput } from '../common/crypto/jws';
 import type { RsaAlgorithm } from '../common/enums';
-import { isNode } from '../common/env';
-import * as rsaNode from './rsa-node';
-import * as rsaWeb from './rsa-web';
+import { base64UrlDecode } from '../common/utils/base64';
+import { bytesToBase64Url } from '../common/utils';
 
 /**
- * RSA sign — auto-detects Node vs browser.
- * Node: uses node:crypto. Browser: uses Web Crypto API.
+ * RSASSA-PKCS1-v1_5 sign (RS256/384/512). Returns a base64url signature.
+ * For new code prefer encodeSigned with PS256 or ES256/EdDSA.
  */
 export async function signRsa(
   signingInput: string,
-  privateKeyPem: string,
+  privateKey: KeyInput,
   alg: RsaAlgorithm,
 ): Promise<string> {
-  return isNode()
-    ? Promise.resolve(rsaNode.signRsa(signingInput, privateKeyPem, alg))
-    : rsaWeb.signRsa(signingInput, privateKeyPem, alg);
+  return bytesToBase64Url(signBytes(alg, signingInput, privateKey));
 }
 
 /**
- * RSA verify — auto-detects Node vs browser.
+ * RSASSA-PKCS1-v1_5 verify (RS256/384/512).
  */
 export async function verifyRsa(
   signingInput: string,
   signatureB64: string,
-  publicKeyPem: string,
+  publicKey: KeyInput,
   alg: RsaAlgorithm,
 ): Promise<boolean> {
-  return isNode()
-    ? Promise.resolve(
-        rsaNode.verifyRsa(signingInput, signatureB64, publicKeyPem, alg),
-      )
-    : rsaWeb.verifyRsa(signingInput, signatureB64, publicKeyPem, alg);
+  return verifyBytes(
+    alg,
+    signingInput,
+    base64UrlDecode(signatureB64),
+    publicKey,
+  );
 }
 
 export type { RsaAlgorithm } from '../common/enums';

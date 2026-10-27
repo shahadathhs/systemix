@@ -10,6 +10,8 @@ export const iterationsError = {
   invalidIterations: 'Invalid iterations. It must be a positive number.',
   iterationsTooLow:
     'Invalid iterations. It must be at least 1,000 for security.',
+  iterationsTooHigh:
+    'Invalid iterations. It must be less than or equal to 10,000,000.',
 };
 
 export const keyLengthError = {
@@ -33,11 +35,36 @@ export const scryptParamsError = {
     'Invalid blockSizeFactor. It must be a positive number.',
   invalidParallelizationFactor:
     'Invalid parallelizationFactor. It must be a positive number.',
+  memoryTooHigh:
+    'Invalid scrypt parameters. 128 * costFactor * blockSizeFactor must be at most 256 MiB.',
+  costFactorTooHigh:
+    'Invalid costFactor. It must be less than or equal to 1,048,576.',
+  blockSizeFactorTooHigh:
+    'Invalid blockSizeFactor. It must be less than or equal to 32.',
+  parallelizationFactorTooHigh:
+    'Invalid parallelizationFactor. It must be less than or equal to 16.',
 };
+
+export const argon2ParamsError = {
+  invalidMemoryCost: 'Invalid memoryCost. It must be a positive integer (KiB).',
+  memoryCostTooLow:
+    'Invalid memoryCost. It must be at least 8 KiB per lane (8 * parallelism).',
+  memoryCostTooHigh:
+    'Invalid memoryCost. It must be less than or equal to 262,144 KiB (256 MiB).',
+  invalidTimeCost: 'Invalid timeCost. It must be a positive integer.',
+  timeCostTooHigh: 'Invalid timeCost. It must be less than or equal to 10.',
+  invalidParallelism: 'Invalid parallelism. It must be a positive integer.',
+  parallelismTooHigh:
+    'Invalid parallelism. It must be less than or equal to 16.',
+  invalidSalt: 'Invalid salt. It must be a Uint8Array with at least 8 bytes.',
+};
+
+export const argon2UnavailableError =
+  'Argon2 requires Node.js 24.7 or newer (crypto.argon2).';
 
 export const encodedHashError = {
   invalidFormat:
-    'Invalid encoded hash. Expected format: algorithm$params$saltB64url$hashB64url.',
+    'Invalid encoded hash. Expected PHC format: $algorithm$params$salt$hash.',
   unknownAlgorithm: 'Invalid encoded hash. Unknown algorithm.',
 };
 

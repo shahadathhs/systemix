@@ -6,12 +6,6 @@ import { src } from './helpers.mjs';
 import { load } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert, assertThrows }) => {
-  // Legacy format: plain object as source
-  assert(
-    load({ FOO: { type: 'string' } }, { FOO: 'legacy' }).FOO === 'legacy',
-    'legacy source format',
-  );
-
   // Type parsing: string, number, boolean
   assert(
     load({ FOO: { type: 'string', required: true } }, src({ FOO: 'bar' }))

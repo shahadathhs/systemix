@@ -3,6 +3,8 @@ export * from './limiter/store';
 export * from './limiter/window.algorithms';
 export * from './limiter/token-bucket.algorithm';
 export * from './middleware/wrapper';
+export * from './middleware/headers';
+export * from './utils/ip';
 export * from './middleware/express';
 export * from './types/rate-limit.types';
 export * from './utils/error.message';

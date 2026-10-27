@@ -1,6 +1,6 @@
 # @systemix/id
 
-Unique, non-secret identifier generation: UUID v4, ULID, and nanoid-style IDs — all with bias-free, crypto-grade randomness. For secrets and tokens, use `@systemix/token` instead.
+Unique, non-secret identifier generation: UUID v4, UUID v7, ULID, and nanoid-style IDs — all with bias-free, crypto-grade randomness. For secrets and tokens, use `@systemix/token` instead.
 
 ## Installation
 
@@ -11,7 +11,12 @@ pnpm add @systemix/id
 ## Basic Usage
 
 ```typescript
-import { generateId, generateUlid, generateUuid } from '@systemix/id';
+import {
+  generateId,
+  generateUlid,
+  generateUuid,
+  generateUuidV7,
+} from '@systemix/id';
 
 generateId(); // "V1StGXR8_Z5jdHi6B-myT"
 generateUlid(); // "01ARZ3NDEKTSV4RRFFQ69G5FAV" — sorts chronologically
@@ -20,11 +25,12 @@ generateUuid(); // "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed"
 
 ## Which one?
 
-| Generator      | Use when you need                                     |
-| -------------- | ----------------------------------------------------- |
-| `generateId`   | Short, URL-safe random IDs (API keys visible in URLs) |
-| `generateUlid` | Lexicographically sortable IDs (DB index-friendly)    |
-| `generateUuid` | Standard, ecosystem-wide unique identifiers           |
+| Generator        | Use when you need                                                  |
+| ---------------- | ------------------------------------------------------------------ |
+| `generateId`     | Short, URL-safe random IDs (API keys visible in URLs)              |
+| `generateUuidV7` | Time-ordered standard UUIDs (best default for new DB primary keys) |
+| `generateUlid`   | Lexicographically sortable IDs (DB index-friendly)                 |
+| `generateUuid`   | Fully random UUIDs; creation time must stay private                |
 
 ## Examples
 
@@ -46,6 +52,26 @@ const nextUlid = createMonotonicUlid();
 nextUlid(); // 01ARZ3NDEKTSV4RRFFQ69G5FAW
 nextUlid(); // 01ARZ3NDEKTSV4RRFFQ69G5FAX
 ```
+
+### UUID v7 (time-ordered)
+
+```typescript
+import {
+  generateUuidV7,
+  createMonotonicUuidV7,
+  uuidV7Timestamp,
+} from '@systemix/id';
+
+generateUuidV7(); // "018bcfe5-687b-7e4e-93c7-f59b358ffd5b"
+
+// Strictly increasing, even within one millisecond or if the clock steps back:
+const next = createMonotonicUuidV7();
+next() < next(); // true
+
+uuidV7Timestamp(generateUuidV7(1_700_000_000_123)); // 1700000000123
+```
+
+UUIDv7 (RFC 9562) puts a 48-bit millisecond timestamp first, so new rows land at the end of a B-tree index instead of scattered through it. The timestamp is readable from the ID — use v4 where creation time must stay private.
 
 ### UUID validation
 
