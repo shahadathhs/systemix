@@ -1,7 +1,7 @@
 /**
  * Supported password hashing algorithms.
  */
-export type HashAlgorithm = 'pbkdf2' | 'scrypt';
+export type HashAlgorithm = 'argon2id' | 'scrypt' | 'pbkdf2';
 
 /**
  * Supported digest functions for PBKDF2 (Web Crypto SHA family).
@@ -10,10 +10,29 @@ export type HashDigest = 'SHA-256' | 'SHA-384' | 'SHA-512';
 
 export interface HashPasswordOptions {
   /**
-   * Hashing algorithm to use.
-   * @default 'pbkdf2'
+   * Hashing algorithm to use. Argon2id is the OWASP first choice; use
+   * 'pbkdf2' only where FIPS-140 compliance is required.
+   * @default 'argon2id'
    */
   algorithm?: HashAlgorithm;
+
+  /**
+   * Argon2id memory cost in KiB.
+   * @default 19_456 (19 MiB, OWASP minimum)
+   */
+  memoryCost?: number;
+
+  /**
+   * Argon2id time cost (number of passes).
+   * @default 2
+   */
+  timeCost?: number;
+
+  /**
+   * Argon2id parallelism (lanes).
+   * @default 1
+   */
+  parallelism?: number;
 
   /**
    * Digest function for PBKDF2.
@@ -23,8 +42,8 @@ export interface HashPasswordOptions {
 
   /**
    * PBKDF2 iteration count. Higher is slower and more secure.
-   * OWASP recommends at least 210,000 for PBKDF2-HMAC-SHA256.
-   * @default 210_000
+   * OWASP recommends at least 600,000 for PBKDF2-HMAC-SHA256.
+   * @default 600_000
    */
   iterations?: number;
 
@@ -41,7 +60,8 @@ export interface HashPasswordOptions {
 
   /**
    * scrypt CPU/memory cost factor (N). Must be a power of 2.
-   * @default 16_384
+   * OWASP recommends at least 2^17 with r=8, p=1.
+   * @default 131_072 (2^17)
    */
   costFactor?: number;
 
@@ -64,6 +84,16 @@ export interface PbkdfDeriveOptions {
   keyLength?: number;
 }
 
+export interface Argon2DeriveOptions {
+  /** Memory cost in KiB. */
+  memoryCost?: number;
+  /** Number of passes. */
+  timeCost?: number;
+  /** Degree of parallelism. */
+  parallelism?: number;
+  keyLength?: number;
+}
+
 export interface ScryptDeriveOptions {
   costFactor?: number;
   blockSizeFactor?: number;
@@ -76,8 +106,22 @@ export interface ScryptDeriveOptions {
  */
 export interface ParsedHash {
   algorithm: HashAlgorithm;
+  /**
+   * 'phc' for the standard `$id$params$salt$hash` format, 'legacy' for the
+   * `pbkdf2$...` / `scrypt$...` format written by @systemix/hash 0.1.x.
+   */
+  format: 'phc' | 'legacy';
   salt: Uint8Array;
   hash: Uint8Array;
+
+  /** Present for argon2id: memory cost in KiB. */
+  memoryCost?: number;
+
+  /** Present for argon2id: number of passes. */
+  timeCost?: number;
+
+  /** Present for argon2id: parallelism. */
+  parallelism?: number;
 
   /** Present for pbkdf2: digest name. */
   digest?: HashDigest;

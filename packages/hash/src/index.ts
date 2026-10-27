@@ -1,3 +1,4 @@
+export * from './hash/argon2';
 export * from './hash/pbkdf2';
 export * from './hash/scrypt';
 export * from './hash/compare';

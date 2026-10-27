@@ -1,16 +1,20 @@
+import { timingSafeEqual } from 'node:crypto';
 import { bytesToBase64Url, base64UrlToBytes } from '../utils/encode';
 
 /**
- * Compares two strings in constant time to prevent timing attacks.
- * Iterates over the longer input regardless of where a difference occurs.
+ * Compares two strings in constant time (node:crypto.timingSafeEqual) to
+ * prevent timing attacks. Compares UTF-8 bytes; when lengths differ it still
+ * performs a comparison of equal cost before returning false.
  */
 export function secureEqual(a: string, b: string): boolean {
-  const max = Math.max(a.length, b.length);
-  let result = a.length ^ b.length;
-  for (let i = 0; i < max; i++) {
-    result |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
+  const enc = new TextEncoder();
+  const aBytes = enc.encode(a);
+  const bBytes = enc.encode(b);
+  if (aBytes.length !== bBytes.length) {
+    timingSafeEqual(aBytes, aBytes);
+    return false;
   }
-  return result === 0;
+  return timingSafeEqual(aBytes, bBytes);
 }
 
 /**
