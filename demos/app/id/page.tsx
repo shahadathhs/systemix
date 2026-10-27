@@ -51,11 +51,21 @@ export default function IdPage() {
       }
       if (kind === 'ulid') {
         const id = nextUlid();
-        return { id, kind, valid: false as const, timestamp: ulidTimestamp(id) };
+        return {
+          id,
+          kind,
+          valid: false as const,
+          timestamp: ulidTimestamp(id),
+        };
       }
       if (kind === 'uuidv7') {
         const id = nextUuidV7();
-        return { id, kind, valid: isUuid(id, 7), timestamp: uuidV7Timestamp(id) };
+        return {
+          id,
+          kind,
+          valid: isUuid(id, 7),
+          timestamp: uuidV7Timestamp(id),
+        };
       }
       const id = generateUuid();
       return { id, kind, valid: isUuid(id, 4) };

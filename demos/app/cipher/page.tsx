@@ -139,8 +139,8 @@ export default function CipherPage() {
         </h1>
         <p className="mt-2 text-sm text-muted leading-relaxed">
           Authenticated AES-256-GCM in a versioned envelope: header, key id,
-          random IV, ciphertext and tag in one value. Tampering — including
-          with the header — is detected, not decrypted. Rotate the key and old
+          random IV, ciphertext and tag in one value. Tampering — including with
+          the header — is detected, not decrypted. Rotate the key and old
           payloads still decrypt.
         </p>
       </div>
@@ -289,8 +289,7 @@ export default function CipherPage() {
                 <span>
                   <span className="font-mono">needsRotation</span>: encrypted
                   with <span className="font-mono">{envelope.keyId}</span>, the
-                  current key is{' '}
-                  <span className="font-mono">{currentId}</span>.
+                  current key is <span className="font-mono">{currentId}</span>.
                 </span>
                 <button
                   type="button"

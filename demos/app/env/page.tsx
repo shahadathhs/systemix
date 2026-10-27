@@ -81,7 +81,9 @@ export default function EnvPage() {
         </div>
 
         <div>
-          <div className="label mb-2">Real environment (wins over the file)</div>
+          <div className="label mb-2">
+            Real environment (wins over the file)
+          </div>
           <div className="mono-box">{JSON.stringify(REAL_ENV, null, 2)}</div>
         </div>
 
@@ -124,12 +126,10 @@ export default function EnvPage() {
 
         <div>
           <div className="label mb-2">
-            strict: true — real output for a .env file containing{' '}
-            DATABSE_URL (typo)
+            strict: true — real output for a .env file containing DATABSE_URL
+            (typo)
           </div>
-          <div className="mono-box">
-            {strictResult}
-          </div>
+          <div className="mono-box">{strictResult}</div>
         </div>
       </div>
     </div>

@@ -52,7 +52,7 @@ npm install @systemix/token
 | `@systemix/token`        | Main entry — re-exports token, signed, rsa, common |
 | `@systemix/token/token`  | Token generator, encoding utils, validation        |
 | `@systemix/token/signed` | Signed token encode/decode/verify                  |
-| `@systemix/token/rsa`    | RSA sign/verify (Node)      |
+| `@systemix/token/rsa`    | RSA sign/verify (Node)                             |
 | `@systemix/token/common` | Crypto, enums, types, errors, utils                |
 
 ---
@@ -276,13 +276,13 @@ const payload = await verifySigned<{ userId: string }>(token, 'my-secret', {
 
 ### Algorithms
 
-| Algorithm           | Type             | Key                                                        |
-| :------------------ | :--------------- | :--------------------------------------------------------- |
-| HS256, HS384, HS512 | HMAC (symmetric) | Secret of at least 32 / 48 / 64 bytes (RFC 7518 §3.2)      |
+| Algorithm           | Type              | Key                                                         |
+| :------------------ | :---------------- | :---------------------------------------------------------- |
+| HS256, HS384, HS512 | HMAC (symmetric)  | Secret of at least 32 / 48 / 64 bytes (RFC 7518 §3.2)       |
 | RS256, RS384, RS512 | RSASSA-PKCS1-v1_5 | PEM private key (encode) / public key (verify), ≥ 2048 bits |
-| PS256, PS384, PS512 | RSASSA-PSS       | Same as RS\*; preferred for new RSA systems                |
-| ES256, ES384, ES512 | ECDSA            | EC key on P-256 / P-384 / P-521; raw `r\|\|s` signatures    |
-| EdDSA               | Ed25519 / Ed448  | Ed25519 or Ed448 key                                       |
+| PS256, PS384, PS512 | RSASSA-PSS        | Same as RS\*; preferred for new RSA systems                 |
+| ES256, ES384, ES512 | ECDSA             | EC key on P-256 / P-384 / P-521; raw `r\|\|s` signatures    |
+| EdDSA               | Ed25519 / Ed448   | Ed25519 or Ed448 key                                        |
 
 Keys are PEM strings or `node:crypto` `KeyObject`s. The library refuses keys that don't fit the algorithm: a PEM can't be an HMAC secret (the RS256→HS256 downgrade), RSA keys under 2048 bits and EC keys on the wrong curve are rejected, and so are short HMAC secrets. These throw `InvalidKeyError`.
 
@@ -508,7 +508,9 @@ const token = bytesToBase64Url(bytes);
 ```typescript
 const keys = { '2026-10': currentSecret, '2026-04': previousSecret };
 
-const token = await encodeSigned({ sub: 'u1' }, currentSecret, { kid: '2026-10' });
+const token = await encodeSigned({ sub: 'u1' }, currentSecret, {
+  kid: '2026-10',
+});
 
 await verifySigned(token, (header) => keys[header.kid], {
   algorithms: ['HS256'],
@@ -520,13 +522,13 @@ await verifySigned(token, (header) => keys[header.kid], {
 
 [`jose`](https://github.com/panva/jose) is the full JOSE toolkit. This package is a small, opinionated JWS signer and verifier: use it when you want a compact API with safe defaults. Use `jose` when you need more.
 
-| | `@systemix/token` | `jose` |
-| :-- | :-- | :-- |
-| Signed tokens (JWS compact) | Yes | Yes |
-| Encrypted tokens (JWE) | No | Yes |
-| JWK / JWKS handling and remote JWKS | No | Yes |
-| Runtimes | Node.js 24.7+ | Node, browsers, edge runtimes |
-| Dependencies | None | None |
+|                                     | `@systemix/token` | `jose`                        |
+| :---------------------------------- | :---------------- | :---------------------------- |
+| Signed tokens (JWS compact)         | Yes               | Yes                           |
+| Encrypted tokens (JWE)              | No                | Yes                           |
+| JWK / JWKS handling and remote JWKS | No                | Yes                           |
+| Runtimes                            | Node.js 24.7+     | Node, browsers, edge runtimes |
+| Dependencies                        | None              | None                          |
 
 Tokens produced here are standard compact JWS, so `jose` and other libraries can verify them.
 

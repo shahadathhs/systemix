@@ -12,7 +12,9 @@ import { CopyButton } from './CopyButton';
 
 export function ByteEncodingSection() {
   const [byteLength, setByteLength] = useState(16);
-  const [bytes, setBytes] = useState<Uint8Array>(() => crypto.getRandomValues(new Uint8Array(16)));
+  const [bytes, setBytes] = useState<Uint8Array>(() =>
+    crypto.getRandomValues(new Uint8Array(16)),
+  );
 
   const regenerate = useCallback(() => {
     setBytes(crypto.getRandomValues(new Uint8Array(byteLength)));

@@ -47,7 +47,8 @@ const pkcs8 = { type: 'pkcs8', format: 'pem' } as const;
 export async function generateKeyAction(
   alg: string,
 ): Promise<{ ok: true; signKey: string; verifyKey: string } | Fail> {
-  if (!isDemoAlgorithm(alg)) return { ok: false, error: 'Unsupported algorithm.' };
+  if (!isDemoAlgorithm(alg))
+    return { ok: false, error: 'Unsupported algorithm.' };
   const rate = await guard();
   if (rate) return rate;
 
@@ -82,14 +83,19 @@ export async function encodeAction(
   expiresIn: number,
   kid: string,
 ): Promise<{ ok: true; token: string } | Fail> {
-  if (!isDemoAlgorithm(alg)) return { ok: false, error: 'Unsupported algorithm.' };
+  if (!isDemoAlgorithm(alg))
+    return { ok: false, error: 'Unsupported algorithm.' };
   const rate = await guard(payloadJson, key, kid);
   if (rate) return rate;
 
   let payload: Record<string, unknown>;
   try {
     const parsed: unknown = JSON.parse(payloadJson);
-    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    if (
+      typeof parsed !== 'object' ||
+      parsed === null ||
+      Array.isArray(parsed)
+    ) {
       return { ok: false, error: 'Payload must be a JSON object.' };
     }
     payload = parsed as Record<string, unknown>;
@@ -127,7 +133,8 @@ export async function verifyAction(
   key: string,
   alg: string,
 ): Promise<{ ok: true; payload: unknown } | Fail> {
-  if (!isDemoAlgorithm(alg)) return { ok: false, error: 'Unsupported algorithm.' };
+  if (!isDemoAlgorithm(alg))
+    return { ok: false, error: 'Unsupported algorithm.' };
   const rate = await guard(token, key);
   if (rate) return rate;
   try {

@@ -139,12 +139,12 @@ Returns a limiter with:
 
 All methods return promises, so the same code works with in-memory and shared stores.
 
-| Method          | Description                                    |
-| :-------------- | :--------------------------------------------- |
-| `limit(key)`    | Records a hit and returns the verdict.         |
-| `peek(key)`     | Reads state without recording a hit.           |
-| `resetKey(key)` | Clears the state for one key.                  |
-| `resetAll()`    | Clears all state.                              |
+| Method          | Description                                                   |
+| :-------------- | :------------------------------------------------------------ |
+| `limit(key)`    | Records a hit and returns the verdict.                        |
+| `peek(key)`     | Reads state without recording a hit.                          |
+| `resetKey(key)` | Clears the state for one key.                                 |
+| `resetAll()`    | Clears all state.                                             |
 | `sweep()`       | Drops idle entries (the default store also does this itself). |
 
 Keys must be non-empty strings of at most 1024 characters.
@@ -153,13 +153,13 @@ Keys must be non-empty strings of at most 1024 characters.
 
 Express-compatible middleware. Extra options beyond the limiter's:
 
-| Option            | Type              | Default                             | Description                          |
-| :---------------- | :---------------- | :---------------------------------- | :----------------------------------- |
-| `keyGenerator`    | `(req) => string` | request IP (IPv6 by /64)            | Extracts the rate limit key.         |
-| `message`         | `unknown`         | `{ message: 'Too many requests…' }` | Body for blocked requests.           |
-| `statusCode`      | `number`          | `429`                               | HTTP status for blocked requests.    |
-| `headers`         | `'legacy' \| 'draft' \| 'both' \| false` | `'legacy'` | Which rate limit headers to emit. |
-| `failOpen`        | `boolean`         | `false`                             | Let requests through if the store throws (default: `next(error)`). |
+| Option         | Type                                     | Default                             | Description                                                        |
+| :------------- | :--------------------------------------- | :---------------------------------- | :----------------------------------------------------------------- |
+| `keyGenerator` | `(req) => string`                        | request IP (IPv6 by /64)            | Extracts the rate limit key.                                       |
+| `message`      | `unknown`                                | `{ message: 'Too many requests…' }` | Body for blocked requests.                                         |
+| `statusCode`   | `number`                                 | `429`                               | HTTP status for blocked requests.                                  |
+| `headers`      | `'legacy' \| 'draft' \| 'both' \| false` | `'legacy'`                          | Which rate limit headers to emit.                                  |
+| `failOpen`     | `boolean`                                | `false`                             | Let requests through if the store throws (default: `next(error)`). |
 
 ### `withRateLimit(handler, limiter, keyGenerator?)`
 

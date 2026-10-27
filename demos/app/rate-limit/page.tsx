@@ -281,11 +281,7 @@ export default function RateLimitPage() {
           </div>
           <pre className="mono-box text-[13px] whitespace-pre-wrap">
             {Object.entries(
-              rateLimitHeaders(
-                result,
-                { limit, windowMs },
-                headerFormat,
-              ),
+              rateLimitHeaders(result, { limit, windowMs }, headerFormat),
             )
               .map(([name, value]) => `${name}: ${value}`)
               .join('\n')}

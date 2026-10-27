@@ -142,7 +142,9 @@ export function SignedTokenSection() {
     setVerifyResult(null);
     const r = await verifyAction(verifyToken, verifyKey, verifyAlg);
     setVerifyResult(
-      r.ok ? { valid: true, payload: r.payload } : { valid: false, error: r.error },
+      r.ok
+        ? { valid: true, payload: r.payload }
+        : { valid: false, error: r.error },
     );
     setLoading(false);
   };
@@ -269,11 +271,7 @@ export function SignedTokenSection() {
               disabled={loading || !signKey.trim()}
               className="px-6 py-2 bg-ink hover:bg-zinc-700 text-ink font-medium disabled:opacity-50 h-10 px-4 text-sm"
             >
-              {loading ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                'Encode'
-              )}
+              {loading ? <Loader2 className="size-4 animate-spin" /> : 'Encode'}
             </button>
             {encodeError && (
               <p className="text-sm text-red-600">{encodeError}</p>
