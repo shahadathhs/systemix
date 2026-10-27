@@ -58,6 +58,10 @@ jobs:
       - name: Version & Publish Packages
         uses: changesets/action@v1
         with:
+          # `pnpm run version` formats the generated CHANGELOGs per package.
+          # Plain `changeset version` formats from the repo root, where
+          # .prettierignore excludes the workspaces, so it silently skipped them.
+          version: pnpm run version
           publish: node scripts/publish-npm.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
