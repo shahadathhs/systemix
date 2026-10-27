@@ -26,7 +26,7 @@
     "prepare": "husky",
     "prepublishOnly": "pnpm build",
     "commit": "cz",
-    "version": "changeset version",
+    "version": "changeset version && pnpm -r exec prettier --write --no-error-on-unmatched-pattern CHANGELOG.md",
     "publish": "changeset publish",
     "changelog": "changeset add",
     "test": "turbo run test"

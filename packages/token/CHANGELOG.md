@@ -6,7 +6,7 @@
 
 - ad40f40: Require Node.js 24.7 or newer (`engines.node`). Older runtimes are no longer supported or tested; CI runs on Node 24 and 26.
 - 377b3dd: Harden signed tokens per RFC 8725 and add ES256/384/512, PS256/384/512 and EdDSA. **Requires Node.js 24.7+; browser support for signing is removed.**
-  
+
   - New algorithms: `ES256/384/512` (raw r||s signatures), `PS256/384/512`, `EdDSA`. Keys are PEM strings or `node:crypto` `KeyObject`s.
   - Key-confusion protection: a PEM can no longer be used as an HMAC secret; HMAC secrets must be at least 32/48/64 bytes (RFC 7518 §3.2); RSA keys must be 2048+ bits; EC keys must match the algorithm's curve. Violations throw the new `InvalidKeyError`.
   - `verifySigned`: new `typ` and `maxAge` options; the key may be a function `(header) => key` for `kid`-based rotation; tokens with a `crit` header, non-object payloads, non-string `alg`, and non-canonical or padded signatures are rejected; a token is now expired at its exact `exp` second (previously accepted until `exp + 1`).
