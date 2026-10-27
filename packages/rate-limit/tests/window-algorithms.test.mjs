@@ -3,15 +3,11 @@
  * (deterministic time control via the now parameter).
  */
 import { createRunner } from '@systemix/runner';
-import {
-  InMemoryStore,
-  hitFixedWindow,
-  hitSlidingWindow,
-} from '../dist/index.js';
+import { hitFixedWindow, hitSlidingWindow } from '../dist/index.js';
 
 export const { run, getCounts } = createRunner(({ assert }) => {
   // --- Fixed window ---
-  let store = new InMemoryStore();
+  let store = new Map();
   let now = 1_000;
 
   let r = hitFixedWindow(store, 'ip:1', 3, 1_000, now);
@@ -31,7 +27,7 @@ export const { run, getCounts } = createRunner(({ assert }) => {
   assert(r.success && r.remaining === 2, 'fixed-window keys are independent');
 
   // --- Sliding window ---
-  store = new InMemoryStore();
+  store = new Map();
   now = 5_000;
 
   for (let i = 0; i < 3; i++) {

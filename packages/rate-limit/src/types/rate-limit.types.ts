@@ -4,6 +4,8 @@
 export type RateLimitAlgorithm =
   'fixed-window' | 'sliding-window' | 'token-bucket';
 
+export type MaybePromise<T> = T | Promise<T>;
+
 /**
  * Mutable state stored per key. Different algorithms use different fields.
  */
@@ -18,18 +20,56 @@ export interface RateLimitEntry {
   tokens: number;
   /** Token bucket: epoch ms of the last refill. */
   lastRefill: number;
+  /**
+   * Epoch ms after which this entry is equivalent to no entry at all (window
+   * over, no requests left in the log, or bucket refilled to capacity). Stores
+   * use it to drop idle keys.
+   */
+  expiresAt: number;
+}
+
+/** Minimal read/write access to entries, used by the algorithms. */
+export interface EntryStore {
+  get(key: string): RateLimitEntry | undefined;
+  set(key: string, entry: RateLimitEntry): unknown;
+}
+
+/** What a store needs to apply a hit. */
+export interface RateLimitPolicy {
+  limit: number;
+  windowMs: number;
+  algorithm: RateLimitAlgorithm;
 }
 
 /**
- * Pluggable storage contract. Implement it to back the limiter with
- * Redis, a database, or any other store.
+ * Storage contract. A store owns the algorithm step, so a distributed store
+ * can run it atomically where the data lives (e.g. one Redis Lua script per
+ * hit) instead of a racy read-modify-write over the network.
+ *
+ * Requirements for implementers:
+ * - `hit` must be atomic per key: concurrent hits may never both read the
+ *   same state and both be allowed past the limit.
+ * - `peek` must not change state.
+ * - Idle keys should expire (see `RateLimitEntry.expiresAt`) so memory is
+ *   bounded by active keys.
  */
 export interface RateLimitStore {
-  get(key: string): RateLimitEntry | undefined;
-  set(key: string, entry: RateLimitEntry): void;
-  delete(key: string): void;
-  /** Iterates over all [key, entry] pairs — used by sweeps and resetAll. */
-  entries(): IterableIterator<[string, RateLimitEntry]>;
+  /** Atomically records a hit and returns the verdict. */
+  hit(
+    key: string,
+    policy: RateLimitPolicy,
+    now: number,
+  ): MaybePromise<RateLimitResult>;
+  /** Reads the current verdict without recording a hit. */
+  peek(
+    key: string,
+    policy: RateLimitPolicy,
+    now: number,
+  ): MaybePromise<RateLimitResult>;
+  delete(key: string): MaybePromise<void>;
+  clear(): MaybePromise<void>;
+  /** Optional: drops entries that are idle at `now`. */
+  sweep?(now: number): MaybePromise<void>;
 }
 
 export interface RateLimitOptions {
@@ -50,9 +90,15 @@ export interface RateLimitOptions {
   algorithm?: RateLimitAlgorithm;
 
   /**
-   * Custom storage. @default in-memory Map
+   * Custom storage. @default a bounded, self-sweeping in-memory store
    */
   store?: RateLimitStore;
+
+  /**
+   * Time source in epoch ms. Override in tests.
+   * @default Date.now
+   */
+  clock?: () => number;
 }
 
 export interface RateLimitResult {
@@ -70,15 +116,15 @@ export interface RateLimitResult {
 
 export interface RateLimiter {
   /** Records a hit for the key and returns the verdict. */
-  limit(key: string): RateLimitResult;
+  limit(key: string): Promise<RateLimitResult>;
   /** Reads the current state without recording a hit. */
-  peek(key: string): RateLimitResult;
+  peek(key: string): Promise<RateLimitResult>;
   /** Clears the state for one key. */
-  resetKey(key: string): void;
+  resetKey(key: string): Promise<void>;
   /** Clears all state. */
-  resetAll(): void;
-  /** Removes expired entries from the store. */
-  sweep(): void;
+  resetAll(): Promise<void>;
+  /** Drops idle entries (the default store also does this on its own). */
+  sweep(): Promise<void>;
   /** The resolved configuration. */
   readonly options: Required<RateLimitOptions>;
 }
@@ -86,7 +132,10 @@ export interface RateLimiter {
 export interface ExpressRateLimitOptions extends RateLimitOptions {
   /**
    * Extracts the rate limit key from the request.
-   * @default request IP
+   * @default the request's IP address (IPv6 grouped by /64), or 'unknown'.
+   * `X-Forwarded-For` is never read by default because clients can forge it:
+   * behind a proxy, configure the proxy trust in your framework so `req.ip`
+   * is right, or supply your own keyGenerator.
    */
   keyGenerator?: (request: ExpressLikeRequest) => string;
 
@@ -103,11 +152,25 @@ export interface ExpressRateLimitOptions extends RateLimitOptions {
   statusCode?: number;
 
   /**
-   * Emits standard RateLimit-* response headers.
-   * @default true
+   * Response headers to emit:
+   * - 'legacy': `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`
+   *   (seconds until reset) and, when blocked, `Retry-After`.
+   * - 'draft': `RateLimit` and `RateLimit-Policy` from
+   *   draft-ietf-httpapi-ratelimit-headers (still an Internet-Draft).
+   * - 'both', or `false` for none.
+   * @default 'legacy'
    */
-  standardHeaders?: boolean;
+  headers?: RateLimitHeadersFormat | false;
+
+  /**
+   * If the store throws (e.g. Redis is down), let the request through
+   * instead of passing the error to `next`.
+   * @default false
+   */
+  failOpen?: boolean;
 }
+
+export type RateLimitHeadersFormat = 'legacy' | 'draft' | 'both';
 
 /**
  * Structural subset of an Express request — keeps the package

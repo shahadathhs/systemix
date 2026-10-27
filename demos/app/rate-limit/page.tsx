@@ -3,7 +3,9 @@
 import { cn } from '@/lib/utils';
 import {
   createRateLimiter,
+  rateLimitHeaders,
   type RateLimitAlgorithm,
+  type RateLimitHeadersFormat,
   type RateLimitResult,
 } from '@systemix/rate-limit';
 import { Send, Trash2 } from 'lucide-react';
@@ -42,33 +44,52 @@ export default function RateLimitPage() {
   const [windowMs, setWindowMs] = useState(10_000);
   const [result, setResult] = useState<RateLimitResult | null>(null);
   const [log, setLog] = useState<{ allowed: boolean; at: number }[]>([]);
-  const [, setTick] = useState(0);
+  const [headerFormat, setHeaderFormat] =
+    useState<RateLimitHeadersFormat>('legacy');
+  const [state, setState] = useState<RateLimitResult>({
+    success: true,
+    limit: 5,
+    remaining: 5,
+    reset: 0,
+    retryAfter: 0,
+  });
 
   const limiter = useMemo(
     () => createRateLimiter({ limit, windowMs, algorithm }),
     [limit, windowMs, algorithm],
   );
 
+  // The limiter is async (it may sit on a shared store), so poll its state.
   useEffect(() => {
-    const timer = setInterval(() => setTick((t) => t + 1), 250);
-    return () => clearInterval(timer);
-  }, []);
+    let cancelled = false;
+    const refresh = async () => {
+      const next = await limiter.peek(KEY);
+      if (!cancelled) setState(next);
+    };
+    void refresh();
+    const timer = setInterval(() => void refresh(), 250);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [limiter]);
 
-  const sendRequest = () => {
-    const r = limiter.limit(KEY);
+  const sendRequest = async () => {
+    const r = await limiter.limit(KEY);
     setResult(r);
+    setState(await limiter.peek(KEY));
     setLog((prev) =>
       [{ allowed: r.success, at: Date.now() }, ...prev].slice(0, 20),
     );
   };
 
-  const reset = () => {
-    limiter.resetKey(KEY);
+  const reset = async () => {
+    await limiter.resetKey(KEY);
     setResult(null);
     setLog([]);
+    setState(await limiter.peek(KEY));
   };
 
-  const state = limiter.peek(KEY);
   const used = limit - state.remaining;
   const usedPct = Math.min(100, (used / limit) * 100);
   const resetIn = Math.max(0, state.reset - Date.now());
@@ -195,7 +216,7 @@ export default function RateLimitPage() {
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={reset}
+              onClick={() => void reset()}
               className="btn-icon"
               title="Reset limiter"
             >
@@ -203,7 +224,7 @@ export default function RateLimitPage() {
             </button>
             <button
               type="button"
-              onClick={sendRequest}
+              onClick={() => void sendRequest()}
               className={cn(
                 'btn',
                 state.success
@@ -234,6 +255,46 @@ export default function RateLimitPage() {
           )}
         >
           {JSON.stringify(result)}
+        </div>
+      )}
+
+      {/* Response headers the middleware would send */}
+      {result && (
+        <div className="panel p-6 mt-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="section-title">Response headers</div>
+            <div className="flex gap-1.5">
+              {(['legacy', 'draft'] as const).map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setHeaderFormat(f)}
+                  className={cn(
+                    'segment font-mono text-xs',
+                    headerFormat === f ? 'segment-active' : '',
+                  )}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+          </div>
+          <pre className="mono-box text-[13px] whitespace-pre-wrap">
+            {Object.entries(
+              rateLimitHeaders(
+                result,
+                { limit, windowMs },
+                headerFormat,
+              ),
+            )
+              .map(([name, value]) => `${name}: ${value}`)
+              .join('\n')}
+          </pre>
+          <p className="text-xs text-faint leading-relaxed">
+            {headerFormat === 'legacy'
+              ? 'RateLimit-Reset is seconds until reset, not a timestamp.'
+              : 'From draft-ietf-httpapi-ratelimit-headers — an Internet-Draft, so the format may still change.'}
+          </p>
         </div>
       )}
 

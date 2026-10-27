@@ -1,7 +1,7 @@
 import {
   RateLimitEntry,
   RateLimitResult,
-  RateLimitStore,
+  EntryStore,
 } from '../types/rate-limit.types';
 import { createEntry } from './store';
 
@@ -9,7 +9,7 @@ import { createEntry } from './store';
  * Reads an entry without recording a hit, for peek().
  */
 export function readEntry(
-  store: RateLimitStore,
+  store: EntryStore,
   key: string,
   now: number,
 ): RateLimitEntry {

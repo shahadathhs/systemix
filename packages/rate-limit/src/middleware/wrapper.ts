@@ -22,11 +22,8 @@ export class RateLimitExceededError extends Error {
  * a RateLimitExceededError instead of executing the handler.
  *
  * @example
- * const getUser = withRateLimit(fetchUser, {
- *   limit: 10,
- *   windowMs: 60_000,
- *   keyGenerator: (userId: string) => userId,
- * });
+ * const limiter = createRateLimiter({ limit: 10, windowMs: 60_000 });
+ * const getUser = withRateLimit(fetchUser, limiter, (userId: string) => userId);
  */
 export function withRateLimit<TArgs extends unknown[], R>(
   handler: (...args: TArgs) => R | Promise<R>,
@@ -35,7 +32,7 @@ export function withRateLimit<TArgs extends unknown[], R>(
 ): (...args: TArgs) => Promise<R> {
   return async (...args: TArgs): Promise<R> => {
     const key = keyGenerator ? keyGenerator(...args) : 'global';
-    const result = limiter.limit(key);
+    const result = await limiter.limit(key);
     if (!result.success) {
       throw new RateLimitExceededError(result.retryAfter, result.limit);
     }
