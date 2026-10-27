@@ -5,11 +5,12 @@
 ### Minor Changes
 
 - 5a583cd: Versioned envelope, key ids and key rotation.
-  
+
   - `encrypt` now writes `SX | version | keyIdLen | keyId | IV | ciphertext+tag`. The header is authenticated as additional data. Payloads from 0.1.x (`[IV][ciphertext+tag]`) still decrypt; pass `allowLegacy: false` to reject them.
   - New `createKeyring({ keys, current })` with `needsRotation()`; new `keyId` option; `parseEnvelope` exported.
   - Breaking: the `iv` option is removed (caller-supplied IVs are a nonce-reuse risk). Output of `encrypt`/`encryptString` has a new layout.
   - Fix: decryption failures now throw `DecryptionError` as documented (previously `InvalidPayloadError`); `InvalidPayloadError` is for structurally invalid payloads.
+
 - ad40f40: Require Node.js 24.7 or newer (`engines.node`). Older runtimes are no longer supported or tested; CI runs on Node 24 and 26.
 
 ## 0.1.1
