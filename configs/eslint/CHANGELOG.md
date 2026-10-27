@@ -1,5 +1,11 @@
 # @systemix/eslint
 
+## 0.7.0
+
+### Minor Changes
+
+- ad40f40: Require Node.js 24.7 or newer (`engines.node`). Older runtimes are no longer supported or tested; CI runs on Node 24 and 26.
+
 ## 0.6.1
 
 ### Patch Changes
