@@ -1,5 +1,11 @@
 # @systemix/rate-limit
 
+## 0.1.1
+
+### Patch Changes
+
+- 0a3e262: Add package README (was missing from the initial release tarball).
+
 ## 0.1.0
 
 ### Minor Changes
