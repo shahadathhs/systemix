@@ -11,6 +11,7 @@ import { randomBytes } from 'node:crypto';
 import Link from 'next/link';
 import { CodeWindow } from '@/components/CodeWindow';
 import { GithubIcon } from '@/components/brand-icons';
+import { Reveal } from '@/components/Reveal';
 
 const RELEASES = 'https://github.com/shahadathhs/systemix/releases';
 
@@ -269,12 +270,15 @@ uuidV7Timestamp(ids[0]);`,
   ];
 }
 
+/** The day this page was built; the output on it is from that build. */
+const buildDate = () => new Date().toISOString().slice(0, 10);
+
 const textLink =
   'text-ink underline underline-offset-4 decoration-line-strong hover:decoration-ink';
 
 export default async function Home() {
   const list = await examples();
-  const builtOn = new Date().toISOString().slice(0, 10);
+  const builtOn = buildDate();
   const calls = list.reduce((n, ex) => n + ex.output.length, 0);
 
   return (
@@ -283,40 +287,48 @@ export default async function Home() {
       <section className="px-6 sm:px-10 pt-20 sm:pt-24 pb-20 border-b border-line">
         <div className="max-w-5xl mx-auto grid gap-12 lg:grid-cols-2 lg:gap-12 items-center">
           <div>
-            <h1 className="font-display text-4xl sm:text-5xl xl:text-[56px] leading-[1.04] text-ink">
-              Security packages for Node.js that depend on nothing.
-            </h1>
-            <p className="mt-6 text-lg text-muted leading-relaxed max-w-lg">
-              Password hashing, encryption, signed tokens, IDs, env loading and
-              rate limiting. Each is its own package, built on{' '}
-              <code className="font-mono text-[15px] text-ink">
-                node:crypto
-              </code>{' '}
-              and nothing else.
-            </p>
+            <Reveal>
+              <h1 className="font-display text-4xl sm:text-5xl xl:text-[56px] leading-[1.04] text-ink">
+                Security packages for Node.js that depend on nothing.
+              </h1>
+            </Reveal>
+            <Reveal delay={80}>
+              <p className="mt-6 text-lg text-muted leading-relaxed max-w-lg">
+                Password hashing, encryption, signed tokens, IDs, env loading
+                and rate limiting. Each is its own package, built on{' '}
+                <code className="font-mono text-[15px] text-ink">
+                  node:crypto
+                </code>{' '}
+                and nothing else.
+              </p>
+            </Reveal>
 
-            <div className="mt-8 max-w-sm border border-line-strong bg-raised px-4 py-3 font-mono text-sm text-ink">
-              <span className="text-faint select-none">$ </span>
-              pnpm add @systemix/hash
-            </div>
+            <Reveal delay={160}>
+              <div className="mt-8 max-w-sm border border-line-strong bg-raised px-4 py-3 font-mono text-sm text-ink">
+                <span className="text-faint select-none">$ </span>
+                pnpm add @systemix/hash
+              </div>
+            </Reveal>
 
-            <div className="mt-6 flex items-center gap-6 text-[15px]">
-              <Link href="/docs" className={`font-medium ${textLink}`}>
-                Read the docs
-              </Link>
-              <a
-                href="https://github.com/shahadathhs/systemix"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-muted hover:text-ink"
-              >
-                <GithubIcon className="size-4" />
-                Source on GitHub
-              </a>
-            </div>
+            <Reveal delay={240}>
+              <div className="mt-6 flex items-center gap-6 text-[15px]">
+                <Link href="/docs" className={`font-medium ${textLink}`}>
+                  Read the docs
+                </Link>
+                <a
+                  href="https://github.com/shahadathhs/systemix"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-muted hover:text-ink"
+                >
+                  <GithubIcon className="size-4" />
+                  Source on GitHub
+                </a>
+              </div>
+            </Reveal>
           </div>
 
-          <div className="min-w-0">
+          <Reveal delay={200} y={32} className="min-w-0">
             <p className="text-xs text-faint mb-2">
               Output of {calls} real calls, run when the site was built (
               {builtOn}).
@@ -335,23 +347,22 @@ export default async function Home() {
                   </div>
                 ))}
             </dl>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Stats */}
       <section className="border-b border-line">
         <div className="ruled-grid grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="ruled-cell text-center py-9 !bg-raised"
-            >
-              <div className="font-display text-4xl sm:text-5xl text-ink">
-                {stat.value}
+          {stats.map((stat, i) => (
+            <Reveal key={stat.label} delay={i * 90} className="h-full">
+              <div className="ruled-cell text-center py-9 !bg-raised h-full">
+                <div className="font-display text-4xl sm:text-5xl text-ink">
+                  {stat.value}
+                </div>
+                <div className="hud mt-2">{stat.label}</div>
               </div>
-              <div className="hud mt-2">{stat.label}</div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -359,20 +370,24 @@ export default async function Home() {
       {/* Why */}
       <section className="px-6 sm:px-10 py-20 border-b border-line">
         <div className="max-w-5xl mx-auto">
-          <h2 className="font-display text-3xl sm:text-4xl text-ink">
-            Why Systemix
-          </h2>
+          <Reveal>
+            <h2 className="font-display text-3xl sm:text-4xl text-ink">
+              Why Systemix
+            </h2>
+          </Reveal>
           <div className="ruled-grid grid-cols-1 md:grid-cols-2 mt-8">
             {why.map((item, i) => (
-              <div key={item.title} className="ruled-cell">
-                <span className="hud">{String(i + 1).padStart(2, '0')}</span>
-                <h3 className="font-display text-lg text-ink mt-2">
-                  {item.title}
-                </h3>
-                <p className="mt-1.5 text-sm text-muted leading-relaxed">
-                  {item.body}
-                </p>
-              </div>
+              <Reveal key={item.title} delay={i * 90} className="h-full">
+                <div className="ruled-cell h-full">
+                  <span className="hud">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className="font-display text-lg text-ink mt-2">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1.5 text-sm text-muted leading-relaxed">
+                    {item.body}
+                  </p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -381,59 +396,60 @@ export default async function Home() {
       {/* Examples */}
       <section className="px-6 sm:px-10 py-20 border-b border-line">
         <div className="max-w-5xl mx-auto">
-          <h2 className="font-display text-3xl sm:text-4xl text-ink">
-            What the code does
-          </h2>
-          <p className="mt-3 text-muted max-w-lg leading-relaxed">
-            Five packages, run for real. The output beside each snippet is what
-            the code returned when this page was built.
-          </p>
+          <Reveal>
+            <h2 className="font-display text-3xl sm:text-4xl text-ink">
+              What the code does
+            </h2>
+            <p className="mt-3 text-muted max-w-lg leading-relaxed">
+              Five packages, run for real. The output beside each snippet is
+              what the code returned when this page was built.
+            </p>
+          </Reveal>
 
           <div className="mt-10">
             {list.map((ex) => (
-              <article
-                key={ex.pkg}
-                className="grid gap-8 py-10 border-t border-line lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10"
-              >
-                <div>
-                  <div className="font-mono text-xs text-faint">
-                    @systemix/{ex.pkg}
+              <Reveal key={ex.pkg} y={32}>
+                <article className="grid gap-8 py-10 border-t border-line lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10">
+                  <div>
+                    <div className="font-mono text-xs text-faint">
+                      @systemix/{ex.pkg}
+                    </div>
+                    <h3 className="mt-1.5 font-display text-[22px] text-ink leading-tight">
+                      {ex.title}
+                    </h3>
+                    <p className="mt-3 text-[15px] text-muted leading-relaxed">
+                      {ex.body}
+                    </p>
+                    <div className="mt-4 flex gap-5 text-[13px]">
+                      <Link href={`/docs/${ex.pkg}`} className={textLink}>
+                        Docs
+                      </Link>
+                      <Link href={`/${ex.pkg}`} className={textLink}>
+                        Try it live
+                      </Link>
+                    </div>
                   </div>
-                  <h3 className="mt-1.5 font-display text-[22px] text-ink leading-tight">
-                    {ex.title}
-                  </h3>
-                  <p className="mt-3 text-[15px] text-muted leading-relaxed">
-                    {ex.body}
-                  </p>
-                  <div className="mt-4 flex gap-5 text-[13px]">
-                    <Link href={`/docs/${ex.pkg}`} className={textLink}>
-                      Docs
-                    </Link>
-                    <Link href={`/${ex.pkg}`} className={textLink}>
-                      Try it live
-                    </Link>
-                  </div>
-                </div>
 
-                <div className="min-w-0 space-y-2.5">
-                  <CodeWindow filename={ex.file} code={ex.code} />
-                  <dl className="border border-line bg-raised divide-y divide-line">
-                    {ex.output.map(([label, value]) => (
-                      <div
-                        key={label}
-                        className="grid gap-1 px-3.5 py-2.5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:gap-3"
-                      >
-                        <dt className="font-mono text-[11px] text-faint pt-0.5">
-                          {label}
-                        </dt>
-                        <dd className="font-mono text-[11.5px] text-ink break-all whitespace-pre-wrap leading-relaxed">
-                          {value}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </article>
+                  <div className="min-w-0 space-y-2.5">
+                    <CodeWindow filename={ex.file} code={ex.code} />
+                    <dl className="border border-line bg-raised divide-y divide-line">
+                      {ex.output.map(([label, value]) => (
+                        <div
+                          key={label}
+                          className="grid gap-1 px-3.5 py-2.5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:gap-3"
+                        >
+                          <dt className="font-mono text-[11px] text-faint pt-0.5">
+                            {label}
+                          </dt>
+                          <dd className="font-mono text-[11.5px] text-ink break-all whitespace-pre-wrap leading-relaxed">
+                            {value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                </article>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -442,7 +458,7 @@ export default async function Home() {
       {/* Fixed defects */}
       <section className="px-6 sm:px-10 py-20 border-b border-line">
         <div className="max-w-5xl mx-auto grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10">
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <Reveal className="lg:sticky lg:top-24 lg:self-start">
             <h2 className="font-display text-3xl sm:text-4xl text-ink">
               Bugs we shipped, and fixed
             </h2>
@@ -460,19 +476,21 @@ export default async function Home() {
               </a>
               .
             </p>
-          </div>
+          </Reveal>
           <ul className="divide-y divide-line border-y border-line">
-            {fixes.map((fix) => (
+            {fixes.map((fix, i) => (
               <li key={fix.title} className="py-5">
-                <div className="font-mono text-[11px] text-faint">
-                  @systemix/{fix.pkg}
-                </div>
-                <h3 className="mt-1 text-lg font-medium text-ink">
-                  {fix.title}
-                </h3>
-                <p className="mt-1.5 text-[15px] text-muted leading-relaxed">
-                  {fix.body}
-                </p>
+                <Reveal delay={i * 90}>
+                  <div className="font-mono text-[11px] text-faint">
+                    @systemix/{fix.pkg}
+                  </div>
+                  <h3 className="mt-1 text-lg font-medium text-ink">
+                    {fix.title}
+                  </h3>
+                  <p className="mt-1.5 text-[15px] text-muted leading-relaxed">
+                    {fix.body}
+                  </p>
+                </Reveal>
               </li>
             ))}
           </ul>
@@ -482,24 +500,27 @@ export default async function Home() {
       {/* Packages */}
       <section className="px-6 sm:px-10 py-20 border-b border-line">
         <div className="max-w-5xl mx-auto">
-          <h2 className="font-display text-3xl sm:text-4xl text-ink">
-            Packages
-          </h2>
+          <Reveal>
+            <h2 className="font-display text-3xl sm:text-4xl text-ink">
+              Packages
+            </h2>
+          </Reveal>
           <div className="ruled-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-8">
             {packages.map(([name, description], i) => (
-              <Link
-                key={name}
-                href={`/docs/${name}`}
-                className="ruled-cell block h-full"
-              >
-                <span className="hud">{String(i + 1).padStart(2, '0')}</span>
-                <div className="font-mono text-[13px] font-medium text-ink mt-2.5">
-                  {name}
-                </div>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
-                  {description}
-                </p>
-              </Link>
+              <Reveal key={name} delay={(i % 4) * 80} className="h-full">
+                <Link
+                  href={`/docs/${name}`}
+                  className="ruled-cell block h-full"
+                >
+                  <span className="hud">{String(i + 1).padStart(2, '0')}</span>
+                  <div className="font-mono text-[13px] font-medium text-ink mt-2.5">
+                    {name}
+                  </div>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
+                    {description}
+                  </p>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -508,26 +529,29 @@ export default async function Home() {
       {/* Tooling */}
       <section className="px-6 sm:px-10 py-20 border-b border-line">
         <div className="max-w-5xl mx-auto">
-          <h2 className="font-display text-3xl sm:text-4xl text-ink">
-            Tooling
-          </h2>
-          <p className="mt-2 text-sm text-muted">
-            The configs this repo is built with.
-          </p>
+          <Reveal>
+            <h2 className="font-display text-3xl sm:text-4xl text-ink">
+              Tooling
+            </h2>
+            <p className="mt-2 text-sm text-muted">
+              The configs this repo is built with.
+            </p>
+          </Reveal>
           <div className="ruled-grid grid-cols-1 md:grid-cols-3 mt-8">
-            {tooling.map(([name, description]) => (
-              <Link
-                key={name}
-                href={`/docs/${name}`}
-                className="ruled-cell block h-full"
-              >
-                <div className="font-mono text-[13px] font-medium text-ink">
-                  @systemix/{name}
-                </div>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
-                  {description}
-                </p>
-              </Link>
+            {tooling.map(([name, description], i) => (
+              <Reveal key={name} delay={i * 90} className="h-full">
+                <Link
+                  href={`/docs/${name}`}
+                  className="ruled-cell block h-full"
+                >
+                  <div className="font-mono text-[13px] font-medium text-ink">
+                    @systemix/{name}
+                  </div>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
+                    {description}
+                  </p>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -536,20 +560,26 @@ export default async function Home() {
       {/* Demos */}
       <section className="px-6 sm:px-10 py-20 border-b border-line">
         <div className="max-w-5xl mx-auto">
-          <h2 className="font-display text-3xl sm:text-4xl text-ink">
-            Live demos
-          </h2>
-          <p className="mt-2 text-sm text-muted">
-            Every demo runs the real package.
-          </p>
+          <Reveal>
+            <h2 className="font-display text-3xl sm:text-4xl text-ink">
+              Live demos
+            </h2>
+            <p className="mt-2 text-sm text-muted">
+              Every demo runs the real package.
+            </p>
+          </Reveal>
           <div className="ruled-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-8">
-            {demos.map(([label, href, description]) => (
-              <Link key={href} href={href} className="ruled-cell block h-full">
-                <span className="text-sm font-medium text-ink">{label} →</span>
-                <span className="block mt-1 text-[13px] text-muted">
-                  {description}
-                </span>
-              </Link>
+            {demos.map(([label, href, description], i) => (
+              <Reveal key={href} delay={(i % 4) * 70} className="h-full">
+                <Link href={href} className="ruled-cell block h-full">
+                  <span className="text-sm font-medium text-ink">
+                    {label} →
+                  </span>
+                  <span className="block mt-1 text-[13px] text-muted">
+                    {description}
+                  </span>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -557,7 +587,7 @@ export default async function Home() {
 
       {/* Install */}
       <section className="px-6 sm:px-10 py-20 text-center">
-        <div className="max-w-5xl mx-auto">
+        <Reveal className="max-w-5xl mx-auto">
           <h2 className="font-display text-3xl sm:text-4xl text-ink">
             Install one, or all of them.
           </h2>
@@ -578,7 +608,7 @@ export default async function Home() {
               Source on GitHub
             </a>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );
