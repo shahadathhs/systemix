@@ -1,5 +1,12 @@
 # @systemix/passphrase
 
+## 0.6.0
+
+### Minor Changes
+
+- ad40f40: Require Node.js 24.7 or newer (`engines.node`). Older runtimes are no longer supported or tested; CI runs on Node 24 and 26.
+- 1a78887: Replace the 10-word default list with the EFF large wordlist (7,776 words). The previous default gave a 4-word passphrase only ~13 bits of entropy; it now gives ~51.7 bits. Passphrases generated before this release with the default list are weak and should be regenerated.
+
 ## 0.5.2
 
 ### Patch Changes
