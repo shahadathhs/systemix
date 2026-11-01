@@ -56,7 +56,7 @@ jobs:
 
       # Version + Publish via Changesets (publishing uses npm OIDC)
       - name: Version & Publish Packages
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
           # `pnpm run version` formats the generated CHANGELOGs per package.
           # Plain `changeset version` formats from the repo root, where
